@@ -1,0 +1,16 @@
+POST  http://localhost:5000/login
+POST  http://localhost:5000/register
+GET http://localhost:5000/profile view profile
+POST http://localhost:5000/products  add product
+GET http://localhost:5000/products all products
+GET http://localhost:5000/products:id  product
+PUT http://localhost:5000/products:id Update product
+DELETE http://localhost:5000/products:id   delete product
+POST   /categories        → Create category
+GET    /categories        → Get categories
+GET    /categories/:id    → Get one category
+PUT    /categories/:id   → Update category
+DELETE /categories/:id   → Delete category
+
+filters
+GET http://localhost:5000/products?name=iphone&category=Mobiles&minPrice=20000&maxPrice=100000&sort=price
