@@ -78,24 +78,7 @@ const createOrder = async (req, res) => {
             }
         });
 
-        // Reduce stock
-        for (const item of cart.items) {
-
-            await Product.findByIdAndUpdate(
-                item.product._id,
-                {
-                    $inc: {
-                        stock: -item.quantity
-                    }
-                }
-            );
-
-        }
-
-        // Clear cart
-        cart.items = [];
-
-        await cart.save();
+        // Reduce 
 
         res.status(201).json({
             success: true,
@@ -143,6 +126,89 @@ const getMyOrders = async (req, res) => {
 
 };
 
+const getOrderById = async (req, res) => {
+
+    try {
+
+        const userId = req.user._id;
+        const orderId = req.params.id;
+
+        const order = await Order.findOne({
+            _id: orderId,
+            user: userId
+        })
+        .populate("items.product");
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Order not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            order
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+
+};
+
+const cancelOrder = async (req, res) => {
+
+    try {
+
+        const userId = req.user._id;
+        const orderId = req.params.id;
+
+        const order = await Order.findOne({
+            _id: orderId,
+            user: userId
+        });
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Order not found"
+            });
+        }
+
+        if (order.orderStatus !== "processing") {
+            return res.status(400).json({
+                success: false,
+                message: "Order cannot be cancelled now"
+            });
+        }
+
+        order.orderStatus = "cancelled";
+
+        await order.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Order cancelled successfully",
+            order
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+
+};
+
 module.exports = {
-    createOrder,getMyOrders
+    createOrder,getMyOrders,getOrderById,cancelOrder
 };
