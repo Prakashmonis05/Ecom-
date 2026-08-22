@@ -41,26 +41,52 @@ const addProduct = async (req, res) => {
     }
 
 };
-
 const getProducts = async (req, res) => {
 
     try {
 
-        const { search, category, minPrice, maxPrice,sort,page=1,limit=10 } = req.query;
+        const {
+            search,
+            category,
+            minPrice,
+            maxPrice,
+            sort,
+            page = 1,
+            limit = 10
+        } = req.query;
 
         const filter = {};
 
+        // Search
         if (search) {
-            filter.name = {
-                $regex: search,
-                $options: "i"
-            };
+            filter.$or = [
+                {
+                    name: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                },
+                {
+                    brand: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                },
+                {
+                    description: {
+                        $regex: search,
+                        $options: "i"
+                    }
+                }
+            ];
         }
 
+        // Category
         if (category) {
             filter.category = category;
         }
 
+        // Price range
         if (minPrice || maxPrice) {
 
             filter.price = {};
@@ -74,47 +100,53 @@ const getProducts = async (req, res) => {
             }
         }
 
-        let sortOption = {};
+        // Pagination
+        const skip = (Number(page) - 1) * Number(limit);
 
-        if (sort) {
-            if (sort === "price") {
-                sortOption.price = 1;
-            }
+        // Sorting
+        let sortOption = {
+            createdAt: -1
+        };
 
-            if (sort === "-price") {
-                sortOption.price = -1;
-            }
-
-            if (sort === "rating") {
-                sortOption.rating = -1;
-            }
+        if (sort === "price_asc") {
+            sortOption = {
+                price: 1
+            };
         }
 
-        const pageNumber = Number(page);
-        const limitNumber = Number(limit);
+        if (sort === "price_desc") {
+            sortOption = {
+                price: -1
+            };
+        }
 
-        const skip = (pageNumber - 1) * limitNumber;
+        if (sort === "name_asc") {
+            sortOption = {
+                name: 1
+            };
+        }
 
-        const totalProducts = await Product.countDocuments(filter);
+        if (sort === "name_desc") {
+            sortOption = {
+                name: -1
+            };
+        }
 
-        const products = await Product
-            .find(filter)
-            .populate("category")
-            .populate("createdBy","name email")
+        const products = await Product.find(filter)
             .sort(sortOption)
             .skip(skip)
-            .limit(limitNumber);
+            .limit(Number(limit));
 
-        const totalPages = Math.ceil(
-            totalProducts / limitNumber
-        );
+        const totalProducts = await Product.countDocuments(filter);
 
         res.status(200).json({
             success: true,
             count: products.length,
             totalProducts,
-            totalPages,
-            currentPage: pageNumber,
+            page: Number(page),
+            totalPages: Math.ceil(
+                totalProducts / Number(limit)
+            ),
             products
         });
 

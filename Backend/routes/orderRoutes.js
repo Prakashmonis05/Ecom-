@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const {createOrder,getMyOrders,getOrderById,cancelOrder } = require("../controllers/orderController");
-const {protect} = require("../middleware/authMiddleware");
+const {createOrder,getMyOrders,getOrderById,cancelOrder,getAllOrders ,getAdminOrderById,updateOrderStatus} = require("../controllers/orderController");
+const {protect, adminOnly} = require("../middleware/authMiddleware");
 
 router.post(
     "/orders",
@@ -24,4 +24,26 @@ router.put(
     protect,
     cancelOrder
 )
+
+router.get(
+    "/admin/orders",
+    protect,
+    adminOnly,
+    getAllOrders
+)
+
+router.get(
+    "/admin/orders/:id",
+    protect,
+    adminOnly,
+    getAdminOrderById
+)
+
+router.put(
+    "/admin/orders/:id/status",
+    protect,
+    adminOnly,
+    updateOrderStatus
+);
+
 module.exports = router;

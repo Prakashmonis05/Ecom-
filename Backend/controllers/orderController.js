@@ -1,6 +1,7 @@
 const Order = require("../models/Order");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
+const { get } = require("mongoose");
 
 const createOrder = async (req, res) => {
 
@@ -163,17 +164,13 @@ const getOrderById = async (req, res) => {
 };
 
 const cancelOrder = async (req, res) => {
-
     try {
-
         const userId = req.user._id;
         const orderId = req.params.id;
-
         const order = await Order.findOne({
             _id: orderId,
             user: userId
         });
-
         if (!order) {
             return res.status(404).json({
                 success: false,
@@ -209,6 +206,114 @@ const cancelOrder = async (req, res) => {
 
 };
 
+const getAllOrders = async (req, res) => {
+
+    try {
+
+        const orders = await Order.find()
+            .populate("user", "-password")
+            .populate("items.product")
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            count: orders.length,
+            orders
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+
+};
+
+const getAdminOrderById = async (req, res) => {
+
+    try {
+
+        const order = await Order.findById(req.params.id)
+            .populate("user", "-password")
+            .populate("items.product");
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Order not found"
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            order
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+
+};
+
+const updateOrderStatus = async (req, res) => {
+
+    try {
+
+        const { status } = req.body;
+
+        const allowedStatuses = [
+            "processing",
+            "shipped",
+            "delivered",
+            "cancelled"
+        ];
+
+        if (!allowedStatuses.includes(status)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid order status"
+            });
+        }
+
+        const order = await Order.findById(req.params.id);
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Order not found"
+            });
+        }
+
+        order.orderStatus = status;
+
+        await order.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Order status updated successfully",
+            order
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+
+};
+
 module.exports = {
-    createOrder,getMyOrders,getOrderById,cancelOrder
+    createOrder,getMyOrders,getOrderById,cancelOrder,
+    getAllOrders,getAdminOrderById,updateOrderStatus
 };
