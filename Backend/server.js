@@ -11,6 +11,7 @@ const reviewRoutes = require("./routes/reviewRoutes");
 // const User = require("./models/User");
 const userRoutes = require("./routes/userRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const app = express();
 connectDB();
 app.use(cors());
@@ -23,6 +24,7 @@ app.use(orderRoutes);
 app.use(reviewRoutes);
 app.use(userRoutes);
 app.use(wishlistRoutes);
+app.use(adminRoutes);
 app.listen(5000, () => {
     console.log("Server running on port 5000");
 });
