@@ -77,16 +77,9 @@ const loginUser = async (req, res) => {
     }
 
 };
-const getProfile = (req, res) => {
-
-    res.json({
-        message: "Welcome to your profile"
-    });
-
-};
 
 module.exports = {
     registerUser,
     loginUser,
-    getProfile
+    
 };

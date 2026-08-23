@@ -1,70 +1,108 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
-function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const Login = () => {
 
-  async function handleLogin(event) {
-  event.preventDefault();
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
-   const user = {
-        email,
-        password
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    });
+
+    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+
     };
 
-    const response = await fetch("http://localhost:5000/login", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify(user)
-});
+    const handleSubmit = async (e) => {
 
-const data = await response.json();
+        e.preventDefault();
 
-console.log(data);
-}
+        setError("");
+        setLoading(true);
 
-  return (
-    <div>
-      <h1>Login</h1>
+        try {
 
-      <form onSubmit={handleLogin}>
+            const response = await api.post(
+                "/login",
+                formData
+            );
+
+            if (!response.data.success) {
+                setError(response.data.message);
+                return;
+            }
+
+            login(response.data.token);
+
+            navigate("/");
+
+        } catch (error) {
+
+            setError(
+                error.response?.data?.message ||
+                "Login failed"
+            );
+
+        } finally {
+
+            setLoading(false);
+
+        }
+
+    };
+
+    return (
         <div>
-          <label>Email</label>
-          <br />
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+
+            <h1>Login</h1>
+
+            {error && (
+                <p>{error}</p>
+            )}
+
+            <form onSubmit={handleSubmit}>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                />
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                />
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                >
+                    {loading ? "Logging in..." : "Login"}
+                </button>
+
+            </form>
+
         </div>
-
-        <br />
-
-        <div>
-          <label>Password</label>
-          <br />
-          <input
-            type="password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">Login</button>
-      </form>
-
-      <hr />
-
-      <p>Email: {email}</p>
-      <p>Password: {password}</p>
-    </div>
-  );
-}
+    );
+};
 
 export default Login;
