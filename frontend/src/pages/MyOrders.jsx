@@ -7,6 +7,7 @@ const MyOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [cancellingId, setCancellingId] = useState(null);
 
     const fetchOrders = async () => {
 
@@ -26,14 +27,53 @@ const MyOrders = () => {
         } finally {
 
             setLoading(false);
-
         }
-
     };
 
     useEffect(() => {
         fetchOrders();
     }, []);
+
+    const cancelOrder = async (orderId) => {
+
+        const confirmed = window.confirm(
+            "Are you sure you want to cancel this order?"
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        setCancellingId(orderId);
+
+        try {
+
+            const response = await api.put(
+                `/orders/${orderId}/cancel`
+            );
+
+            setOrders((previousOrders) =>
+                previousOrders.map((order) =>
+                    order._id === orderId
+                        ? response.data.order
+                        : order
+                )
+            );
+
+            alert(response.data.message);
+
+        } catch (error) {
+
+            alert(
+                error.response?.data?.message ||
+                "Failed to cancel order"
+            );
+
+        } finally {
+
+            setCancellingId(null);
+        }
+    };
 
     if (loading) {
         return <p>Loading orders...</p>;
@@ -50,7 +90,9 @@ const MyOrders = () => {
 
                 <h1>My Orders</h1>
 
-                <p>You haven't placed any orders yet.</p>
+                <p>
+                    You haven't placed any orders yet.
+                </p>
 
                 <Link to="/products">
                     Start Shopping
@@ -85,16 +127,42 @@ const MyOrders = () => {
                     </p>
 
                     <p>
-                        Payment: {order.paymentMethod}
+                        Payment:{" "}
+                        {order.paymentMethod || "Cash on Delivery"}
                     </p>
 
                     <p>
-                        Payment Status: {order.paymentStatus}
+                        Payment Status:{" "}
+                        {order.paymentStatus}
                     </p>
 
                     <p>
-                        Order Status: {order.orderStatus}
+                        Order Status:{" "}
+                        {order.orderStatus}
                     </p>
+
+                    <Link to={`/orders/${order._id}`}>
+                        View Order
+                    </Link>
+
+                    {" "}
+
+                    {order.orderStatus === "processing" && (
+
+                        <button
+                            onClick={() =>
+                                cancelOrder(order._id)
+                            }
+                            disabled={
+                                cancellingId === order._id
+                            }
+                        >
+                            {cancellingId === order._id
+                                ? "Cancelling..."
+                                : "Cancel Order"}
+                        </button>
+
+                    )}
 
                     <h3>Items</h3>
 
@@ -107,7 +175,8 @@ const MyOrders = () => {
                             </p>
 
                             <p>
-                                ₹{item.price} × {item.quantity}
+                                ₹{item.price} ×{" "}
+                                {item.quantity}
                             </p>
 
                         </div>

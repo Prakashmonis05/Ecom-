@@ -20,10 +20,12 @@ const Checkout = () => {
 
     const handleChange = (e) => {
 
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
 
     };
 
@@ -42,8 +44,10 @@ const Checkout = () => {
             );
 
             if (!response.data.success) {
+
                 setError(response.data.message);
                 return;
+
             }
 
             navigate("/order-success", {
@@ -72,7 +76,13 @@ const Checkout = () => {
 
             <h1>Checkout</h1>
 
+            {error && (
+                <p>{error}</p>
+            )}
+
             <form onSubmit={placeOrder}>
+
+                <h2>Shipping Address</h2>
 
                 <input
                     type="text"
@@ -83,6 +93,8 @@ const Checkout = () => {
                     required
                 />
 
+                <br />
+
                 <input
                     type="tel"
                     name="phone"
@@ -92,6 +104,8 @@ const Checkout = () => {
                     required
                 />
 
+                <br />
+
                 <textarea
                     name="address"
                     placeholder="Address"
@@ -99,6 +113,8 @@ const Checkout = () => {
                     onChange={handleChange}
                     required
                 />
+
+                <br />
 
                 <input
                     type="text"
@@ -109,6 +125,8 @@ const Checkout = () => {
                     required
                 />
 
+                <br />
+
                 <input
                     type="text"
                     name="state"
@@ -117,6 +135,8 @@ const Checkout = () => {
                     onChange={handleChange}
                     required
                 />
+
+                <br />
 
                 <input
                     type="text"
@@ -127,13 +147,13 @@ const Checkout = () => {
                     required
                 />
 
-                <p>
-                    Payment Method: Cash on Delivery
-                </p>
+                <br />
 
-                {error && (
-                    <p>{error}</p>
-                )}
+                <h2>Payment Method</h2>
+
+                <p>
+                    Cash on Delivery
+                </p>
 
                 <button
                     type="submit"

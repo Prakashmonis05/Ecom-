@@ -14,6 +14,10 @@ import MyOrders from "./pages/MyOrders";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminOrderDetails from "./pages/admin/AdminOrderDetails";
 import Profile from "./pages/Profile";
+import ChangePassword from "./pages/ChangePassword";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminProducts from "./pages/admin/AdminProducts";
+import AdminProductForm from "./pages/admin/AdminProductForm";
 
 function App() {
 
@@ -83,6 +87,11 @@ function App() {
     element={<MyOrders />}
 />
 
+<Route
+    path="/change-password"
+    element={<ChangePassword />}
+/>
+
         </Route>
 
       
@@ -104,6 +113,31 @@ function App() {
     path="/admin/orders/:id"
     element={<AdminOrderDetails />}
 />
+
+<Route
+    path="/admin/dashboard"
+    element={<AdminDashboard />}
+/>
+
+<Route
+    path="/admin/products"
+    element={<AdminProducts />}
+/>
+<Route
+    path="/admin/products/create"
+    element={<AdminProductForm />}
+/>
+
+<Route
+    path="/admin/products/:id/edit"
+    element={<AdminProductForm />}
+/>
+
+
+<Link to="/admin/products">
+    Manage Products
+</Link>
+
 
         </Route>
 
