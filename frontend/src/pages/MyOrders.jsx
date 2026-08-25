@@ -12,7 +12,7 @@ const MyOrders = () => {
 
         try {
 
-            const response = await api.get("/orders/my");
+            const response = await api.get("/orders");
 
             setOrders(response.data.orders);
 

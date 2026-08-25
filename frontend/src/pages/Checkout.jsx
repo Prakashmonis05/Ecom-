@@ -6,17 +6,40 @@ const Checkout = () => {
 
     const navigate = useNavigate();
 
+    const [formData, setFormData] = useState({
+        name: "",
+        phone: "",
+        address: "",
+        city: "",
+        state: "",
+        pincode: ""
+    });
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const placeOrder = async () => {
+    const handleChange = (e) => {
+
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+
+    };
+
+    const placeOrder = async (e) => {
+
+        e.preventDefault();
 
         setLoading(true);
         setError("");
 
         try {
 
-            const response = await api.post("/orders");
+            const response = await api.post(
+                "/orders",
+                formData
+            );
 
             if (!response.data.success) {
                 setError(response.data.message);
@@ -49,22 +72,79 @@ const Checkout = () => {
 
             <h1>Checkout</h1>
 
-            <p>
-                Payment Method: Cash on Delivery
-            </p>
+            <form onSubmit={placeOrder}>
 
-            {error && (
-                <p>{error}</p>
-            )}
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Full Name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                />
 
-            <button
-                onClick={placeOrder}
-                disabled={loading}
-            >
-                {loading
-                    ? "Placing Order..."
-                    : "Place Order"}
-            </button>
+                <input
+                    type="tel"
+                    name="phone"
+                    placeholder="Phone Number"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                />
+
+                <textarea
+                    name="address"
+                    placeholder="Address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    required
+                />
+
+                <input
+                    type="text"
+                    name="city"
+                    placeholder="City"
+                    value={formData.city}
+                    onChange={handleChange}
+                    required
+                />
+
+                <input
+                    type="text"
+                    name="state"
+                    placeholder="State"
+                    value={formData.state}
+                    onChange={handleChange}
+                    required
+                />
+
+                <input
+                    type="text"
+                    name="pincode"
+                    placeholder="Pincode"
+                    value={formData.pincode}
+                    onChange={handleChange}
+                    required
+                />
+
+                <p>
+                    Payment Method: Cash on Delivery
+                </p>
+
+                {error && (
+                    <p>{error}</p>
+                )}
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                >
+                    {loading
+                        ? "Placing Order..."
+                        : "Place Order"}
+                </button>
+
+            </form>
 
         </div>
     );

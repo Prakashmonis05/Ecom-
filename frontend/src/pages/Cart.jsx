@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 const Cart = () => {
@@ -10,6 +10,7 @@ const Cart = () => {
     const navigate = useNavigate();
 
     const fetchCart = async () => {
+
 
         try {
 
@@ -121,7 +122,7 @@ const Cart = () => {
 
             {cart.items.map((item) => (
 
-                <div key={item.product._id}>
+                <div key={item._id}>
 
                     {item.product.images?.length > 0 && (
                         <img
@@ -186,6 +187,7 @@ const Cart = () => {
                         Remove
                     </button>
 
+
                     <hr />
 
                 </div>
@@ -197,8 +199,8 @@ const Cart = () => {
             </h2>
 
             <button onClick={() => navigate("/checkout")}>
-    Proceed to Checkout
-</button>
+                Proceed to Checkout
+            </button>
 
         </div>
     );

@@ -11,6 +11,9 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import MyOrders from "./pages/MyOrders";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminOrderDetails from "./pages/admin/AdminOrderDetails";
+import Profile from "./pages/Profile";
 
 function App() {
 
@@ -52,9 +55,9 @@ function App() {
           />
 
           <Route
-            path="/profile"
-            element={<h1>Profile</h1>}
-          />
+    path="/profile"
+    element={<Profile />}
+/>
           <Route
             path="/products"
             element={<Products />}
@@ -91,6 +94,16 @@ function App() {
             path="/admin/dashboard"
             element={<h1>Admin Dashboard</h1>}
           />
+
+          <Route
+    path="/admin/orders"
+    element={<AdminOrders />}
+/>
+
+<Route
+    path="/admin/orders/:id"
+    element={<AdminOrderDetails />}
+/>
 
         </Route>
 

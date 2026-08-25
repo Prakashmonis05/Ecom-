@@ -79,7 +79,24 @@ const createOrder = async (req, res) => {
             }
         });
 
-        // Reduce 
+        // Reduce product stock
+        for (const item of cart.items) {
+
+            await Product.findByIdAndUpdate(
+                item.product._id,
+                {
+                    $inc: {
+                        stock: -item.quantity
+                    }
+                }
+            );
+
+        }
+
+        // Clear cart
+        cart.items = [];
+
+        await cart.save();
 
         res.status(201).json({
             success: true,
@@ -107,8 +124,8 @@ const getMyOrders = async (req, res) => {
         const orders = await Order.find({
             user: userId
         })
-        .populate("items.product")
-        .sort({ createdAt: -1 });
+            .populate("items.product")
+            .sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,
@@ -138,7 +155,7 @@ const getOrderById = async (req, res) => {
             _id: orderId,
             user: userId
         })
-        .populate("items.product");
+            .populate("items.product");
 
         if (!order) {
             return res.status(404).json({
@@ -314,6 +331,6 @@ const updateOrderStatus = async (req, res) => {
 };
 
 module.exports = {
-    createOrder,getMyOrders,getOrderById,cancelOrder,
-    getAllOrders,getAdminOrderById,updateOrderStatus
+    createOrder, getMyOrders, getOrderById, cancelOrder,
+    getAllOrders, getAdminOrderById, updateOrderStatus
 };
