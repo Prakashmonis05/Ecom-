@@ -3,16 +3,15 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
+
     try {
 
-        const { name, email, password,role} = req.body;
-
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const { name, email, password, role } = req.body;
 
         const user = await User.create({
             name,
             email,
-            password: hashedPassword,
+            password,
             role
         });
 
@@ -32,6 +31,7 @@ const registerUser = async (req, res) => {
     }
 };
 
+
 const loginUser = async (req, res) => {
 
     try {
@@ -47,7 +47,10 @@ const loginUser = async (req, res) => {
             });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(
+            password,
+            user.password
+        );
 
         if (!isMatch) {
             return res.json({
@@ -55,6 +58,7 @@ const loginUser = async (req, res) => {
                 message: "Invalid Password"
             });
         }
+
         const token = jwt.sign(
             { id: user._id },
             process.env.JWT_SECRET,
@@ -64,7 +68,7 @@ const loginUser = async (req, res) => {
         res.json({
             success: true,
             message: "Login Successful",
-            token: token
+            token
         });
 
     } catch (error) {
@@ -78,8 +82,8 @@ const loginUser = async (req, res) => {
 
 };
 
+
 module.exports = {
     registerUser,
-    loginUser,
-    
+    loginUser
 };

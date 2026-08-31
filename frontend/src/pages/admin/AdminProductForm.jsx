@@ -19,9 +19,48 @@ const AdminProductForm = () => {
         images: ""
     });
 
+    const [categories, setCategories] = useState([]);
+
     const [loading, setLoading] = useState(false);
     const [fetching, setFetching] = useState(isEditMode);
     const [error, setError] = useState("");
+
+    // =========================
+    // Fetch categories
+    // =========================
+
+    useEffect(() => {
+
+        const fetchCategories = async () => {
+
+            try {
+
+                const response = await api.get(
+                    "/categories"
+                );
+
+                setCategories(
+                    response.data.categories
+                );
+
+            } catch (error) {
+
+                setError(
+                    error.response?.data?.message ||
+                    "Failed to load categories"
+                );
+
+            }
+
+        };
+
+        fetchCategories();
+
+    }, []);
+
+    // =========================
+    // Fetch product for edit
+    // =========================
 
     useEffect(() => {
 
@@ -37,16 +76,31 @@ const AdminProductForm = () => {
                     `/products/${id}`
                 );
 
-                const product = response.data.product;
+                const product =
+                    response.data.product;
 
                 setFormData({
                     name: product.name || "",
-                    description: product.description || "",
-                    price: product.price || "",
-                    brand: product.brand || "",
-                    category: product.category || "",
-                    stock: product.stock || "",
-                    images: product.images?.join(", ") || ""
+
+                    description:
+                        product.description || "",
+
+                    price:
+                        product.price ?? "",
+
+                    brand:
+                        product.brand || "",
+
+                    category:
+                        product.category?._id ||
+                        product.category ||
+                        "",
+
+                    stock:
+                        product.stock ?? "",
+
+                    images:
+                        product.images?.join(", ") || ""
                 });
 
             } catch (error) {
@@ -59,12 +113,17 @@ const AdminProductForm = () => {
             } finally {
 
                 setFetching(false);
+
             }
         };
 
         fetchProduct();
 
     }, [id, isEditMode]);
+
+    // =========================
+    // Handle input
+    // =========================
 
     const handleChange = (e) => {
 
@@ -77,6 +136,10 @@ const AdminProductForm = () => {
 
     };
 
+    // =========================
+    // Submit
+    // =========================
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
@@ -84,38 +147,70 @@ const AdminProductForm = () => {
         setLoading(true);
         setError("");
 
+        // Make sure category is selected
+        if (!formData.category) {
+
+            setError(
+                "Please select a category"
+            );
+
+            setLoading(false);
+
+            return;
+        }
+
         const productData = {
+
             name: formData.name,
-            description: formData.description,
-            price: Number(formData.price),
-            brand: formData.brand,
-            category: formData.category,
-            stock: Number(formData.stock),
-            images: formData.images
-                .split(",")
-                .map((image) => image.trim())
-                .filter(Boolean)
+
+            description:
+                formData.description,
+
+            price:
+                Number(formData.price),
+
+            brand:
+                formData.brand,
+
+            category:
+                formData.category,
+
+            stock:
+                Number(formData.stock),
+
+            images:
+                formData.images
+                    .split(",")
+                    .map((image) => image.trim())
+                    .filter(Boolean)
         };
 
         try {
 
             if (isEditMode) {
 
-                await api.put(
+                const response = await api.put(
                     `/products/${id}`,
                     productData
                 );
 
-                alert("Product updated successfully");
+                alert(
+                    response.data.message ||
+                    "Product updated successfully"
+                );
 
             } else {
 
-                await api.post(
+                const response = await api.post(
                     "/products",
                     productData
                 );
 
-                alert("Product created successfully");
+                alert(
+                    response.data.message ||
+                    "Product created successfully"
+                );
+
             }
 
             navigate("/admin/products");
@@ -130,12 +225,27 @@ const AdminProductForm = () => {
         } finally {
 
             setLoading(false);
+
         }
     };
 
+    // =========================
+    // Loading
+    // =========================
+
     if (fetching) {
-        return <p>Loading product...</p>;
+
+        return (
+            <p>
+                Loading product...
+            </p>
+        );
+
     }
+
+    // =========================
+    // UI
+    // =========================
 
     return (
         <div>
@@ -147,10 +257,14 @@ const AdminProductForm = () => {
             </h1>
 
             {error && (
-                <p>{error}</p>
+                <p>
+                    {error}
+                </p>
             )}
 
             <form onSubmit={handleSubmit}>
+
+                {/* Product Name */}
 
                 <input
                     type="text"
@@ -162,6 +276,9 @@ const AdminProductForm = () => {
                 />
 
                 <br />
+                <br />
+
+                {/* Description */}
 
                 <textarea
                     name="description"
@@ -172,6 +289,9 @@ const AdminProductForm = () => {
                 />
 
                 <br />
+                <br />
+
+                {/* Price */}
 
                 <input
                     type="number"
@@ -184,6 +304,9 @@ const AdminProductForm = () => {
                 />
 
                 <br />
+                <br />
+
+                {/* Brand */}
 
                 <input
                     type="text"
@@ -195,15 +318,48 @@ const AdminProductForm = () => {
                 />
 
                 <br />
+                <br />
 
-                <input
-                    type="text"
+                {/* Category */}
+
+                <label>
+                    Category
+                </label>
+
+                <br />
+
+                <select
                     name="category"
-                    placeholder="Category"
                     value={formData.category}
                     onChange={handleChange}
                     required
-                />
+                >
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                    {categories.map((category) => (
+
+                        <option
+                            key={category._id}
+                            value={category._id}
+                        >
+                            {category.name}
+                        </option>
+
+                    ))}
+
+                </select>
+
+                <br />
+                <br />
+
+                {/* Stock */}
+
+                <label>
+                    Stock
+                </label>
 
                 <br />
 
@@ -218,6 +374,9 @@ const AdminProductForm = () => {
                 />
 
                 <br />
+                <br />
+
+                {/* Images */}
 
                 <input
                     type="text"
@@ -228,16 +387,21 @@ const AdminProductForm = () => {
                 />
 
                 <br />
+                <br />
+
+                {/* Submit */}
 
                 <button
                     type="submit"
                     disabled={loading}
                 >
+
                     {loading
                         ? "Saving..."
                         : isEditMode
                             ? "Update Product"
                             : "Create Product"}
+
                 </button>
 
             </form>

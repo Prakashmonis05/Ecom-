@@ -26,14 +26,38 @@ const AdminOrders = () => {
         } finally {
 
             setLoading(false);
-
         }
-
     };
 
     useEffect(() => {
         fetchOrders();
     }, []);
+
+    const updateStatus = async (orderId, status) => {
+
+        try {
+
+            const response = await api.put(
+                `/admin/orders/${orderId}/status`,
+                { status }
+            );
+
+            setOrders((previousOrders) =>
+                previousOrders.map((order) =>
+                    order._id === orderId
+                        ? response.data.order
+                        : order
+                )
+            );
+
+        } catch (error) {
+
+            alert(
+                error.response?.data?.message ||
+                "Failed to update order status"
+            );
+        }
+    };
 
     if (loading) {
         return <p>Loading orders...</p>;
@@ -75,15 +99,45 @@ const AdminOrders = () => {
                         </p>
 
                         <p>
-                            Status: {order.orderStatus}
+                            Payment: {order.paymentMethod}
                         </p>
 
                         <p>
-                            Date:{" "}
-                            {new Date(
-                                order.createdAt
-                            ).toLocaleDateString()}
+                            Payment Status: {order.paymentStatus}
                         </p>
+
+                        <p>
+                            Current Status: {order.orderStatus}
+                        </p>
+
+                        <select
+                            value={order.orderStatus}
+                            onChange={(e) =>
+                                updateStatus(
+                                    order._id,
+                                    e.target.value
+                                )
+                            }
+                        >
+                            <option value="processing">
+                                Processing
+                            </option>
+
+                            <option value="shipped">
+                                Shipped
+                            </option>
+
+                            <option value="delivered">
+                                Delivered
+                            </option>
+
+                            <option value="cancelled">
+                                Cancelled
+                            </option>
+
+                        </select>
+
+                        {" "}
 
                         <Link
                             to={`/admin/orders/${order._id}`}

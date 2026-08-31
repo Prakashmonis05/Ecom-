@@ -17,9 +17,7 @@ const AdminDashboard = () => {
 
         try {
 
-            const response = await api.get(
-                "/admin/dashboard"
-            );
+            const response = await api.get("/admin/dashboard");
 
             setStats(response.data.stats);
 
@@ -33,9 +31,7 @@ const AdminDashboard = () => {
         } finally {
 
             setLoading(false);
-
         }
-
     };
 
     useEffect(() => {
@@ -57,21 +53,64 @@ const AdminDashboard = () => {
 
             <div>
 
-                <div>
-                    <h2>Products</h2>
-                    <p>{stats.products}</p>
-                </div>
+                <h2>Products</h2>
 
-                <div>
-                    <h2>Orders</h2>
-                    <p>{stats.orders}</p>
-                </div>
+                <p>{stats.totalProducts}</p>
 
-                <div>
-                    <h2>Users</h2>
-                    <p>{stats.users}</p>
-                </div>
+                <Link to="/admin/products">
+                    Manage Products
+                </Link>
 
+                <br />
+
+                <Link to="/admin/products/low-stock">
+                    View Low Stock Products
+                </Link>
+
+            </div>
+            <hr />
+
+            <div>
+
+                <h2>Orders</h2>
+                <p>{stats.totalOrders}</p>
+
+                <Link to="/admin/orders">
+                    Manage Orders
+                </Link>
+
+            </div>
+
+            <hr />
+
+            <div>
+
+                <h2>Categories</h2>
+
+                <Link to="/admin/categories">
+                    Manage Categories
+                </Link>
+
+            </div>
+
+            <hr />
+
+            <div>
+
+                <h2>Users</h2>
+                <p>{stats.totalUsers}</p>
+
+                <Link to="/admin/users">
+                    Manage Users
+                </Link>
+
+            </div>
+
+            <hr />
+
+            <div>
+                <h2>Total Revenue</h2>
+                <p>₹{stats.totalRevenue}</p>
             </div>
 
         </div>

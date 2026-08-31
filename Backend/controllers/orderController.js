@@ -202,9 +202,25 @@ const cancelOrder = async (req, res) => {
             });
         }
 
+        // Restore product stock
+        for (const item of order.items) {
+
+            await Product.findByIdAndUpdate(
+                item.product,
+                {
+                    $inc: {
+                        stock: item.quantity
+                    }
+                }
+            );
+
+        }
+
+        // Cancel the order
         order.orderStatus = "cancelled";
 
         await order.save();
+
 
         res.status(200).json({
             success: true,
@@ -279,12 +295,12 @@ const getAdminOrderById = async (req, res) => {
     }
 
 };
-
 const updateOrderStatus = async (req, res) => {
 
     try {
 
         const { status } = req.body;
+        const orderId = req.params.id;
 
         const allowedStatuses = [
             "processing",
@@ -293,6 +309,7 @@ const updateOrderStatus = async (req, res) => {
             "cancelled"
         ];
 
+        // Check if status is valid
         if (!allowedStatuses.includes(status)) {
             return res.status(400).json({
                 success: false,
@@ -300,7 +317,8 @@ const updateOrderStatus = async (req, res) => {
             });
         }
 
-        const order = await Order.findById(req.params.id);
+        // Find order
+        const order = await Order.findById(orderId);
 
         if (!order) {
             return res.status(404).json({
@@ -309,6 +327,56 @@ const updateOrderStatus = async (req, res) => {
             });
         }
 
+        const currentStatus = order.orderStatus;
+
+        // If same status
+        if (currentStatus === status) {
+            return res.status(400).json({
+                success: false,
+                message: "Order already has this status"
+            });
+        }
+
+        // Define allowed transitions
+        const allowedTransitions = {
+            processing: ["shipped", "cancelled"],
+            shipped: ["delivered"],
+            delivered: [],
+            cancelled: []
+        };
+
+        // Check transition
+        if (!allowedTransitions[currentStatus].includes(status)) {
+
+            return res.status(400).json({
+                success: false,
+                message: `Cannot change order status from ${currentStatus} to ${status}`
+            });
+
+        }
+
+        // Handle cancellation
+        if (
+            status === "cancelled" &&
+            currentStatus !== "cancelled"
+        ) {
+
+            for (const item of order.items) {
+
+                await Product.findByIdAndUpdate(
+                    item.product,
+                    {
+                        $inc: {
+                            stock: item.quantity
+                        }
+                    }
+                );
+
+            }
+
+        }
+
+        // Update status
         order.orderStatus = status;
 
         await order.save();
@@ -320,6 +388,8 @@ const updateOrderStatus = async (req, res) => {
         });
 
     } catch (error) {
+
+        console.error("UPDATE ORDER STATUS ERROR:", error);
 
         res.status(500).json({
             success: false,

@@ -129,7 +129,7 @@ const ProductDetails = () => {
             </p>
 
             <p>
-                Category: {product.category}
+                Category: {product.category?.name}
             </p>
 
             <p>

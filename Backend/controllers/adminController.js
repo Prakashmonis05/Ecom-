@@ -24,7 +24,7 @@ const getDashboardStats = async (req, res) => {
                 $group: {
                     _id: null,
                     totalRevenue: {
-                        $sum: "$totalPrice"
+                        $sum: "$totalAmount"
                     }
                 }
             }
@@ -86,7 +86,30 @@ const getLowStockProducts = async (req, res) => {
     }
 
 };
+const getAllUsers = async (req, res) => {
+
+    try {
+
+        const users = await User.find()
+            .select("-password")
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            users
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+
+};
 
 module.exports = {
-    getDashboardStats,getLowStockProducts
+    getDashboardStats,getLowStockProducts,getAllUsers
 };

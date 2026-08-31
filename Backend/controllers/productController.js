@@ -133,6 +133,7 @@ const getProducts = async (req, res) => {
         }
 
         const products = await Product.find(filter)
+            .populate("category", "name")
             .sort(sortOption)
             .skip(skip)
             .limit(Number(limit));
@@ -165,7 +166,8 @@ const getProductById = async (req, res) => {
 
     try {
 
-        const product = await Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id)
+    .populate("category", "name");
 
         if (!product) {
 

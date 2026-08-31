@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    getDashboardStats,getLowStockProducts
+    getDashboardStats,getLowStockProducts,getAllUsers
 } = require("../controllers/adminController");
 
 const {
@@ -23,6 +23,13 @@ router.get(
     protect,
     adminOnly,
     getLowStockProducts
+);
+
+router.get(
+    "/admin/users",
+    protect,
+    adminOnly,
+    getAllUsers
 );
 
 module.exports = router;

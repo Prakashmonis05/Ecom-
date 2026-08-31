@@ -12,6 +12,8 @@ const Wishlist = () => {
 
         try {
 
+            setLoading(true);
+
             const response = await api.get("/wishlist");
 
             setProducts(response.data.products);
@@ -28,12 +30,66 @@ const Wishlist = () => {
             setLoading(false);
 
         }
-
     };
 
     useEffect(() => {
         fetchWishlist();
     }, []);
+
+    const removeFromWishlist = async (productId) => {
+
+        try {
+
+            const response = await api.post(
+                `/wishlist/${productId}`
+            );
+
+            alert(response.data.message);
+
+            setProducts((previousProducts) =>
+                previousProducts.filter(
+                    (product) => product._id !== productId
+                )
+            );
+
+        } catch (error) {
+
+            alert(
+                error.response?.data?.message ||
+                "Failed to remove from wishlist"
+            );
+
+        }
+    };
+
+    const addToCart = async (productId, stock) => {
+
+        if (stock <= 0) {
+            alert("Product is out of stock");
+            return;
+        }
+
+        try {
+
+            const response = await api.post(
+                "/cart",
+                {
+                    productId,
+                    quantity: 1
+                }
+            );
+
+            alert(response.data.message);
+
+        } catch (error) {
+
+            alert(
+                error.response?.data?.message ||
+                "Failed to add product to cart"
+            );
+
+        }
+    };
 
     if (loading) {
         return <p>Loading wishlist...</p>;
@@ -49,7 +105,19 @@ const Wishlist = () => {
             <h1>My Wishlist</h1>
 
             {products.length === 0 ? (
-                <p>Your wishlist is empty.</p>
+
+                <div>
+
+                    <p>
+                        Your wishlist is empty.
+                    </p>
+
+                    <Link to="/products">
+                        Browse Products
+                    </Link>
+
+                </div>
+
             ) : (
 
                 <div>
@@ -58,23 +126,40 @@ const Wishlist = () => {
 
                         <div key={product._id}>
 
-                            {product.images?.length > 0 && (
+                            {product.images?.length > 0 ? (
+
                                 <img
                                     src={product.images[0]}
                                     alt={product.name}
                                     width="200"
                                 />
+
+                            ) : (
+
+                                <p>No Image</p>
+
                             )}
 
-                            <h2>{product.name}</h2>
+                            <h2>
+                                {product.name}
+                            </h2>
 
                             <p>
-                                ₹{product.price}
+                                Brand: {product.brand}
                             </p>
 
                             <p>
+                                Category:{" "}
+                                {product.category?.name}
+                            </p>
+
+                            <h3>
+                                ₹{product.price}
+                            </h3>
+
+                            <p>
                                 {product.stock > 0
-                                    ? "In Stock"
+                                    ? `In Stock: ${product.stock}`
                                     : "Out of Stock"}
                             </p>
 
@@ -83,6 +168,37 @@ const Wishlist = () => {
                             >
                                 View Product
                             </Link>
+
+                            <br />
+                            <br />
+
+                            <button
+                                onClick={() =>
+                                    addToCart(
+                                        product._id,
+                                        product.stock
+                                    )
+                                }
+                                disabled={product.stock <= 0}
+                            >
+                                {product.stock <= 0
+                                    ? "Out of Stock"
+                                    : "Add to Cart"}
+                            </button>
+
+                            {" "}
+
+                            <button
+                                onClick={() =>
+                                    removeFromWishlist(
+                                        product._id
+                                    )
+                                }
+                            >
+                                Remove
+                            </button>
+
+                            <hr />
 
                         </div>
 

@@ -1,9 +1,22 @@
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { useAuth } from "../context/AuthContext";
 
 const ProductCard = ({ product }) => {
 
+    const { user } = useAuth();
+
     const handleAddToCart = async () => {
+
+        if (!user) {
+            alert("Please login to add products to cart");
+            return;
+        }
+
+        if (product.stock <= 0) {
+            alert("Product is out of stock");
+            return;
+        }
 
         try {
 
@@ -22,10 +35,14 @@ const ProductCard = ({ product }) => {
             );
 
         }
-
     };
 
     const handleWishlist = async () => {
+
+        if (!user) {
+            alert("Please login to use wishlist");
+            return;
+        }
 
         try {
 
@@ -43,25 +60,40 @@ const ProductCard = ({ product }) => {
             );
 
         }
-
     };
 
     return (
         <div>
 
-            {product.images?.length > 0 && (
+            {product.images?.length > 0 ? (
+
                 <img
                     src={product.images[0]}
                     alt={product.name}
                     width="200"
                 />
+
+            ) : (
+
+                <p>No Image</p>
+
             )}
 
-            <h2>{product.name}</h2>
+            <h2>
+                {product.name}
+            </h2>
 
-            <p>{product.brand}</p>
+            <p>
+                Brand: {product.brand}
+            </p>
 
-            <p>₹{product.price}</p>
+            <p>
+                Category: {product.category?.name}
+            </p>
+
+            <h3>
+                ₹{product.price}
+            </h3>
 
             <p>
                 {product.stock > 0
@@ -74,19 +106,20 @@ const ProductCard = ({ product }) => {
             </Link>
 
             <br />
+            <br />
 
             <button
                 onClick={handleAddToCart}
-                disabled={product.stock === 0}
+                disabled={product.stock <= 0}
             >
-                {product.stock === 0
+                {product.stock <= 0
                     ? "Out of Stock"
                     : "Add to Cart"}
             </button>
 
-            <button
-                onClick={handleWishlist}
-            >
+            {" "}
+
+            <button onClick={handleWishlist}>
                 Wishlist
             </button>
 

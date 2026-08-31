@@ -38,6 +38,8 @@ const Cart = () => {
     }, []);
 
     const updateQuantity = async (productId, quantity) => {
+            console.log("PRODUCT ID RECEIVED:", productId);
+    console.log("QUANTITY RECEIVED:", quantity);
 
         try {
 

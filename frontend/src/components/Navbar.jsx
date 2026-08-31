@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "./Navbar.css";
 
 const Navbar = () => {
 
@@ -16,54 +17,71 @@ const Navbar = () => {
     }
 
     return (
-        <nav>
+        <nav className="navbar">
 
-            <Link to="/">
-                <strong>WordWander</strong>
-            </Link>
+            <div className="navbar-container">
 
-            <Link to="/products">
-                Products
-            </Link>
+                <Link
+                    to="/"
+                    className="navbar-logo"
+                >
+                    WordWander
+                </Link>
 
-            {!user ? (
-                <>
-                    <Link to="/login">
-                        Login
+                <div className="navbar-links">
+
+                    <Link to="/products">
+                        Products
                     </Link>
 
-                    <Link to="/register">
-                        Register
-                    </Link>
-                </>
-            ) : (
-                <>
-                    <Link to="/cart">
-                        Cart
-                    </Link>
+                    {!user ? (
+                        <>
+                            <Link to="/login">
+                                Login
+                            </Link>
 
-                    <Link to="/wishlist">
-                        Wishlist
-                    </Link>
+                            <Link to="/register">
+                                Register
+                            </Link>
+                        </>
+                    ) : (
+                        <>
 
-                    <Link to="/profile">
-                        Profile
-                    </Link>
-                    <Link to="/orders">
-    My Orders
-</Link>
+                            <Link to="/wishlist">
+                                Wishlist
+                            </Link>
 
-                    {user.role === "admin" && (
-                        <Link to="/admin/dashboard">
-                            Admin Dashboard
-                        </Link>
+                            <Link to="/cart">
+                                Cart
+                            </Link>
+
+                            <Link to="/orders">
+                                Orders
+                            </Link>
+
+                            <Link to="/profile">
+                                Profile
+                            </Link>
+
+                            {user.role === "admin" && (
+                                <Link to="/admin/dashboard">
+                                    Admin
+                                </Link>
+                            )}
+
+                            <button
+                                className="navbar-button"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </button>
+
+                        </>
                     )}
 
-                    <button onClick={handleLogout}>
-                        Logout
-                    </button>
-                </>
-            )}
+                </div>
+
+            </div>
 
         </nav>
     );
