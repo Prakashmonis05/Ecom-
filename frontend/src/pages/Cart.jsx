@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
+import "./Cart.css";
 
 const Cart = () => {
 
@@ -10,7 +11,6 @@ const Cart = () => {
     const navigate = useNavigate();
 
     const fetchCart = async () => {
-
 
         try {
 
@@ -38,8 +38,6 @@ const Cart = () => {
     }, []);
 
     const updateQuantity = async (productId, quantity) => {
-            console.log("PRODUCT ID RECEIVED:", productId);
-    console.log("QUANTITY RECEIVED:", quantity);
 
         try {
 
@@ -83,25 +81,32 @@ const Cart = () => {
     };
 
     if (loading) {
-        return <p>Loading cart...</p>;
+        return <p className="cart-status">Loading cart...</p>;
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return <p className="cart-status cart-error">{error}</p>;
     }
 
     if (!cart || cart.items.length === 0) {
 
         return (
-            <div>
+            <div className="cart-page">
 
-                <h1>Your Cart</h1>
+                <h1 className="cart-title">Your Cart</h1>
 
-                <p>Your cart is empty.</p>
+                <div className="cart-empty">
 
-                <Link to="/products">
-                    Continue Shopping
-                </Link>
+                    <p>Your cart is empty.</p>
+
+                    <Link
+                        to="/products"
+                        className="cart-empty-link"
+                    >
+                        Continue Shopping
+                    </Link>
+
+                </div>
 
             </div>
         );
@@ -118,91 +123,132 @@ const Cart = () => {
     );
 
     return (
-        <div>
+        <div className="cart-page">
 
-            <h1>Your Cart</h1>
+            <h1 className="cart-title">Your Cart</h1>
 
-            {cart.items.map((item) => (
+            <div className="cart-layout">
 
-                <div key={item._id}>
+                <div className="cart-items">
 
-                    {item.product.images?.length > 0 && (
-                        <img
-                            src={item.product.images[0]}
-                            alt={item.product.name}
-                            width="150"
-                        />
-                    )}
+                    {cart.items.map((item) => (
 
-                    <h2>
-                        {item.product.name}
-                    </h2>
+                        <div
+                            key={item._id}
+                            className="cart-item"
+                        >
 
-                    <p>
-                        Price: ₹{item.product.price}
-                    </p>
+                            <div className="cart-item-image">
 
-                    <p>
-                        Quantity: {item.quantity}
-                    </p>
+                                {item.product.images?.length > 0 ? (
+                                    <img
+                                        src={item.product.images[0]}
+                                        alt={item.product.name}
+                                    />
+                                ) : (
+                                    <div className="cart-no-image">
+                                        No Image
+                                    </div>
+                                )}
 
-                    <button
-                        disabled={item.quantity <= 1}
-                        onClick={() =>
-                            updateQuantity(
-                                item.product._id,
-                                item.quantity - 1
-                            )
-                        }
-                    >
-                        -
-                    </button>
+                            </div>
 
-                    <span>
-                        {" "}{item.quantity}{" "}
-                    </span>
+                            <div className="cart-item-details">
 
-                    <button
-                        disabled={
-                            item.quantity >= item.product.stock
-                        }
-                        onClick={() =>
-                            updateQuantity(
-                                item.product._id,
-                                item.quantity + 1
-                            )
-                        }
-                    >
-                        +
-                    </button>
+                                <h2 className="cart-item-name">
+                                    {item.product.name}
+                                </h2>
 
-                    <p>
-                        Subtotal: ₹
-                        {item.product.price * item.quantity}
-                    </p>
+                                <p className="cart-item-price">
+                                    ₹{item.product.price}
+                                </p>
 
-                    <button
-                        onClick={() =>
-                            removeItem(item.product._id)
-                        }
-                    >
-                        Remove
-                    </button>
+                                <div className="cart-item-qty">
 
+                                    <button
+                                        disabled={item.quantity <= 1}
+                                        onClick={() =>
+                                            updateQuantity(
+                                                item.product._id,
+                                                item.quantity - 1
+                                            )
+                                        }
+                                    >
+                                        −
+                                    </button>
 
-                    <hr />
+                                    <span>{item.quantity}</span>
+
+                                    <button
+                                        disabled={
+                                            item.quantity >= item.product.stock
+                                        }
+                                        onClick={() =>
+                                            updateQuantity(
+                                                item.product._id,
+                                                item.quantity + 1
+                                            )
+                                        }
+                                    >
+                                        +
+                                    </button>
+
+                                </div>
+
+                                <button
+                                    className="cart-remove-btn"
+                                    onClick={() =>
+                                        removeItem(item.product._id)
+                                    }
+                                >
+                                    Remove
+                                </button>
+
+                            </div>
+
+                            <div className="cart-item-subtotal">
+                                ₹{item.product.price * item.quantity}
+                            </div>
+
+                        </div>
+
+                    ))}
 
                 </div>
 
-            ))}
+                <div className="cart-summary">
 
-            <h2>
-                Total: ₹{totalPrice}
-            </h2>
+                    <h2 className="cart-summary-title">
+                        Order Summary
+                    </h2>
 
-            <button onClick={() => navigate("/checkout")}>
-                Proceed to Checkout
-            </button>
+                    <div className="cart-summary-row">
+                        <span>Subtotal</span>
+                        <span>₹{totalPrice}</span>
+                    </div>
+
+                    <div className="cart-summary-total">
+                        <span>Total</span>
+                        <span>₹{totalPrice}</span>
+                    </div>
+
+                    <button
+                        className="cart-checkout-btn"
+                        onClick={() => navigate("/checkout")}
+                    >
+                        Proceed to Checkout
+                    </button>
+
+                    <Link
+                        to="/products"
+                        className="cart-continue-link"
+                    >
+                        Continue Shopping
+                    </Link>
+
+                </div>
+
+            </div>
 
         </div>
     );

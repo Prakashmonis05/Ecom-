@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import "./Profile.css";
 
 const Profile = () => {
 
@@ -53,6 +54,8 @@ const Profile = () => {
         );
     }
 
+    const initial = profile?.name?.charAt(0)?.toUpperCase() || "?";
+
     return (
         <div className="page-shell">
 
@@ -60,18 +63,32 @@ const Profile = () => {
                 <h1>My Profile</h1>
             </div>
 
-            <div className="form-card">
-                <p>
-                    Name: {profile?.name}
-                </p>
+            <div className="form-card profile-card">
 
-                <p>
-                    Email: {profile?.email}
-                </p>
+                <div className="profile-avatar">
+                    {initial}
+                </div>
 
-                <p>
-                    Role: {profile?.role}
-                </p>
+                <div className="profile-info">
+
+                    <div className="profile-row">
+                        <span className="profile-label">Name</span>
+                        <span className="profile-value">{profile?.name}</span>
+                    </div>
+
+                    <div className="profile-row">
+                        <span className="profile-label">Email</span>
+                        <span className="profile-value">{profile?.email}</span>
+                    </div>
+
+                    <div className="profile-row">
+                        <span className="profile-label">Role</span>
+                        <span className="profile-value profile-role">
+                            {profile?.role}
+                        </span>
+                    </div>
+
+                </div>
 
                 <Link
                     className="button button-secondary"
@@ -79,6 +96,7 @@ const Profile = () => {
                 >
                     Change Password
                 </Link>
+
             </div>
 
         </div>

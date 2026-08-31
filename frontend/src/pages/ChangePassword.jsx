@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import "./ChangePassword.css";
 
 const ChangePassword = () => {
 
@@ -16,6 +17,7 @@ const ChangePassword = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
+
     const handleChange = (e) => {
 
         const { name, value } = e.target;
@@ -26,6 +28,7 @@ const ChangePassword = () => {
         }));
 
     };
+
 
     const handleSubmit = async (e) => {
 
@@ -43,11 +46,13 @@ const ChangePassword = () => {
             return;
         }
 
-        if (
-            formData.newPassword !==
-            formData.confirmPassword
-        ) {
+        if (formData.newPassword !== formData.confirmPassword) {
             setError("New passwords do not match");
+            return;
+        }
+
+        if (formData.newPassword.length < 6) {
+            setError("New password must be at least 6 characters");
             return;
         }
 
@@ -86,82 +91,169 @@ const ChangePassword = () => {
 
     };
 
+
     return (
-        <div className="page-shell">
+        <main className="change-password-page">
 
-            <div className="page-header">
-                <h1>Change Password</h1>
-            </div>
-
-            {error && (
-                <p className="status-badge status-badge-error">
-                    {error}
-                </p>
-            )}
-
-            {success && (
-                <p className="status-badge status-badge-success">
-                    {success}
-                </p>
-            )}
-
-            <form
-                className="form-card"
-                onSubmit={handleSubmit}
-            >
-
-                <div className="form-field">
-                    <input
-                        type="password"
-                        name="currentPassword"
-                        placeholder="Current Password"
-                        value={formData.currentPassword}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="form-field">
-                    <input
-                        type="password"
-                        name="newPassword"
-                        placeholder="New Password"
-                        value={formData.newPassword}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-
-                <div className="form-field">
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm New Password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
+            <div className="change-password-container">
 
                 <button
-                    className="button button-primary"
-                    type="submit"
-                    disabled={loading}
+                    className="change-password-back"
+                    onClick={() => navigate("/profile")}
                 >
-                    {loading
-                        ? "Changing..."
-                        : "Change Password"}
+                    ← Back to Profile
                 </button>
 
-            </form>
-            <button
-                className="button button-secondary"
-                onClick={() => navigate("/profile")}
-            >
-                Back to Profile
-            </button>
 
-        </div>
+                <div className="change-password-card">
+
+                    <div className="security-icon">
+                        🔒
+                    </div>
+
+
+                    <div className="change-password-header">
+
+                        <span>
+                            ACCOUNT SECURITY
+                        </span>
+
+                        <h1>
+                            Change Password
+                        </h1>
+
+                        <p>
+                            Keep your Veyro account secure by using a
+                            strong password.
+                        </p>
+
+                    </div>
+
+
+                    {error && (
+
+                        <div className="password-message error">
+
+                            <span>!</span>
+
+                            <p>
+                                {error}
+                            </p>
+
+                        </div>
+
+                    )}
+
+
+                    {success && (
+
+                        <div className="password-message success">
+
+                            <span>✓</span>
+
+                            <p>
+                                {success}
+                            </p>
+
+                        </div>
+
+                    )}
+
+
+                    <form
+                        onSubmit={handleSubmit}
+                        className="password-form"
+                    >
+
+                        <div className="password-field">
+
+                            <label>
+                                Current Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="currentPassword"
+                                placeholder="Enter current password"
+                                value={formData.currentPassword}
+                                onChange={handleChange}
+                                required
+                            />
+
+                        </div>
+
+
+                        <div className="password-field">
+
+                            <label>
+                                New Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="newPassword"
+                                placeholder="Enter new password"
+                                value={formData.newPassword}
+                                onChange={handleChange}
+                                required
+                            />
+
+                            <small>
+                                Use at least 6 characters.
+                            </small>
+
+                        </div>
+
+
+                        <div className="password-field">
+
+                            <label>
+                                Confirm New Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                placeholder="Confirm new password"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                required
+                            />
+
+                        </div>
+
+
+                        <button
+                            className="change-password-submit"
+                            type="submit"
+                            disabled={loading}
+                        >
+                            {loading
+                                ? "Changing Password..."
+                                : "Change Password"}
+                        </button>
+
+                    </form>
+
+
+                    <div className="security-note">
+
+                        <span>
+                            🔐
+                        </span>
+
+                        <p>
+                            Never share your password with anyone.
+                            Veyro will never ask for your password.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
     );
 };
 

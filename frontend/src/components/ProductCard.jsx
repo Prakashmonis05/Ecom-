@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import "./ProductCard.css";
 
 const ProductCard = ({ product }) => {
-
     const { user } = useAuth();
 
     const handleAddToCart = async () => {
-
         if (!user) {
             alert("Please login to add products to cart");
             return;
@@ -19,110 +18,128 @@ const ProductCard = ({ product }) => {
         }
 
         try {
-
             const response = await api.post("/cart", {
                 productId: product._id,
                 quantity: 1
             });
 
             alert(response.data.message);
-
         } catch (error) {
-
             alert(
                 error.response?.data?.message ||
                 "Failed to add product to cart"
             );
-
         }
     };
 
     const handleWishlist = async () => {
-
         if (!user) {
             alert("Please login to use wishlist");
             return;
         }
 
         try {
-
             const response = await api.post(
                 `/wishlist/${product._id}`
             );
 
             alert(response.data.message);
-
         } catch (error) {
-
             alert(
                 error.response?.data?.message ||
                 "Failed to update wishlist"
             );
-
         }
     };
 
     return (
-        <div>
+        <div className="product-card">
 
-            {product.images?.length > 0 ? (
+            {/* Product Image */}
+            <div className="product-image-container">
 
-                <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    width="200"
-                />
+                {product.images?.length > 0 ? (
+                    <img
+                        className="product-image"
+                        src={product.images[0]}
+                        alt={product.name}
+                    />
+                ) : (
+                    <div className="no-image">
+                        No Image
+                    </div>
+                )}
 
-            ) : (
+                {/* Stock Badge */}
+                <span
+                    className={`stock-badge ${
+                        product.stock > 0
+                            ? "in-stock"
+                            : "out-of-stock"
+                    }`}
+                >
+                    {product.stock > 0
+                        ? "In Stock"
+                        : "Out of Stock"}
+                </span>
 
-                <p>No Image</p>
+                {/* Wishlist Button */}
+                <button
+                    className="wishlist-btn"
+                    onClick={handleWishlist}
+                    aria-label="Add to wishlist"
+                >
+                    ♡
+                </button>
+            </div>
 
-            )}
+            {/* Product Information */}
+            <div className="product-info">
 
-            <h2>
-                {product.name}
-            </h2>
+                <p className="product-brand">
+                    {product.brand}
+                </p>
 
-            <p>
-                Brand: {product.brand}
-            </p>
+                <h2 className="product-name">
+                    {product.name}
+                </h2>
 
-            <p>
-                Category: {product.category?.name}
-            </p>
+                <p className="product-category">
+                    {product.category?.name}
+                </p>
 
-            <h3>
-                ₹{product.price}
-            </h3>
+                <div className="product-price">
+                    ₹{product.price}
+                </div>
 
-            <p>
-                {product.stock > 0
-                    ? `In Stock: ${product.stock}`
-                    : "Out of Stock"}
-            </p>
+                {product.stock > 0 && (
+                    <p className="stock-count">
+                        {product.stock} available
+                    </p>
+                )}
 
-            <Link to={`/products/${product._id}`}>
-                View Product
-            </Link>
+                {/* Actions */}
+                <div className="product-actions">
 
-            <br />
-            <br />
+                    <Link
+                        to={`/products/${product._id}`}
+                        className="view-product-btn"
+                    >
+                        View Product
+                    </Link>
 
-            <button
-                onClick={handleAddToCart}
-                disabled={product.stock <= 0}
-            >
-                {product.stock <= 0
-                    ? "Out of Stock"
-                    : "Add to Cart"}
-            </button>
+                    <button
+                        className="add-cart-btn"
+                        onClick={handleAddToCart}
+                        disabled={product.stock <= 0}
+                    >
+                        {product.stock <= 0
+                            ? "Out of Stock"
+                            : "Add to Cart"}
+                    </button>
 
-            {" "}
-
-            <button onClick={handleWishlist}>
-                Wishlist
-            </button>
-
+                </div>
+            </div>
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import "./MyOrders.css";
 
 const MyOrders = () => {
 
@@ -76,118 +77,159 @@ const MyOrders = () => {
     };
 
     if (loading) {
-        return <p>Loading orders...</p>;
+        return <p className="orders-status">Loading orders...</p>;
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return <p className="orders-status orders-error">{error}</p>;
     }
 
     if (orders.length === 0) {
 
         return (
-            <div>
+            <div className="orders-page">
 
-                <h1>My Orders</h1>
+                <h1 className="orders-title">My Orders</h1>
 
-                <p>
-                    You haven't placed any orders yet.
-                </p>
+                <div className="orders-empty">
 
-                <Link to="/products">
-                    Start Shopping
-                </Link>
+                    <p>
+                        You haven't placed any orders yet.
+                    </p>
+
+                    <Link
+                        to="/products"
+                        className="orders-empty-link"
+                    >
+                        Start Shopping
+                    </Link>
+
+                </div>
 
             </div>
         );
     }
 
     return (
-        <div>
+        <div className="orders-page">
 
-            <h1>My Orders</h1>
+            <h1 className="orders-title">My Orders</h1>
 
-            {orders.map((order) => (
+            <div className="orders-list">
 
-                <div key={order._id}>
+                {orders.map((order) => (
 
-                    <h2>
-                        Order #{order._id}
-                    </h2>
+                    <div
+                        key={order._id}
+                        className="order-card"
+                    >
 
-                    <p>
-                        Date:{" "}
-                        {new Date(
-                            order.createdAt
-                        ).toLocaleDateString()}
-                    </p>
+                        <div className="order-card-header">
 
-                    <p>
-                        Total: ₹{order.totalAmount}
-                    </p>
+                            <div>
 
-                    <p>
-                        Payment:{" "}
-                        {order.paymentMethod || "Cash on Delivery"}
-                    </p>
+                                <h2 className="order-id">
+                                    Order #{order._id}
+                                </h2>
 
-                    <p>
-                        Payment Status:{" "}
-                        {order.paymentStatus}
-                    </p>
+                                <p className="order-date">
+                                    {new Date(
+                                        order.createdAt
+                                    ).toLocaleDateString()}
+                                </p>
 
-                    <p>
-                        Order Status:{" "}
-                        {order.orderStatus}
-                    </p>
+                            </div>
 
-                    <Link to={`/orders/${order._id}`}>
-                        View Order
-                    </Link>
-
-                    {" "}
-
-                    {order.orderStatus === "processing" && (
-
-                        <button
-                            onClick={() =>
-                                cancelOrder(order._id)
-                            }
-                            disabled={
-                                cancellingId === order._id
-                            }
-                        >
-                            {cancellingId === order._id
-                                ? "Cancelling..."
-                                : "Cancel Order"}
-                        </button>
-
-                    )}
-
-                    <h3>Items</h3>
-
-                    {order.items.map((item) => (
-
-                        <div key={item._id}>
-
-                            <p>
-                                {item.product?.name}
-                            </p>
-
-                            <p>
-                                ₹{item.price} ×{" "}
-                                {item.quantity}
-                            </p>
+                            <span
+                                className={`order-badge status-${order.orderStatus}`}
+                            >
+                                {order.orderStatus}
+                            </span>
 
                         </div>
 
-                    ))}
+                        <div className="order-card-meta">
 
-                    <hr />
+                            <div className="order-meta-item">
+                                <span className="order-meta-label">Total</span>
+                                <span className="order-meta-value">
+                                    ₹{order.totalAmount}
+                                </span>
+                            </div>
 
-                </div>
+                            <div className="order-meta-item">
+                                <span className="order-meta-label">Payment</span>
+                                <span className="order-meta-value">
+                                    {order.paymentMethod || "Cash on Delivery"}
+                                </span>
+                            </div>
 
-            ))}
+                            <div className="order-meta-item">
+                                <span className="order-meta-label">Payment Status</span>
+                                <span className="order-meta-value">
+                                    {order.paymentStatus}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div className="order-items">
+
+                            {order.items.map((item) => (
+
+                                <div
+                                    key={item._id}
+                                    className="order-item-row"
+                                >
+
+                                    <span className="order-item-name">
+                                        {item.product?.name}
+                                    </span>
+
+                                    <span className="order-item-price">
+                                        ₹{item.price} × {item.quantity}
+                                    </span>
+
+                                </div>
+
+                            ))}
+
+                        </div>
+
+                        <div className="order-card-actions">
+
+                            <Link
+                                to={`/orders/${order._id}`}
+                                className="order-view-link"
+                            >
+                                View Order
+                            </Link>
+
+                            {order.orderStatus === "processing" && (
+
+                                <button
+                                    className="order-cancel-btn"
+                                    onClick={() =>
+                                        cancelOrder(order._id)
+                                    }
+                                    disabled={
+                                        cancellingId === order._id
+                                    }
+                                >
+                                    {cancellingId === order._id
+                                        ? "Cancelling..."
+                                        : "Cancel Order"}
+                                </button>
+
+                            )}
+
+                        </div>
+
+                    </div>
+
+                ))}
+
+            </div>
 
         </div>
     );

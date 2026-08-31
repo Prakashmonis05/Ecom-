@@ -19,7 +19,7 @@ const Home = () => {
                     "/products?limit=4"
                 );
 
-                setProducts(response.data.products);
+                setProducts(response.data.products || []);
 
             } catch (error) {
 
@@ -41,62 +41,83 @@ const Home = () => {
     }, []);
 
     return (
-        <main>
+        <main className="home-page">
 
-            {/* HERO */}
+            {/* ================= HERO ================= */}
 
-            <section className="hero-section">
+            <section className="home-hero">
 
-                <div className="container hero-content">
+                <div className="home-container">
 
-                    <div className="hero-text">
+                    <div className="hero-content">
 
-                        <span className="hero-label">
-                            DISCOVER YOUR NEXT FAVORITE
-                        </span>
+                        <div className="hero-copy">
 
-                        <h1>
-                            Every book is a
-                            <span> new journey.</span>
-                        </h1>
+                            <span className="hero-eyebrow">
+                                WELCOME TO VEYRO
+                            </span>
 
-                        <p>
-                            Explore stories, discover new ideas,
-                            and find books that stay with you.
-                        </p>
+                            <h1>
+                                Everything you want.
+                                <span> All in one place.</span>
+                            </h1>
 
-                        <div className="hero-buttons">
+                            <p>
+                                Discover products you'll love,
+                                compare your options, and shop
+                                everything you need from Veyro.
+                            </p>
 
-                            <Link
-                                to="/products"
-                                className="btn btn-primary"
-                            >
-                                Explore Books
-                            </Link>
+                            <div className="hero-actions">
 
-                            <Link
-                                to="/register"
-                                className="btn btn-secondary"
-                            >
-                                Join WordWander
-                            </Link>
+                                <Link
+                                    to="/products"
+                                    className="home-btn home-btn-dark"
+                                >
+                                    Shop Now
+                                    <span>→</span>
+                                </Link>
+
+                                <Link
+                                    to="/products"
+                                    className="home-btn home-btn-outline"
+                                >
+                                    Explore Products
+                                </Link>
+
+                            </div>
 
                         </div>
 
-                    </div>
 
-                    <div className="hero-visual">
+                        {/* Hero Product Showcase */}
 
-                        <div className="book-card book-one">
-                            📕
-                        </div>
+                        <div className="hero-showcase">
 
-                        <div className="book-card book-two">
-                            📗
-                        </div>
+                            <div className="hero-product hero-product-one">
+                                <span>NEW</span>
+                                <div className="hero-product-shape shape-one">
+                                    VEYRO
+                                </div>
+                            </div>
 
-                        <div className="book-card book-three">
-                            📘
+                            <div className="hero-product hero-product-two">
+                                <div className="hero-product-shape shape-two">
+                                    V
+                                </div>
+                            </div>
+
+                            <div className="hero-product hero-product-three">
+                                <div className="hero-product-shape shape-three">
+                                    VEYRO
+                                </div>
+                            </div>
+
+                            <div className="hero-floating-card">
+                                <strong>10K+</strong>
+                                <span>Products</span>
+                            </div>
+
                         </div>
 
                     </div>
@@ -106,26 +127,96 @@ const Home = () => {
             </section>
 
 
-            {/* CATEGORIES */}
+            {/* ================= BENEFITS ================= */}
+
+            <section className="benefits-section">
+
+                <div className="home-container">
+
+                    <div className="benefits-grid">
+
+                        <div className="benefit-item">
+
+                            <div className="benefit-icon">
+                                ✓
+                            </div>
+
+                            <div>
+                                <h3>Quality Products</h3>
+                                <p>Products worth buying</p>
+                            </div>
+
+                        </div>
+
+
+                        <div className="benefit-item">
+
+                            <div className="benefit-icon">
+                                →
+                            </div>
+
+                            <div>
+                                <h3>Fast Delivery</h3>
+                                <p>Delivered to your doorstep</p>
+                            </div>
+
+                        </div>
+
+
+                        <div className="benefit-item">
+
+                            <div className="benefit-icon">
+                                ♢
+                            </div>
+
+                            <div>
+                                <h3>Secure Payments</h3>
+                                <p>Safe and reliable checkout</p>
+                            </div>
+
+                        </div>
+
+
+                        <div className="benefit-item">
+
+                            <div className="benefit-icon">
+                                ↺
+                            </div>
+
+                            <div>
+                                <h3>Easy Returns</h3>
+                                <p>Simple return process</p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            {/* ================= CATEGORIES ================= */}
 
             <section className="categories-section">
 
-                <div className="container">
+                <div className="home-container">
 
-                    <div className="section-header">
+                    <div className="section-heading">
 
                         <div>
-                            <span className="section-label">
-                                EXPLORE
+                            <span className="section-eyebrow">
+                                SHOP BY CATEGORY
                             </span>
 
                             <h2>
-                                Browse Categories
+                                What are you looking for?
                             </h2>
                         </div>
 
                         <Link to="/products">
-                            View All →
+                            View all →
                         </Link>
 
                     </div>
@@ -134,42 +225,138 @@ const Home = () => {
                     <div className="category-grid">
 
                         <Link
-                            to="/products?category=fiction"
-                            className="category-card"
+                            to="/products?category=electronics"
+                            className="category-card category-electronics"
                         >
-                            <span>📖</span>
-                            <h3>Fiction</h3>
-                            <p>Stories that take you somewhere new.</p>
+
+                            <div className="category-content">
+
+                                <span className="category-number">
+                                    01
+                                </span>
+
+                                <h3>
+                                    Electronics
+                                </h3>
+
+                                <p>
+                                    Gadgets, devices and accessories
+                                </p>
+
+                                <span className="category-link">
+                                    Shop now →
+                                </span>
+
+                            </div>
+
+                            <div className="category-visual">
+                                <div className="category-device">
+                                    ◫
+                                </div>
+                            </div>
+
                         </Link>
 
 
                         <Link
-                            to="/products?category=technology"
-                            className="category-card"
+                            to="/products?category=fashion"
+                            className="category-card category-fashion"
                         >
-                            <span>💻</span>
-                            <h3>Technology</h3>
-                            <p>Learn about the world of technology.</p>
+
+                            <div className="category-content">
+
+                                <span className="category-number">
+                                    02
+                                </span>
+
+                                <h3>
+                                    Fashion
+                                </h3>
+
+                                <p>
+                                    Style, clothing and accessories
+                                </p>
+
+                                <span className="category-link">
+                                    Shop now →
+                                </span>
+
+                            </div>
+
+                            <div className="category-visual">
+                                <div className="category-fashion-shape">
+                                    V
+                                </div>
+                            </div>
+
                         </Link>
 
 
                         <Link
-                            to="/products?category=business"
-                            className="category-card"
+                            to="/products?category=home"
+                            className="category-card category-home"
                         >
-                            <span>📈</span>
-                            <h3>Business</h3>
-                            <p>Ideas for building and growing.</p>
+
+                            <div className="category-content">
+
+                                <span className="category-number">
+                                    03
+                                </span>
+
+                                <h3>
+                                    Home & Living
+                                </h3>
+
+                                <p>
+                                    Make your space feel better
+                                </p>
+
+                                <span className="category-link">
+                                    Shop now →
+                                </span>
+
+                            </div>
+
+                            <div className="category-visual">
+                                <div className="category-home-shape">
+                                    □
+                                </div>
+                            </div>
+
                         </Link>
 
 
                         <Link
-                            to="/products?category=self-help"
-                            className="category-card"
+                            to="/products?category=accessories"
+                            className="category-card category-accessories"
                         >
-                            <span>🧠</span>
-                            <h3>Self Help</h3>
-                            <p>Books for personal growth.</p>
+
+                            <div className="category-content">
+
+                                <span className="category-number">
+                                    04
+                                </span>
+
+                                <h3>
+                                    Accessories
+                                </h3>
+
+                                <p>
+                                    The finishing touches you need
+                                </p>
+
+                                <span className="category-link">
+                                    Shop now →
+                                </span>
+
+                            </div>
+
+                            <div className="category-visual">
+                                <div className="category-accessory-shape">
+                                    ○
+                                </div>
+                            </div>
+
                         </Link>
 
                     </div>
@@ -179,28 +366,28 @@ const Home = () => {
             </section>
 
 
-            {/* FEATURED PRODUCTS */}
+            {/* ================= FEATURED PRODUCTS ================= */}
 
             <section className="featured-section">
 
-                <div className="container">
+                <div className="home-container">
 
-                    <div className="section-header">
+                    <div className="section-heading">
 
                         <div>
 
-                            <span className="section-label">
-                                HANDPICKED
+                            <span className="section-eyebrow">
+                                FEATURED
                             </span>
 
                             <h2>
-                                Featured Books
+                                Popular right now
                             </h2>
 
                         </div>
 
                         <Link to="/products">
-                            View All →
+                            View all products →
                         </Link>
 
                     </div>
@@ -208,15 +395,26 @@ const Home = () => {
 
                     {loading ? (
 
-                        <p>Loading books...</p>
+                        <div className="home-loading">
+                            <div className="loading-spinner"></div>
+                            <p>Loading products...</p>
+                        </div>
 
                     ) : products.length === 0 ? (
 
-                        <p>No books available.</p>
+                        <div className="home-empty">
+                            <h3>
+                                No products available
+                            </h3>
+
+                            <p>
+                                New products will appear here.
+                            </p>
+                        </div>
 
                     ) : (
 
-                        <div className="product-grid">
+                        <div className="home-product-grid">
 
                             {products.map((product) => (
 
@@ -236,81 +434,55 @@ const Home = () => {
             </section>
 
 
-            {/* WHY WORDWANDER */}
+            {/* ================= DEAL BANNER ================= */}
 
-            <section className="why-section">
+            <section className="deal-section">
 
-                <div className="container">
+                <div className="home-container">
 
-                    <div className="section-header centered">
+                    <div className="deal-banner">
 
-                        <div>
+                        <div className="deal-copy">
 
-                            <span className="section-label">
-                                WHY WORDWANDER
+                            <span>
+                                VEYRO SPECIAL
                             </span>
 
                             <h2>
-                                More than just a bookstore
+                                Great products.
+                                <br />
+                                Better prices.
                             </h2>
 
-                        </div>
-
-                    </div>
-
-
-                    <div className="features-grid">
-
-                        <div className="feature">
-
-                            <div className="feature-icon">
-                                📚
-                            </div>
-
-                            <h3>
-                                Curated Collection
-                            </h3>
-
                             <p>
-                                Discover books selected to give
-                                you quality choices.
+                                Discover products worth adding
+                                to your cart.
                             </p>
+
+                            <Link
+                                to="/products"
+                                className="home-btn home-btn-white"
+                            >
+                                Shop Deals →
+                            </Link>
 
                         </div>
 
 
-                        <div className="feature">
+                        <div className="deal-visual">
 
-                            <div className="feature-icon">
-                                🚚
+                            <div className="deal-circle circle-one"></div>
+                            <div className="deal-circle circle-two"></div>
+
+                            <div className="deal-card">
+                                <small>VEYRO</small>
+                                <strong>
+                                    DEAL
+                                </strong>
+                                <span>
+                                    EVERY DAY
+                                </span>
                             </div>
-
-                            <h3>
-                                Fast Delivery
-                            </h3>
-
-                            <p>
-                                Get your favorite books delivered
-                                right to your doorstep.
-                            </p>
-
-                        </div>
-
-
-                        <div className="feature">
-
-                            <div className="feature-icon">
-                                🔒
-                            </div>
-
-                            <h3>
-                                Secure Checkout
-                            </h3>
-
-                            <p>
-                                Your orders and payment information
-                                stay protected.
-                            </p>
 
                         </div>
 
@@ -321,25 +493,118 @@ const Home = () => {
             </section>
 
 
-            {/* CTA */}
+            {/* ================= WHY VEYRO ================= */}
 
-            <section className="cta-section">
+            <section className="why-section">
 
-                <div className="container">
+                <div className="home-container">
+
+                    <div className="why-layout">
+
+                        <div className="why-heading">
+
+                            <span className="section-eyebrow">
+                                WHY VEYRO
+                            </span>
+
+                            <h2>
+                                Shopping should
+                                <span> be simple.</span>
+                            </h2>
+
+                            <p>
+                                Veyro brings products, prices and
+                                convenience together in one place.
+                            </p>
+
+                        </div>
+
+
+                        <div className="why-features">
+
+                            <div className="why-feature">
+
+                                <span>01</span>
+
+                                <div>
+                                    <h3>
+                                        Curated Products
+                                    </h3>
+
+                                    <p>
+                                        Find useful products without
+                                        endless searching.
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div className="why-feature">
+
+                                <span>02</span>
+
+                                <div>
+                                    <h3>
+                                        Simple Shopping
+                                    </h3>
+
+                                    <p>
+                                        Browse, choose, add to cart
+                                        and checkout without friction.
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div className="why-feature">
+
+                                <span>03</span>
+
+                                <div>
+                                    <h3>
+                                        Customer First
+                                    </h3>
+
+                                    <p>
+                                        A shopping experience designed
+                                        around the customer.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            {/* ================= FINAL CTA ================= */}
+
+            <section className="final-cta">
+
+                <div className="home-container">
+
+                    <span className="section-eyebrow">
+                        READY TO SHOP?
+                    </span>
 
                     <h2>
-                        Ready to find your next story?
+                        Find something
+                        <br />
+                        you'll love.
                     </h2>
-
-                    <p>
-                        Start exploring the WordWander collection.
-                    </p>
 
                     <Link
                         to="/products"
-                        className="btn btn-primary"
+                        className="home-btn home-btn-white"
                     >
-                        Start Wandering →
+                        Start Shopping →
                     </Link>
 
                 </div>

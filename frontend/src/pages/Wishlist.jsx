@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import "./Wishlist.css";
 
 const Wishlist = () => {
 
@@ -92,27 +93,30 @@ const Wishlist = () => {
     };
 
     if (loading) {
-        return <p>Loading wishlist...</p>;
+        return <p className="wishlist-status">Loading wishlist...</p>;
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return <p className="wishlist-status wishlist-error">{error}</p>;
     }
 
     return (
-        <div>
+        <div className="wishlist-page">
 
-            <h1>My Wishlist</h1>
+            <h1 className="wishlist-title">My Wishlist</h1>
 
             {products.length === 0 ? (
 
-                <div>
+                <div className="wishlist-empty">
 
                     <p>
                         Your wishlist is empty.
                     </p>
 
-                    <Link to="/products">
+                    <Link
+                        to="/products"
+                        className="wishlist-empty-link"
+                    >
                         Browse Products
                     </Link>
 
@@ -120,85 +124,104 @@ const Wishlist = () => {
 
             ) : (
 
-                <div>
+                <div className="wishlist-grid">
 
                     {products.map((product) => (
 
-                        <div key={product._id}>
+                        <div
+                            key={product._id}
+                            className="wishlist-card"
+                        >
 
-                            {product.images?.length > 0 ? (
+                            <div className="wishlist-card-image">
 
-                                <img
-                                    src={product.images[0]}
-                                    alt={product.name}
-                                    width="200"
-                                />
+                                {product.images?.length > 0 ? (
 
-                            ) : (
+                                    <img
+                                        src={product.images[0]}
+                                        alt={product.name}
+                                    />
 
-                                <p>No Image</p>
+                                ) : (
 
-                            )}
+                                    <div className="wishlist-no-image">
+                                        No Image
+                                    </div>
 
-                            <h2>
-                                {product.name}
-                            </h2>
+                                )}
 
-                            <p>
-                                Brand: {product.brand}
-                            </p>
+                            </div>
 
-                            <p>
-                                Category:{" "}
-                                {product.category?.name}
-                            </p>
+                            <div className="wishlist-card-body">
 
-                            <h3>
-                                ₹{product.price}
-                            </h3>
+                                <h2 className="wishlist-card-name">
+                                    {product.name}
+                                </h2>
 
-                            <p>
-                                {product.stock > 0
-                                    ? `In Stock: ${product.stock}`
-                                    : "Out of Stock"}
-                            </p>
+                                <p className="wishlist-card-meta">
+                                    {product.brand}
+                                    {product.category?.name &&
+                                        ` · ${product.category.name}`}
+                                </p>
 
-                            <Link
-                                to={`/products/${product._id}`}
-                            >
-                                View Product
-                            </Link>
+                                <div className="wishlist-card-price-row">
 
-                            <br />
-                            <br />
+                                    <h3 className="wishlist-card-price">
+                                        ₹{product.price}
+                                    </h3>
 
-                            <button
-                                onClick={() =>
-                                    addToCart(
-                                        product._id,
-                                        product.stock
-                                    )
-                                }
-                                disabled={product.stock <= 0}
-                            >
-                                {product.stock <= 0
-                                    ? "Out of Stock"
-                                    : "Add to Cart"}
-                            </button>
+                                    <span
+                                        className={
+                                            product.stock > 0
+                                                ? "wishlist-stock in-stock"
+                                                : "wishlist-stock out-stock"
+                                        }
+                                    >
+                                        {product.stock > 0
+                                            ? `In Stock: ${product.stock}`
+                                            : "Out of Stock"}
+                                    </span>
 
-                            {" "}
+                                </div>
 
-                            <button
-                                onClick={() =>
-                                    removeFromWishlist(
-                                        product._id
-                                    )
-                                }
-                            >
-                                Remove
-                            </button>
+                                <Link
+                                    to={`/products/${product._id}`}
+                                    className="wishlist-view-link"
+                                >
+                                    View Product
+                                </Link>
 
-                            <hr />
+                                <div className="wishlist-card-actions">
+
+                                    <button
+                                        className="wishlist-btn wishlist-btn-primary"
+                                        onClick={() =>
+                                            addToCart(
+                                                product._id,
+                                                product.stock
+                                            )
+                                        }
+                                        disabled={product.stock <= 0}
+                                    >
+                                        {product.stock <= 0
+                                            ? "Out of Stock"
+                                            : "Add to Cart"}
+                                    </button>
+
+                                    <button
+                                        className="wishlist-btn wishlist-btn-remove"
+                                        onClick={() =>
+                                            removeFromWishlist(
+                                                product._id
+                                            )
+                                        }
+                                    >
+                                        Remove
+                                    </button>
+
+                                </div>
+
+                            </div>
 
                         </div>
 

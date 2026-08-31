@@ -25,7 +25,7 @@ const Navbar = () => {
                     to="/"
                     className="navbar-logo"
                 >
-                    WordWander
+                    Veyro
                 </Link>
 
                 <div className="navbar-links">

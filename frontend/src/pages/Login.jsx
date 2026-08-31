@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import "../styles/Auth.css";
 
 const Login = () => {
 
@@ -110,6 +111,13 @@ const Login = () => {
                 >
                     {loading ? "Logging in..." : "Login"}
                 </button>
+
+                <p className="auth-switch">
+                    Don't have an account?{" "}
+                    <span onClick={() => navigate("/register")}>
+                        Register
+                    </span>
+                </p>
 
             </form>
 
