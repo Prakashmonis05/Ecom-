@@ -39,78 +39,116 @@ const AdminDashboard = () => {
     }, []);
 
     if (loading) {
-        return <p>Loading dashboard...</p>;
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message">
+                    Loading dashboard...
+                </p>
+            </div>
+        );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message admin-state__message--error">
+                    {error}
+                </p>
+            </div>
+        );
     }
 
     return (
-        <div>
+        <div className="admin-page admin-dashboard">
 
-            <h1>Admin Dashboard</h1>
+            <header className="admin-page__header">
+                <h1 className="admin-page__title">Admin Dashboard</h1>
+            </header>
 
-            <div>
+            <div className="admin-dashboard__grid">
 
-                <h2>Products</h2>
+                <section className="admin-card admin-card--products">
 
-                <p>{stats.totalProducts}</p>
+                    <h2 className="admin-card__title">Products</h2>
 
-                <Link to="/admin/products">
-                    Manage Products
-                </Link>
+                    <p className="admin-card__metric">
+                        {stats.totalProducts}
+                    </p>
 
-                <br />
+                    <div className="admin-card__actions">
+                        <Link
+                            className="admin-link admin-link--action"
+                            to="/admin/products"
+                        >
+                            Manage Products
+                        </Link>
 
-                <Link to="/admin/products/low-stock">
-                    View Low Stock Products
-                </Link>
+                        <Link
+                            className="admin-link admin-link--action"
+                            to="/admin/products/low-stock"
+                        >
+                            View Low Stock Products
+                        </Link>
+                    </div>
 
-            </div>
-            <hr />
+                </section>
 
-            <div>
+                <section className="admin-card admin-card--orders">
 
-                <h2>Orders</h2>
-                <p>{stats.totalOrders}</p>
+                    <h2 className="admin-card__title">Orders</h2>
+                    <p className="admin-card__metric">
+                        {stats.totalOrders}
+                    </p>
 
-                <Link to="/admin/orders">
-                    Manage Orders
-                </Link>
+                    <div className="admin-card__actions">
+                        <Link
+                            className="admin-link admin-link--action"
+                            to="/admin/orders"
+                        >
+                            Manage Orders
+                        </Link>
+                    </div>
 
-            </div>
+                </section>
 
-            <hr />
+                <section className="admin-card admin-card--categories">
 
-            <div>
+                    <h2 className="admin-card__title">Categories</h2>
 
-                <h2>Categories</h2>
+                    <div className="admin-card__actions">
+                        <Link
+                            className="admin-link admin-link--action"
+                            to="/admin/categories"
+                        >
+                            Manage Categories
+                        </Link>
+                    </div>
 
-                <Link to="/admin/categories">
-                    Manage Categories
-                </Link>
+                </section>
 
-            </div>
+                <section className="admin-card admin-card--users">
 
-            <hr />
+                    <h2 className="admin-card__title">Users</h2>
+                    <p className="admin-card__metric">
+                        {stats.totalUsers}
+                    </p>
 
-            <div>
+                    <div className="admin-card__actions">
+                        <Link
+                            className="admin-link admin-link--action"
+                            to="/admin/users"
+                        >
+                            Manage Users
+                        </Link>
+                    </div>
+                </section>
 
-                <h2>Users</h2>
-                <p>{stats.totalUsers}</p>
-
-                <Link to="/admin/users">
-                    Manage Users
-                </Link>
-
-            </div>
-
-            <hr />
-
-            <div>
-                <h2>Total Revenue</h2>
-                <p>₹{stats.totalRevenue}</p>
+                <section className="admin-card admin-card--revenue">
+                    <h2 className="admin-card__title">Total Revenue</h2>
+                    <p className="admin-card__metric">
+                        ₹{stats.totalRevenue}
+                    </p>
+                </section>
             </div>
 
         </div>

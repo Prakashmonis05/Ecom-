@@ -76,127 +76,173 @@ const AdminOrderDetails = () => {
     };
 
     if (loading) {
-        return <p>Loading order...</p>;
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message">
+                    Loading order...
+                </p>
+            </div>
+        );
     }
 
     if (error && !order) {
-        return <p>{error}</p>;
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message admin-state__message--error">
+                    {error}
+                </p>
+            </div>
+        );
     }
 
     if (!order) {
-        return <p>Order not found</p>;
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message">
+                    Order not found
+                </p>
+            </div>
+        );
     }
 
     return (
-        <div>
+        <div className="admin-page admin-order-details">
 
-            <h1>Order Details</h1>
+            <header className="admin-page__header">
+                <h1 className="admin-page__title">Order Details</h1>
 
-            <p>
-                Order ID: {order._id}
-            </p>
-
-            <p>
-                Date:{" "}
-                {new Date(
-                    order.createdAt
-                ).toLocaleDateString()}
-            </p>
-
-            <h2>Customer</h2>
-
-            <p>
-                Name: {order.user?.name}
-            </p>
-
-            <p>
-                Email: {order.user?.email}
-            </p>
-
-            <h2>Shipping Address</h2>
-
-            <p>{order.shippingAddress?.name}</p>
-            <p>{order.shippingAddress?.phone}</p>
-            <p>{order.shippingAddress?.address}</p>
-            <p>
-                {order.shippingAddress?.city},{" "}
-                {order.shippingAddress?.state}
-            </p>
-            <p>{order.shippingAddress?.pincode}</p>
-
-            <h2>Items</h2>
-
-            {order.items.map((item) => (
-
-                <div key={item._id}>
-
+                <div className="admin-order-details__summary">
                     <p>
-                        {item.product?.name}
+                        Order ID: {order._id}
                     </p>
 
                     <p>
-                        ₹{item.price} × {item.quantity}
+                        Date:{" "}
+                        {new Date(
+                            order.createdAt
+                        ).toLocaleDateString()}
                     </p>
+                </div>
+            </header>
 
-                    <p>
-                        Subtotal: ₹
-                        {item.price * item.quantity}
-                    </p>
+            <div className="admin-detail-grid">
+                <section className="admin-card admin-detail-card">
+                    <h2 className="admin-card__title">Customer</h2>
 
-                    <hr />
+                    <div className="admin-detail-card__content">
+                        <p>
+                            Name: {order.user?.name}
+                        </p>
+
+                        <p>
+                            Email: {order.user?.email}
+                        </p>
+                    </div>
+                </section>
+
+                <section className="admin-card admin-detail-card">
+                    <h2 className="admin-card__title">Shipping Address</h2>
+
+                    <div className="admin-detail-card__content">
+                        <p>{order.shippingAddress?.name}</p>
+                        <p>{order.shippingAddress?.phone}</p>
+                        <p>{order.shippingAddress?.address}</p>
+                        <p>
+                            {order.shippingAddress?.city},{" "}
+                            {order.shippingAddress?.state}
+                        </p>
+                        <p>{order.shippingAddress?.pincode}</p>
+                    </div>
+                </section>
+            </div>
+
+            <section className="admin-card admin-order-items">
+                <h2 className="admin-card__title">Items</h2>
+
+                <div className="admin-list admin-order-items__list">
+                    {order.items.map((item) => (
+
+                        <div className="admin-order-item" key={item._id}>
+
+                            <p>
+                                {item.product?.name}
+                            </p>
+
+                            <p>
+                                ₹{item.price} × {item.quantity}
+                            </p>
+
+                            <p>
+                                Subtotal: ₹
+                                {item.price * item.quantity}
+                            </p>
+
+                        </div>
+
+                    ))}
 
                 </div>
 
-            ))}
+                <h2 className="admin-order-items__total">
+                    Total: ₹{order.totalAmount}
+                </h2>
+            </section>
 
-            <h2>
-                Total: ₹{order.totalAmount}
-            </h2>
+            <section className="admin-card admin-order-status">
+                <h2 className="admin-card__title">Order Status</h2>
 
-            <h2>Order Status</h2>
+                <div className="admin-card__actions">
+                    <select
+                        className="admin-form__control admin-order-status__control"
+                        value={status}
+                        onChange={(e) =>
+                            setStatus(e.target.value)
+                        }
+                    >
+                        <option value="processing">
+                            Processing
+                        </option>
 
-            <select
-                value={status}
-                onChange={(e) =>
-                    setStatus(e.target.value)
-                }
-            >
-                <option value="processing">
-                    Processing
-                </option>
+                        <option value="shipped">
+                            Shipped
+                        </option>
 
-                <option value="shipped">
-                    Shipped
-                </option>
+                        <option value="delivered">
+                            Delivered
+                        </option>
 
-                <option value="delivered">
-                    Delivered
-                </option>
+                        <option value="cancelled">
+                            Cancelled
+                        </option>
 
-                <option value="cancelled">
-                    Cancelled
-                </option>
+                    </select>
 
-            </select>
+                    <button
+                        className="admin-button admin-button--primary"
+                        onClick={updateStatus}
+                        disabled={updating || status === order.orderStatus}
+                    >
+                        {updating
+                            ? "Updating..."
+                            : "Update Status"}
+                    </button>
+                </div>
 
-            <button
-                onClick={updateStatus}
-                disabled={updating || status === order.orderStatus}
-            >
-                {updating
-                    ? "Updating..."
-                    : "Update Status"}
-            </button>
+                {error && (
+                    <p className="admin-form__message admin-form__message--error">
+                        {error}
+                    </p>
+                )}
+            </section>
 
-            {error && (
-                <p>{error}</p>
-            )}
-
-            <br />
-
-            <Link to="/admin/orders">
-                Back to Orders
-            </Link>
+            <div className="admin-page__footer-actions">
+                <Link
+                    className="admin-button admin-button--secondary"
+                    to="/admin/orders"
+                >
+                    Back to Orders
+                </Link>
+            </div>
 
         </div>
     );

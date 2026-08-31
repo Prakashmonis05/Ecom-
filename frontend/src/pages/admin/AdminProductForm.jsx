@@ -236,9 +236,11 @@ const AdminProductForm = () => {
     if (fetching) {
 
         return (
-            <p>
-                Loading product...
-            </p>
+            <div className="admin-page admin-state">
+                <p className="admin-state__message">
+                    Loading product...
+                </p>
+            </div>
         );
 
     }
@@ -248,161 +250,162 @@ const AdminProductForm = () => {
     // =========================
 
     return (
-        <div>
+        <div className="admin-page admin-product-form-page">
 
-            <h1>
-                {isEditMode
-                    ? "Edit Product"
-                    : "Create Product"}
-            </h1>
+            <header className="admin-page__header">
+                <h1 className="admin-page__title">
+                    {isEditMode
+                        ? "Edit Product"
+                        : "Create Product"}
+                </h1>
+            </header>
 
             {error && (
-                <p>
+                <p className="admin-form__message admin-form__message--error">
                     {error}
                 </p>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form className="admin-form admin-card" onSubmit={handleSubmit}>
 
                 {/* Product Name */}
 
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Product Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                />
-
-                <br />
-                <br />
+                <div className="admin-form__field">
+                    <input
+                        className="admin-form__control"
+                        type="text"
+                        name="name"
+                        placeholder="Product Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
                 {/* Description */}
 
-                <textarea
-                    name="description"
-                    placeholder="Description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    required
-                />
-
-                <br />
-                <br />
+                <div className="admin-form__field">
+                    <textarea
+                        className="admin-form__control admin-form__control--textarea"
+                        name="description"
+                        placeholder="Description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
                 {/* Price */}
 
-                <input
-                    type="number"
-                    name="price"
-                    placeholder="Price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    min="0"
-                    required
-                />
-
-                <br />
-                <br />
+                <div className="admin-form__field">
+                    <input
+                        className="admin-form__control"
+                        type="number"
+                        name="price"
+                        placeholder="Price"
+                        value={formData.price}
+                        onChange={handleChange}
+                        min="0"
+                        required
+                    />
+                </div>
 
                 {/* Brand */}
 
-                <input
-                    type="text"
-                    name="brand"
-                    placeholder="Brand"
-                    value={formData.brand}
-                    onChange={handleChange}
-                    required
-                />
-
-                <br />
-                <br />
+                <div className="admin-form__field">
+                    <input
+                        className="admin-form__control"
+                        type="text"
+                        name="brand"
+                        placeholder="Brand"
+                        value={formData.brand}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
                 {/* Category */}
 
-                <label>
-                    Category
-                </label>
+                <div className="admin-form__field">
+                    <label className="admin-form__label">
+                        Category
+                    </label>
 
-                <br />
+                    <select
+                        className="admin-form__control"
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        required
+                    >
 
-                <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    required
-                >
-
-                    <option value="">
-                        Select Category
-                    </option>
-
-                    {categories.map((category) => (
-
-                        <option
-                            key={category._id}
-                            value={category._id}
-                        >
-                            {category.name}
+                        <option value="">
+                            Select Category
                         </option>
 
-                    ))}
+                        {categories.map((category) => (
 
-                </select>
+                            <option
+                                key={category._id}
+                                value={category._id}
+                            >
+                                {category.name}
+                            </option>
 
-                <br />
-                <br />
+                        ))}
+
+                    </select>
+                </div>
 
                 {/* Stock */}
 
-                <label>
-                    Stock
-                </label>
+                <div className="admin-form__field">
+                    <label className="admin-form__label">
+                        Stock
+                    </label>
 
-                <br />
-
-                <input
-                    type="number"
-                    name="stock"
-                    placeholder="Stock"
-                    value={formData.stock}
-                    onChange={handleChange}
-                    min="0"
-                    required
-                />
-
-                <br />
-                <br />
+                    <input
+                        className="admin-form__control"
+                        type="number"
+                        name="stock"
+                        placeholder="Stock"
+                        value={formData.stock}
+                        onChange={handleChange}
+                        min="0"
+                        required
+                    />
+                </div>
 
                 {/* Images */}
 
-                <input
-                    type="text"
-                    name="images"
-                    placeholder="Image URLs separated by commas"
-                    value={formData.images}
-                    onChange={handleChange}
-                />
-
-                <br />
-                <br />
+                <div className="admin-form__field">
+                    <input
+                        className="admin-form__control"
+                        type="text"
+                        name="images"
+                        placeholder="Image URLs separated by commas"
+                        value={formData.images}
+                        onChange={handleChange}
+                    />
+                </div>
 
                 {/* Submit */}
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                >
+                <div className="admin-form__actions">
+                    <button
+                        className="admin-button admin-button--primary"
+                        type="submit"
+                        disabled={loading}
+                    >
 
-                    {loading
-                        ? "Saving..."
-                        : isEditMode
-                            ? "Update Product"
-                            : "Create Product"}
+                        {loading
+                            ? "Saving..."
+                            : isEditMode
+                                ? "Update Product"
+                                : "Create Product"}
 
-                </button>
+                    </button>
+                </div>
 
             </form>
 

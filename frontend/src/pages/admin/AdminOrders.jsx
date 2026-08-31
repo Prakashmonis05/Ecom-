@@ -60,96 +60,120 @@ const AdminOrders = () => {
     };
 
     if (loading) {
-        return <p>Loading orders...</p>;
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message">
+                    Loading orders...
+                </p>
+            </div>
+        );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message admin-state__message--error">
+                    {error}
+                </p>
+            </div>
+        );
     }
 
     return (
-        <div>
+        <div className="admin-page admin-orders">
 
-            <h1>Manage Orders</h1>
+            <header className="admin-page__header">
+                <h1 className="admin-page__title">Manage Orders</h1>
+            </header>
 
             {orders.length === 0 ? (
 
-                <p>No orders found.</p>
+                <div className="admin-empty-state">
+                    <p>No orders found.</p>
+                </div>
 
             ) : (
 
-                orders.map((order) => (
+                <div className="admin-list admin-order-list">
+                    {orders.map((order) => (
 
-                    <div key={order._id}>
-
-                        <h2>
-                            Order #{order._id}
-                        </h2>
-
-                        <p>
-                            Customer: {order.user?.name}
-                        </p>
-
-                        <p>
-                            Email: {order.user?.email}
-                        </p>
-
-                        <p>
-                            Total: ₹{order.totalAmount}
-                        </p>
-
-                        <p>
-                            Payment: {order.paymentMethod}
-                        </p>
-
-                        <p>
-                            Payment Status: {order.paymentStatus}
-                        </p>
-
-                        <p>
-                            Current Status: {order.orderStatus}
-                        </p>
-
-                        <select
-                            value={order.orderStatus}
-                            onChange={(e) =>
-                                updateStatus(
-                                    order._id,
-                                    e.target.value
-                                )
-                            }
+                        <article
+                            className="admin-card admin-order-card"
+                            key={order._id}
                         >
-                            <option value="processing">
-                                Processing
-                            </option>
 
-                            <option value="shipped">
-                                Shipped
-                            </option>
+                            <h2 className="admin-card__title">
+                                Order #{order._id}
+                            </h2>
 
-                            <option value="delivered">
-                                Delivered
-                            </option>
+                            <div className="admin-order-card__meta">
+                                <p>
+                                    Customer: {order.user?.name}
+                                </p>
 
-                            <option value="cancelled">
-                                Cancelled
-                            </option>
+                                <p>
+                                    Email: {order.user?.email}
+                                </p>
 
-                        </select>
+                                <p>
+                                    Total: ₹{order.totalAmount}
+                                </p>
 
-                        {" "}
+                                <p>
+                                    Payment: {order.paymentMethod}
+                                </p>
 
-                        <Link
-                            to={`/admin/orders/${order._id}`}
-                        >
-                            View Order
-                        </Link>
+                                <p>
+                                    Payment Status: {order.paymentStatus}
+                                </p>
 
-                        <hr />
+                                <p>
+                                    Current Status: {order.orderStatus}
+                                </p>
+                            </div>
 
-                    </div>
+                            <div className="admin-card__actions">
+                                <select
+                                    className="admin-form__control admin-order-card__status-control"
+                                    value={order.orderStatus}
+                                    onChange={(e) =>
+                                        updateStatus(
+                                            order._id,
+                                            e.target.value
+                                        )
+                                    }
+                                >
+                                    <option value="processing">
+                                        Processing
+                                    </option>
 
-                ))
+                                    <option value="shipped">
+                                        Shipped
+                                    </option>
+
+                                    <option value="delivered">
+                                        Delivered
+                                    </option>
+
+                                    <option value="cancelled">
+                                        Cancelled
+                                    </option>
+
+                                </select>
+
+                                <Link
+                                    className="admin-button admin-button--secondary"
+                                    to={`/admin/orders/${order._id}`}
+                                >
+                                    View Order
+                                </Link>
+                            </div>
+
+                        </article>
+
+                    ))}
+
+                </div>
 
             )}
 

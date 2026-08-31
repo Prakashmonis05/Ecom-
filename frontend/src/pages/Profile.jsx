@@ -36,33 +36,50 @@ const Profile = () => {
     }, []);
 
     if (loading) {
-        return <p>Loading profile...</p>;
+        return (
+            <div className="page-shell loading-state">
+                <p>Loading profile...</p>
+            </div>
+        );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <div className="page-shell">
+                <p className="status-badge status-badge-error">
+                    {error}
+                </p>
+            </div>
+        );
     }
 
     return (
-        <div>
+        <div className="page-shell">
 
-            <h1>My Profile</h1>
+            <div className="page-header">
+                <h1>My Profile</h1>
+            </div>
 
-            <p>
-                Name: {profile?.name}
-            </p>
+            <div className="form-card">
+                <p>
+                    Name: {profile?.name}
+                </p>
 
-            <p>
-                Email: {profile?.email}
-            </p>
+                <p>
+                    Email: {profile?.email}
+                </p>
 
-            <p>
-                Role: {profile?.role}
-            </p>
+                <p>
+                    Role: {profile?.role}
+                </p>
 
-            <Link to="/change-password">
-                Change Password
-            </Link>
+                <Link
+                    className="button button-secondary"
+                    to="/change-password"
+                >
+                    Change Password
+                </Link>
+            </div>
 
         </div>
     );

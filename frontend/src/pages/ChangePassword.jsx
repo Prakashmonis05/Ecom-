@@ -87,54 +87,64 @@ const ChangePassword = () => {
     };
 
     return (
-        <div>
+        <div className="page-shell">
 
-            <h1>Change Password</h1>
+            <div className="page-header">
+                <h1>Change Password</h1>
+            </div>
 
             {error && (
-                <p>{error}</p>
+                <p className="status-badge status-badge-error">
+                    {error}
+                </p>
             )}
 
             {success && (
-                <p>{success}</p>
+                <p className="status-badge status-badge-success">
+                    {success}
+                </p>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form
+                className="form-card"
+                onSubmit={handleSubmit}
+            >
 
-                <input
-                    type="password"
-                    name="currentPassword"
-                    placeholder="Current Password"
-                    value={formData.currentPassword}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="form-field">
+                    <input
+                        type="password"
+                        name="currentPassword"
+                        placeholder="Current Password"
+                        value={formData.currentPassword}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <br />
+                <div className="form-field">
+                    <input
+                        type="password"
+                        name="newPassword"
+                        placeholder="New Password"
+                        value={formData.newPassword}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <input
-                    type="password"
-                    name="newPassword"
-                    placeholder="New Password"
-                    value={formData.newPassword}
-                    onChange={handleChange}
-                    required
-                />
-
-                <br />
-
-                <input
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Confirm New Password"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    required
-                />
-
-                <br />
+                <div className="form-field">
+                    <input
+                        type="password"
+                        name="confirmPassword"
+                        placeholder="Confirm New Password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
                 <button
+                    className="button button-primary"
                     type="submit"
                     disabled={loading}
                 >
@@ -144,10 +154,10 @@ const ChangePassword = () => {
                 </button>
 
             </form>
-
-            <br />
-
-            <button onClick={() => navigate("/profile")}>
+            <button
+                className="button button-secondary"
+                onClick={() => navigate("/profile")}
+            >
                 Back to Profile
             </button>
 

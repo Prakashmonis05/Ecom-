@@ -72,90 +72,98 @@ const Checkout = () => {
     };
 
     return (
-        <div>
+        <div className="page-shell">
 
-            <h1>Checkout</h1>
+            <div className="page-header">
+                <h1>Checkout</h1>
+            </div>
 
             {error && (
-                <p>{error}</p>
+                <p className="status-badge status-badge-error">
+                    {error}
+                </p>
             )}
 
-            <form onSubmit={placeOrder}>
+            <form
+                className="form-card"
+                onSubmit={placeOrder}
+            >
 
                 <h2>Shipping Address</h2>
 
-                <input
-                    type="text"
-                    name="name"
-                    placeholder="Full Name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="form-field">
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Full Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <br />
+                <div className="form-field">
+                    <input
+                        type="tel"
+                        name="phone"
+                        placeholder="Phone Number"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <input
-                    type="tel"
-                    name="phone"
-                    placeholder="Phone Number"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="form-field">
+                    <textarea
+                        name="address"
+                        placeholder="Address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <br />
+                <div className="form-field">
+                    <input
+                        type="text"
+                        name="city"
+                        placeholder="City"
+                        value={formData.city}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <textarea
-                    name="address"
-                    placeholder="Address"
-                    value={formData.address}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="form-field">
+                    <input
+                        type="text"
+                        name="state"
+                        placeholder="State"
+                        value={formData.state}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <br />
-
-                <input
-                    type="text"
-                    name="city"
-                    placeholder="City"
-                    value={formData.city}
-                    onChange={handleChange}
-                    required
-                />
-
-                <br />
-
-                <input
-                    type="text"
-                    name="state"
-                    placeholder="State"
-                    value={formData.state}
-                    onChange={handleChange}
-                    required
-                />
-
-                <br />
-
-                <input
-                    type="text"
-                    name="pincode"
-                    placeholder="Pincode"
-                    value={formData.pincode}
-                    onChange={handleChange}
-                    required
-                />
-
-                <br />
+                <div className="form-field">
+                    <input
+                        type="text"
+                        name="pincode"
+                        placeholder="Pincode"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
                 <h2>Payment Method</h2>
 
-                <p>
+                <p className="status-badge">
                     Cash on Delivery
                 </p>
 
                 <button
+                    className="button button-primary"
                     type="submit"
                     disabled={loading}
                 >

@@ -68,88 +68,121 @@ const AdminProducts = () => {
     };
 
     if (loading) {
-        return <p>Loading products...</p>;
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message">
+                    Loading products...
+                </p>
+            </div>
+        );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message admin-state__message--error">
+                    {error}
+                </p>
+            </div>
+        );
     }
 
     return (
-        <div>
+        <div className="admin-page admin-products">
 
-            <h1>Manage Products</h1>
+            <header className="admin-page__header">
+                <h1 className="admin-page__title">Manage Products</h1>
 
-            <Link to="/admin/products/create">
-                Add New Product
-            </Link>
-
-            <hr />
+                <Link
+                    className="admin-button admin-button--primary"
+                    to="/admin/products/create"
+                >
+                    Add New Product
+                </Link>
+            </header>
 
             {products.length === 0 ? (
 
-                <p>No products found.</p>
+                <div className="admin-empty-state">
+                    <p>No products found.</p>
+                </div>
 
             ) : (
 
-                products.map((product) => (
+                <div className="admin-list admin-product-list">
 
-                    <div key={product._id}>
+                    {products.map((product) => (
 
-                        {product.images?.length > 0 && (
-                            <img
-                                src={product.images[0]}
-                                alt={product.name}
-                                width="150"
-                            />
-                        )}
-
-                        <h2>{product.name}</h2>
-
-                        <p>
-                            Brand: {product.brand}
-                        </p>
-
-                        <p>
-                            Category: {product.category}
-                        </p>
-
-                        <p>
-                            Price: ₹{product.price}
-                        </p>
-
-                        <p>
-                            Stock: {product.stock}
-                        </p>
-
-                        <p>
-                            Status:{" "}
-                            {product.isActive
-                                ? "Active"
-                                : "Inactive"}
-                        </p>
-
-                        <Link
-                            to={`/admin/products/${product._id}/edit`}
+                        <article
+                            className="admin-card admin-product-card"
+                            key={product._id}
                         >
-                            Edit
-                        </Link>
 
-                        {" "}
+                            {product.images?.length > 0 && (
+                                <div className="admin-product-card__media">
+                                    <img
+                                        className="admin-product-card__image"
+                                        src={product.images[0]}
+                                        alt={product.name}
+                                        width="150"
+                                    />
+                                </div>
+                            )}
 
-                        <button
-                            onClick={() =>
-                                deleteProduct(product._id)
-                            }
-                        >
-                            Delete
-                        </button>
+                            <div className="admin-product-card__content">
+                                <h2 className="admin-card__title">
+                                    {product.name}
+                                </h2>
 
-                        <hr />
+                                <div className="admin-product-card__meta">
+                                    <p>
+                                        Brand: {product.brand}
+                                    </p>
 
-                    </div>
+                                    <p>
+                                        Category: {product.category}
+                                    </p>
 
-                ))
+                                    <p>
+                                        Price: ₹{product.price}
+                                    </p>
+
+                                    <p>
+                                        Stock: {product.stock}
+                                    </p>
+
+                                    <p>
+                                        Status:{" "}
+                                        {product.isActive
+                                            ? "Active"
+                                            : "Inactive"}
+                                    </p>
+                                </div>
+
+                                <div className="admin-card__actions">
+                                    <Link
+                                        className="admin-button admin-button--secondary"
+                                        to={`/admin/products/${product._id}/edit`}
+                                    >
+                                        Edit
+                                    </Link>
+
+                                    <button
+                                        className="admin-button admin-button--danger"
+                                        onClick={() =>
+                                            deleteProduct(product._id)
+                                        }
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+
+                        </article>
+
+                    ))}
+
+                </div>
 
             )}
 

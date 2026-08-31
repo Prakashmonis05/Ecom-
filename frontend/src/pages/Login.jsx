@@ -64,35 +64,47 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <div className="page-shell">
 
-            <h1>Login</h1>
+            <div className="page-header">
+                <h1>Login</h1>
+            </div>
 
             {error && (
-                <p>{error}</p>
+                <p className="status-badge status-badge-error">
+                    {error}
+                </p>
             )}
 
-            <form onSubmit={handleSubmit}>
+            <form
+                className="form-card"
+                onSubmit={handleSubmit}
+            >
 
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="form-field">
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                />
+                <div className="form-field">
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
                 <button
+                    className="button button-primary"
                     type="submit"
                     disabled={loading}
                 >
