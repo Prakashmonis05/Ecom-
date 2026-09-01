@@ -28,6 +28,38 @@
     --shadow-lift: 0 20px 50px rgba(43, 34, 22, 0.15);
     --display: Georgia, "Times New Roman", serif;
 }
+/* ========================================
+   VEYRO GLOBAL RESET
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background: #f7f7f5;
+    color: #111111;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+a {
+    color: inherit;
+}
 
 body {
     color: var(--ink);

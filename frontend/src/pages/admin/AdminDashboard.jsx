@@ -470,7 +470,7 @@ const AdminDashboard = () => {
                     <div className="quick-action-buttons">
 
                         <Link
-                            to="/admin/products"
+                            to="/products"
                             className="quick-primary"
                         >
                             Manage Products

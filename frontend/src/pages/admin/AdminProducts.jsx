@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
+import "./AdminProducts.css";
 
 const AdminProducts = () => {
 
@@ -140,7 +141,7 @@ const AdminProducts = () => {
                                     </p>
 
                                     <p>
-                                        Category: {product.category}
+                                        Category: {product.category?.name || "Uncategorized"}
                                     </p>
 
                                     <p>

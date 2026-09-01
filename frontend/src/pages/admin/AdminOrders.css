@@ -1,0 +1,238 @@
+/* ================================
+   ADMIN ORDERS
+================================ */
+
+.admin-orders {
+    width: 100%;
+}
+
+/* Header */
+
+.admin-orders .admin-page__header {
+    margin-bottom: 28px;
+}
+
+.admin-orders .admin-page__title {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--primary, #202925);
+}
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.admin-empty-state {
+    background: #ffffff;
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 14px;
+    padding: 50px 24px;
+    text-align: center;
+    color: #6b7280;
+}
+
+/* ================================
+   ORDER LIST
+================================ */
+
+.admin-order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* ================================
+   ORDER CARD
+================================ */
+
+.admin-order-card {
+    background: #ffffff;
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 14px;
+    padding: 24px;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.admin-order-card:hover {
+    transform: translateY(-2px);
+    border-color: #d1d5db;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* ================================
+   ORDER TITLE
+================================ */
+
+.admin-order-card .admin-card__title {
+    margin: 0 0 20px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary, #202925);
+
+    /* Prevent very long MongoDB IDs from breaking layout */
+    overflow-wrap: anywhere;
+}
+
+/* ================================
+   ORDER INFORMATION
+================================ */
+
+.admin-order-card__meta {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.admin-order-card__meta p {
+    margin: 0;
+    padding: 12px 14px;
+    background: #f8faf9;
+    border-radius: 9px;
+
+    font-size: 13px;
+    line-height: 1.5;
+    color: #6b7280;
+}
+
+.admin-order-card__meta p::first-line {
+    color: #202925;
+}
+
+/* ================================
+   ACTIONS
+================================ */
+
+.admin-order-card .admin-card__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+
+    padding-top: 18px;
+    border-top: 1px solid var(--border, #e5e7eb);
+}
+
+/* ================================
+   STATUS SELECT
+================================ */
+
+.admin-order-card__status-control {
+    min-width: 160px;
+    height: 42px;
+
+    padding: 0 12px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #202925;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.admin-order-card__status-control:hover {
+    border-color: #9ca3af;
+}
+
+.admin-order-card__status-control:focus {
+    border-color: #202925;
+    box-shadow: 0 0 0 3px rgba(32, 41, 37, 0.08);
+}
+
+/* ================================
+   ADMIN BUTTONS
+================================ */
+
+.admin-button {
+    min-height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 18px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.admin-button:hover {
+    transform: translateY(-1px);
+}
+
+/* Secondary */
+
+.admin-button--secondary {
+    background: #ffffff;
+    color: #202925;
+    border: 1px solid #d1d5db;
+}
+
+.admin-button--secondary:hover {
+    background: #f8faf9;
+    border-color: #9ca3af;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 900px) {
+
+    .admin-order-card__meta {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .admin-orders .admin-page__title {
+        font-size: 25px;
+    }
+
+    .admin-order-card {
+        padding: 18px;
+    }
+
+    .admin-order-card__meta {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-order-card .admin-card__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-order-card__status-control,
+    .admin-order-card .admin-button {
+        width: 100%;
+    }
+
+}
