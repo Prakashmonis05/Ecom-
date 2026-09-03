@@ -5,7 +5,6 @@ import { useAuth } from "../context/AuthContext";
 import "../styles/Auth.css";
 
 const Login = () => {
-
     const navigate = useNavigate();
     const { login } = useAuth();
 
@@ -14,31 +13,29 @@ const Login = () => {
         password: ""
     });
 
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
-
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
 
+        if (error) {
+            setError("");
+        }
     };
 
     const handleSubmit = async (e) => {
-
         e.preventDefault();
 
         setError("");
         setLoading(true);
 
         try {
-
-            const response = await api.post(
-                "/login",
-                formData
-            );
+            const response = await api.post("/login", formData);
 
             if (!response.data.success) {
                 setError(response.data.message);
@@ -46,80 +43,192 @@ const Login = () => {
             }
 
             login(response.data.token);
-
-            navigate("/");
+            navigate("/products");
 
         } catch (error) {
-
             setError(
                 error.response?.data?.message ||
-                "Login failed"
+                "Login failed. Please try again."
             );
-
         } finally {
-
             setLoading(false);
-
         }
-
     };
 
     return (
-        <div className="page-shell">
+        <div className="auth-page">
 
-            <div className="page-header">
-                <h1>Login</h1>
-            </div>
+            {/* Branding */}
+            {/* <div className="auth-brand">
+                VEYRO
+            </div> */}
 
-            {error && (
-                <p className="status-badge status-badge-error">
-                    {error}
-                </p>
-            )}
+            <div className="auth-form-wrapper">
 
-            <form
-                className="form-card"
-                onSubmit={handleSubmit}
-            >
+                <div className="auth-form-header">
 
-                <div className="form-field">
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                    />
+                    <span className="auth-form-eyebrow">
+                        ACCOUNT
+                    </span>
+
+                    <h1>Welcome back</h1>
+
+                    <p>
+                        Sign in to continue to your Veyro account.
+                    </p>
+
                 </div>
 
-                <div className="form-field">
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
 
-                <button
-                    className="button button-primary"
-                    type="submit"
-                    disabled={loading}
+                {error && (
+                    <div className="auth-error">
+                        <span>!</span>
+                        <p>{error}</p>
+                    </div>
+                )}
+
+
+                <form
+                    className="auth-form"
+                    onSubmit={handleSubmit}
                 >
-                    {loading ? "Logging in..." : "Login"}
+
+                    {/* Email */}
+                    <div className="auth-field">
+
+                        <label htmlFor="email">
+                            Email address
+                        </label>
+
+                        <div className="auth-input-wrapper">
+
+                            <span className="auth-input-icon">
+                                @
+                            </span>
+
+                            <input
+                                id="email"
+                                type="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                value={formData.email}
+                                onChange={handleChange}
+                                autoComplete="email"
+                                required
+                            />
+
+                        </div>
+
+                    </div>
+
+
+                    {/* Password */}
+                    <div className="auth-field">
+
+                        <div className="auth-label-row">
+
+                            <label htmlFor="password">
+                                Password
+                            </label>
+
+                            <button
+                                type="button"
+                                className="forgot-password"
+                                onClick={() =>
+                                    alert(
+                                        "Password reset functionality will be added soon."
+                                    )
+                                }
+                            >
+                                Forgot password?
+                            </button>
+
+                        </div>
+
+                        <div className="auth-input-wrapper">
+
+                            <span className="auth-input-icon">
+                                •
+                            </span>
+
+                            <input
+                                id="password"
+                                type={
+                                    showPassword
+                                        ? "text"
+                                        : "password"
+                                }
+                                name="password"
+                                placeholder="Enter your password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                autoComplete="current-password"
+                                required
+                            />
+
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() =>
+                                    setShowPassword(!showPassword)
+                                }
+                            >
+                                {showPassword ? "Hide" : "Show"}
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    {/* Login Button */}
+                    <button
+                        className="auth-submit"
+                        type="submit"
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <>
+                                <span className="auth-spinner"></span>
+                                Signing in...
+                            </>
+                        ) : (
+                            <>
+                                Sign in
+                                <span>→</span>
+                            </>
+                        )}
+                    </button>
+
+                </form>
+
+
+                {/* Register */}
+                <div className="auth-register">
+
+                    <span>
+                        Don't have an account?
+                    </span>
+
+                    <button
+                        type="button"
+                        onClick={() => navigate("/register")}
+                    >
+                        Create an account
+                    </button>
+
+                </div>
+
+
+                {/* Back to Store */}
+                <button
+                    className="back-to-store"
+                    onClick={() => navigate("/")}
+                >
+                    ← Back to Veyro
                 </button>
 
-                <p className="auth-switch">
-                    Don't have an account?{" "}
-                    <span onClick={() => navigate("/register")}>
-                        Register
-                    </span>
-                </p>
-
-            </form>
+            </div>
 
         </div>
     );

@@ -1,146 +1,326 @@
 .navbar {
-    background: var(--white, #ffffff);
-    border-bottom: 1px solid var(--border, #e5e7eb);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    width: 100%;
+    height: 72px;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #e5e7eb;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
 }
 
 .navbar-container {
-    width: min(1200px, 92%);
-    margin: auto;
-
-    min-height: 68px;
+    width: min(1180px, 92%);
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
 
     display: flex;
     align-items: center;
-    gap: 25px;
+    justify-content: space-between;
 }
 
+/* =========================
+   LOGO
+========================= */
+
 .navbar-logo {
+    text-decoration: none;
+    color: #202925;
+
     font-size: 22px;
     font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--primary, #202925);
-    margin-right: auto;
-    white-space: nowrap;
-    transition: opacity 0.15s ease;
+    letter-spacing: 2px;
+
+    transition: opacity 0.2s ease;
 }
 
 .navbar-logo:hover {
-    opacity: 0.8;
+    opacity: 0.75;
 }
 
-.navbar-links {
+/* =========================
+   HAMBURGER TOGGLE
+========================= */
+
+.navbar-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #ffffff;
+
+    cursor: pointer;
+}
+
+.navbar-toggle-bar {
+    position: relative;
+
+    width: 18px;
+    height: 2px;
+
+    background: #202925;
+
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar-toggle-bar::before,
+.navbar-toggle-bar::after {
+    content: "";
+    position: absolute;
+    left: 0;
+
+    width: 18px;
+    height: 2px;
+
+    background: #202925;
+
+    transition: transform 0.2s ease, top 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar-toggle-bar::before {
+    top: -6px;
+}
+
+.navbar-toggle-bar::after {
+    top: 6px;
+}
+
+/* animate into an X when open */
+.navbar-toggle.is-open .navbar-toggle-bar {
+    background: transparent;
+}
+
+.navbar-toggle.is-open .navbar-toggle-bar::before {
+    top: 0;
+    transform: rotate(45deg);
+}
+
+.navbar-toggle.is-open .navbar-toggle-bar::after {
+    top: 0;
+    transform: rotate(-45deg);
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.navbar-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
-.navbar-links a {
+/* =========================
+   NORMAL LINKS
+========================= */
+
+.navbar-link {
     position: relative;
-    color: var(--secondary, #4b5563);
-    font-size: 14.5px;
+
+    text-decoration: none;
+    color: #4b5563;
+
+    font-size: 14px;
     font-weight: 600;
-    padding: 8px 10px;
-    border-radius: 6px;
-    white-space: nowrap;
-    transition: color 0.15s ease, background-color 0.15s ease;
+
+    padding: 9px 12px;
+    border-radius: 7px;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
 }
 
-.navbar-links a:hover {
-    color: var(--accent-dark, #c96045);
-    background: var(--bg-subtle, rgba(0, 0, 0, 0.04));
+.navbar-link:hover {
+    color: #202925;
+    background: #f3f5f4;
 }
 
-.navbar-links a:focus-visible,
-.navbar-button:focus-visible {
-    outline: 2px solid var(--accent-dark, #c96045);
-    outline-offset: 2px;
+/* =========================
+   LOGIN
+========================= */
+
+.navbar-login {
+    text-decoration: none;
+    color: #202925;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    padding: 9px 13px;
+    border-radius: 7px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
 }
 
-.navbar-button {
-    border: none;
-    background: var(--primary, #202925);
-    color: #fff;
+.navbar-login:hover {
+    background: #f3f5f4;
+}
 
-    padding: 9px 16px;
+/* =========================
+   REGISTER
+========================= */
+
+.navbar-register {
+    text-decoration: none;
+
+    background: #202925;
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    padding: 10px 17px;
     border-radius: 8px;
-    margin-left: 4px;
 
-    font-size: 14.5px;
+    margin-left: 3px;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.navbar-register:hover {
+    background: #2d3833;
+    transform: translateY(-1px);
+}
+
+/* =========================
+   ADMIN
+========================= */
+
+.navbar-admin {
+    text-decoration: none;
+
+    color: #202925;
+    background: #f5f7f6;
+
+    border: 1px solid #dce1df;
+
+    font-size: 13px;
     font-weight: 600;
-    white-space: nowrap;
 
-    transition: background-color 0.15s ease, transform 0.1s ease;
+    padding: 8px 12px;
+    border-radius: 7px;
+
+    margin-left: 3px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
-.navbar-button:hover {
-    background: #374151;
+.navbar-admin:hover {
+    background: #eef1ef;
+    border-color: #cdd4d0;
 }
 
-.navbar-button:active {
-    transform: scale(0.97);
+/* =========================
+   LOGOUT
+========================= */
+
+.navbar-logout {
+    border: 1px solid #d9dddb;
+    background: #ffffff;
+
+    color: #374151;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    padding: 8px 13px;
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    margin-left: 3px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
 }
 
-/* ---------- Tablet ---------- */
-@media (max-width: 900px) {
-
-    .navbar-container {
-        gap: 16px;
-    }
-
-    .navbar-links {
-        gap: 2px;
-    }
-
-    .navbar-links a,
-    .navbar-button {
-        font-size: 14px;
-        padding: 8px;
-    }
-
+.navbar-logout:hover {
+    background: #f5f6f5;
+    border-color: #c9cfcc;
+    color: #202925;
 }
 
-/* ---------- Mobile ---------- */
-@media (max-width: 640px) {
+/* =========================
+   MOBILE
+   Collapses navbar-actions into a
+   dropdown panel triggered by the
+   hamburger toggle.
+========================= */
 
-    .navbar-container {
-        flex-wrap: wrap;
-        align-items: flex-start;
-        min-height: auto;
-        padding: 14px 0;
-        gap: 10px;
+@media (max-width: 800px) {
+
+    .navbar-toggle {
+        display: inline-flex;
     }
 
-    .navbar-logo {
+    .navbar-actions {
+        position: absolute;
+        top: calc(100% + 1px);
+        left: 0;
+        right: 0;
+
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+
+        max-height: 0;
+        overflow: hidden;
+
+        padding: 0 16px;
+
+        background: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+
+        transition: max-height 0.25s ease, padding 0.25s ease;
+    }
+
+    .navbar-actions.is-open {
+        max-height: 520px;
+        padding: 12px 16px 16px;
+    }
+
+    .navbar-link,
+    .navbar-login,
+    .navbar-register,
+    .navbar-admin,
+    .navbar-logout {
         width: 100%;
-        margin-right: 0;
-        font-size: 20px;
-    }
 
-    .navbar-links {
-        width: 100%;
-        flex-wrap: nowrap;
-        overflow-x: auto;
+        text-align: left;
         justify-content: flex-start;
-        padding-bottom: 4px;
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
 
-    .navbar-links::-webkit-scrollbar {
-        display: none;
-    }
+        padding: 12px 14px;
+        font-size: 14px;
 
-    .navbar-links a,
-    .navbar-button {
-        flex: 0 0 auto;
-    }
-
-    .navbar-button {
         margin-left: 0;
     }
 
+    .navbar-register {
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 520px) {
+
+    .navbar-logo {
+        font-size: 19px;
+    }
 }

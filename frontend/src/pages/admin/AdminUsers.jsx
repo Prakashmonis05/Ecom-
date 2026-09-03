@@ -36,52 +36,146 @@ const AdminUsers = () => {
     }, []);
 
     if (loading) {
-        return <p>Loading users...</p>;
+        return (
+            <div className="admin-page admin-users-state">
+                <p>Loading users...</p>
+            </div>
+        );
     }
 
     if (error) {
-        return <p>{error}</p>;
+        return (
+            <div className="admin-page admin-users-state admin-users-state--error">
+                <p>{error}</p>
+            </div>
+        );
     }
 
     return (
-        <div>
+        <div className="admin-page admin-users">
 
-            <h1>Manage Users</h1>
+            {/* HEADER */}
+
+            <header className="admin-page__header">
+
+                <h1 className="admin-page__title">
+                    Manage Users
+                </h1>
+
+            </header>
+
+
+            {/* USERS */}
 
             {users.length === 0 ? (
 
-                <p>No users found.</p>
+                <div className="admin-users-empty">
+                    <p>No users found.</p>
+                </div>
 
             ) : (
 
-                users.map((user) => (
+                <div className="admin-users-table-wrapper">
 
-                    <div key={user._id}>
+                    <table className="admin-users-table">
 
-                        <h2>
-                            {user.name}
-                        </h2>
+                        <thead>
 
-                        <p>
-                            Email: {user.email}
-                        </p>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                            </tr>
 
-                        <p>
-                            Role: {user.role}
-                        </p>
+                        </thead>
 
-                        <p>
-                            Joined:{" "}
-                            {new Date(
-                                user.createdAt
-                            ).toLocaleDateString()}
-                        </p>
 
-                        <hr />
+                        <tbody>
 
-                    </div>
+                            {users.map((user) => {
 
-                ))
+                                const initial =
+                                    user.name
+                                        ?.charAt(0)
+                                        ?.toUpperCase() || "?";
+
+                                return (
+
+                                    <tr key={user._id}>
+
+                                        {/* USER */}
+
+                                        <td>
+
+                                            <div className="admin-user-name">
+
+                                                <span className="admin-user-avatar">
+                                                    {initial}
+                                                </span>
+
+                                                <span>
+                                                    {user.name}
+                                                </span>
+
+                                            </div>
+
+                                        </td>
+
+
+                                        {/* EMAIL */}
+
+                                        <td>
+
+                                            <span className="admin-user-email">
+                                                {user.email}
+                                            </span>
+
+                                        </td>
+
+
+                                        {/* ROLE */}
+
+                                        <td>
+
+                                            <span
+                                                className={`admin-user-role ${
+                                                    user.role === "admin"
+                                                        ? "admin-user-role--admin"
+                                                        : ""
+                                                }`}
+                                            >
+                                                {user.role}
+                                            </span>
+
+                                        </td>
+
+
+                                        {/* JOINED */}
+
+                                        <td>
+
+                                            <span className="admin-user-date">
+
+                                                {new Date(
+                                                    user.createdAt
+                                                ).toLocaleDateString()}
+
+                                            </span>
+
+                                        </td>
+
+                                    </tr>
+
+                                );
+
+                            })}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
 
             )}
 

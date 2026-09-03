@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
@@ -6,6 +7,68 @@ import "./ProductCard.css";
 const ProductCard = ({ product }) => {
     const { user } = useAuth();
 
+    const [isWishlisted, setIsWishlisted] = useState(false);
+
+    // Check whether product is already in wishlist
+    useEffect(() => {
+        const checkWishlist = async () => {
+            if (!user) {
+                setIsWishlisted(false);
+                return;
+            }
+
+            try {
+                const response = await api.get("/wishlist");
+
+                const wishlistProducts = response.data.products || [];
+
+                const exists = wishlistProducts.some(
+                    (wishlistProduct) =>
+                        wishlistProduct._id === product._id
+                );
+
+                setIsWishlisted(exists);
+
+            } catch (error) {
+                console.error(
+                    "Failed to check wishlist:",
+                    error
+                );
+            }
+        };
+
+        checkWishlist();
+    }, [user, product._id]);
+
+
+    // Add / remove wishlist
+    const handleWishlist = async () => {
+        if (!user) {
+            alert("Please login to use wishlist");
+            return;
+        }
+
+        try {
+            const response = await api.post(
+                `/wishlist/${product._id}`
+            );
+
+            // Since backend toggles the product,
+            // update the frontend state too
+            setIsWishlisted((previous) => !previous);
+
+            alert(response.data.message);
+
+        } catch (error) {
+            alert(
+                error.response?.data?.message ||
+                "Failed to update wishlist"
+            );
+        }
+    };
+
+
+    // Add to cart
     const handleAddToCart = async () => {
         if (!user) {
             alert("Please login to add products to cart");
@@ -24,6 +87,7 @@ const ProductCard = ({ product }) => {
             });
 
             alert(response.data.message);
+
         } catch (error) {
             alert(
                 error.response?.data?.message ||
@@ -32,30 +96,10 @@ const ProductCard = ({ product }) => {
         }
     };
 
-    const handleWishlist = async () => {
-        if (!user) {
-            alert("Please login to use wishlist");
-            return;
-        }
-
-        try {
-            const response = await api.post(
-                `/wishlist/${product._id}`
-            );
-
-            alert(response.data.message);
-        } catch (error) {
-            alert(
-                error.response?.data?.message ||
-                "Failed to update wishlist"
-            );
-        }
-    };
 
     return (
         <div className="product-card">
 
-            {/* Product Image */}
             <div className="product-image-container">
 
                 {product.images?.length > 0 ? (
@@ -70,7 +114,6 @@ const ProductCard = ({ product }) => {
                     </div>
                 )}
 
-                {/* Stock Badge */}
                 <span
                     className={`stock-badge ${
                         product.stock > 0
@@ -83,17 +126,23 @@ const ProductCard = ({ product }) => {
                         : "Out of Stock"}
                 </span>
 
-                {/* Wishlist Button */}
+
+                {/* Wishlist */}
                 <button
                     className="wishlist-btn"
                     onClick={handleWishlist}
-                    aria-label="Add to wishlist"
+                    aria-label={
+                        isWishlisted
+                            ? "Remove from wishlist"
+                            : "Add to wishlist"
+                    }
                 >
-                    ♡
+                    {isWishlisted ? "♥" : "♡"}
                 </button>
+
             </div>
 
-            {/* Product Information */}
+
             <div className="product-info">
 
                 <p className="product-brand">
@@ -118,7 +167,7 @@ const ProductCard = ({ product }) => {
                     </p>
                 )}
 
-                {/* Actions */}
+
                 <div className="product-actions">
 
                     <Link
@@ -139,7 +188,9 @@ const ProductCard = ({ product }) => {
                     </button>
 
                 </div>
+
             </div>
+
         </div>
     );
 };
