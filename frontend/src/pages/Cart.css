@@ -253,11 +253,13 @@
 
     .cart-layout {
         grid-template-columns: 1fr;
+        gap: 20px;
     }
 
     .cart-summary {
         position: static;
-        order: -1;
+        order: 1;
+        margin-top: 10px;
     }
 
 }
@@ -265,7 +267,8 @@
 @media (max-width: 560px) {
 
     .cart-page {
-        padding: 20px 0 40px;
+        width: calc(100% - 24px);
+        padding: 18px 0 36px;
     }
 
     .cart-title {
@@ -274,26 +277,50 @@
     }
 
     .cart-item {
-        grid-template-columns: 72px 1fr;
+        grid-template-columns: 80px 1fr;
         grid-template-areas:
             "image details"
             "subtotal subtotal";
-        row-gap: 8px;
+        row-gap: 12px;
+        padding: 12px;
+        border-radius: 12px;
     }
 
     .cart-item-image {
         grid-area: image;
+        border-radius: 8px;
     }
 
     .cart-item-details {
         grid-area: details;
     }
 
+    .cart-item-name {
+        font-size: 14.5px;
+    }
+
+    .cart-item-qty button {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
     .cart-item-subtotal {
         grid-area: subtotal;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         text-align: right;
         border-top: 1px dashed var(--border, #e5e7eb);
-        padding-top: 8px;
+        padding-top: 10px;
+        font-size: 15px;
+    }
+
+    .cart-item-subtotal::before {
+        content: "Item Total:";
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--secondary, #6b7280);
     }
 
 }

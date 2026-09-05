@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 import "./App.css";
 
 import Home from "./pages/Home";
@@ -29,6 +30,20 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminLowStock from "./pages/admin/AdminLowStock";
 import AdminCategories from "./pages/admin/AdminCategories";
 
+const HomeRedirect = () => {
+
+    const { user, loading } = useAuth();
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
+
+    if (user) {
+        return <Navigate to="/products" replace />;
+    }
+
+    return <Home />;
+};
 
 function App() {
 
@@ -44,7 +59,7 @@ function App() {
 
                 <Route
                     path="/"
-                    element={<Home />}
+                    element={<HomeRedirect />}
                 />
 
                 <Route

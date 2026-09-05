@@ -25,129 +25,461 @@
 }
 
 /* =========================
-   FILTERS
+   SEARCH & FILTERS (AMAZON-STYLE)
 ========================= */
 
-.products-filters {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    padding: 18px;
-    margin-bottom: 28px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
-}
-
-/* Search */
-
-.filter-search {
+.products-controls {
     display: flex;
-    width: 100%;
-    margin-bottom: 14px;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
 }
 
-.filter-search input {
+/* Search Row */
+
+.amazon-search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Unified Amazon Search Bar */
+
+.amazon-search-bar {
     flex: 1;
     min-width: 0;
 
-    height: 42px;
-    padding: 0 14px;
+    display: flex;
+    align-items: stretch;
+    height: 46px;
 
-    border: 1px solid #dfe3e1;
-    border-right: none;
-    border-radius: 8px 0 0 8px;
+    background: #ffffff;
+    border: 1.5px solid #d5d9d9;
+    border-radius: 9px;
 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.amazon-search-bar:focus-within {
+    border-color: #202925;
+    box-shadow: 0 0 0 3px rgba(32, 41, 37, 0.12);
+}
+
+/* Left Category Pill */
+
+.amazon-cat-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    background: #f4f6f5;
+    border-right: 1px solid #d5d9d9;
+
+    padding: 0 24px 0 12px;
+    cursor: pointer;
+
+    transition: background-color 0.15s ease;
+}
+
+.amazon-cat-wrap:hover {
+    background: #e9ecea;
+}
+
+.amazon-cat-wrap select {
+    appearance: none;
+    -webkit-appearance: none;
+
+    border: none;
+    background: transparent;
+
+    color: #1e2925;
+    font-size: 12.5px;
+    font-weight: 600;
+
+    cursor: pointer;
     outline: none;
 
-    color: #202925;
-    font-size: 14px;
+    max-width: 110px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding-right: 2px;
+}
+
+.amazon-caret {
+    position: absolute;
+    right: 9px;
+    pointer-events: none;
+
+    width: 9px;
+    height: 6px;
+    color: #4b5563;
+}
+
+/* Middle Input */
+
+.amazon-input-wrap {
+    flex: 1;
+    min-width: 0;
+
+    position: relative;
+    display: flex;
+    align-items: center;
 
     background: #ffffff;
 }
 
-.filter-search input:focus {
-    border-color: #202925;
-}
-
-.filter-search button {
-    height: 42px;
-    padding: 0 20px;
+.amazon-input-wrap input {
+    width: 100%;
+    height: 100%;
 
     border: none;
-    border-radius: 0 8px 8px 0;
+    outline: none;
 
+    padding: 0 32px 0 14px;
+
+    font-family: inherit;
+    font-size: 14px;
+    color: #1e2925;
+
+    background: transparent;
+}
+
+.amazon-input-wrap input::placeholder {
+    color: #8c9691;
+}
+
+.search-clear-x {
+    position: absolute;
+    right: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 22px;
+    height: 22px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: transparent;
+    color: #8c9691;
+
+    font-size: 12px;
+    cursor: pointer;
+
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.search-clear-x:hover {
+    background: #f0f3f1;
+    color: #202925;
+}
+
+/* Right Search Button */
+
+.amazon-search-btn {
+    height: 100%;
+    padding: 0 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
     background: #202925;
     color: #ffffff;
 
-    font-size: 14px;
-    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.18s ease;
+}
+
+.amazon-search-btn:hover {
+    background: #2f3e37;
+}
+
+/* Filter Toggle Button */
+
+.filter-toggle-btn {
+    height: 46px;
+    padding: 0 18px;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    background: #ffffff;
+    border: 1.5px solid #d5d9d9;
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 650;
+    color: #202925;
 
     cursor: pointer;
+    white-space: nowrap;
 
-    transition: background 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
 }
 
-.filter-search button:hover {
-    background: #2d3833;
+.filter-toggle-btn:hover {
+    background: #f7f9f8;
+    border-color: #bcc4bf;
 }
 
-/* Filter row */
+.filter-toggle-btn.is-active {
+    background: #202925;
+    border-color: #202925;
+    color: #ffffff;
+}
 
-.filter-row {
+.filter-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+
+    border-radius: 999px;
+    background: #c85f43;
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 750;
+}
+
+/* =========================
+   COLLAPSIBLE FILTER DRAWER
+========================= */
+
+.filter-drawer-panel {
+    background: #ffffff;
+    border: 1px solid #e0e5e2;
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+
+    animation: drawerSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes drawerSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f3f1;
+}
+
+.drawer-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #202925;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.drawer-clear-btn {
+    border: none;
+    background: transparent;
+
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #c85f43;
+
+    cursor: pointer;
+    padding: 0;
+}
+
+.drawer-clear-btn:hover {
+    text-decoration: underline;
+}
+
+.drawer-grid {
     display: grid;
-    grid-template-columns: 1.3fr 1fr 1fr 1.3fr auto;
-    gap: 10px;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 18px;
+    align-items: flex-end;
+}
+
+.drawer-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.drawer-field label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.price-inputs-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price-input-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
     align-items: center;
 }
 
-.filter-row select,
-.price-input {
-    width: 100%;
-    height: 40px;
-
-    padding: 0 11px;
-
-    border: 1px solid #dfe3e1;
-    border-radius: 8px;
-
-    background: #ffffff;
-    color: #374151;
-
-    font-family: inherit;
-    font-size: 13px;
-
-    outline: none;
-}
-
-.filter-row select:focus,
-.price-input:focus {
-    border-color: #202925;
-}
-
-.clear-btn {
-    height: 40px;
-    padding: 0 15px;
-
-    border: 1px solid #d7dcda;
-    border-radius: 8px;
-
-    background: #ffffff;
-    color: #374151;
-
-    font-family: inherit;
+.currency-prefix {
+    position: absolute;
+    left: 10px;
     font-size: 13px;
     font-weight: 600;
-
-    white-space: nowrap;
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
+    color: #6b7280;
+    pointer-events: none;
 }
 
-.clear-btn:hover {
-    background: #f5f6f5;
-    border-color: #c8cfcb;
+.price-input-wrapper input {
+    width: 100%;
+    height: 38px;
+
+    padding: 0 10px 0 24px;
+
+    border: 1px solid #d5d9d9;
+    border-radius: 7px;
+
+    font-family: inherit;
+    font-size: 13px;
+    color: #202925;
+
+    background: #fafbfa;
+    outline: none;
+
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.price-input-wrapper input:focus {
+    background: #ffffff;
+    border-color: #202925;
+    box-shadow: 0 0 0 2px rgba(32, 41, 37, 0.08);
+}
+
+.price-to {
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.drawer-field select {
+    width: 100%;
+    height: 38px;
+
+    padding: 0 12px;
+
+    border: 1px solid #d5d9d9;
+    border-radius: 7px;
+
+    font-family: inherit;
+    font-size: 13px;
+    color: #202925;
+
+    background: #fafbfa;
+    outline: none;
+    cursor: pointer;
+
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.drawer-field select:focus {
+    background: #ffffff;
+    border-color: #202925;
+    box-shadow: 0 0 0 2px rgba(32, 41, 37, 0.08);
+}
+
+/* =========================
+   ACTIVE CHIPS
+========================= */
+
+.active-chips-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding-top: 2px;
+}
+
+.chips-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 4px 10px;
+    border-radius: 999px;
+
+    background: #eef2ef;
+    border: 1px solid #d6dfd9;
+
+    font-size: 12px;
+    font-weight: 600;
+    color: #202925;
+}
+
+.filter-chip button {
+    border: none;
+    background: transparent;
+
+    color: #6b7280;
+    font-size: 11px;
+    cursor: pointer;
+
+    padding: 0;
+    display: flex;
+    align-items: center;
+    line-height: 1;
+
+    transition: color 0.15s ease;
+}
+
+.filter-chip button:hover {
+    color: #111111;
+}
+
+.chip-clear-all {
+    border: none;
+    background: transparent;
+
+    color: #c85f43;
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+    padding: 2px 6px;
+    text-decoration: underline;
 }
 
 /* =========================
@@ -244,14 +576,7 @@
 @media (max-width: 1050px) {
     .products-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .filter-row {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .clear-btn {
-        width: 100%;
+        gap: 16px;
     }
 }
 
@@ -261,17 +586,18 @@
 
 @media (max-width: 760px) {
     .products-page {
-        width: 94%;
-        padding-top: 24px;
+        width: calc(100% - 32px);
+        padding-top: 20px;
     }
 
     .products-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
+        gap: 14px;
     }
 
-    .filter-row {
+    .drawer-grid {
         grid-template-columns: 1fr;
+        gap: 14px;
     }
 }
 
@@ -279,25 +605,106 @@
    MOBILE
 ========================= */
 
-@media (max-width: 500px) {
-    .products-header h1 {
-        font-size: 26px;
+@media (max-width: 580px) {
+    .products-page {
+        width: calc(100% - 24px);
+        padding: 16px 0 32px;
     }
 
-    .products-filters {
+    .products-header {
+        margin-bottom: 14px;
+    }
+
+    .products-header h1 {
+        font-size: 24px;
+    }
+
+    .products-controls {
+        margin-bottom: 20px;
+        gap: 10px;
+    }
+
+    .amazon-search-bar {
+        height: 42px;
+    }
+
+    .amazon-cat-wrap {
+        padding: 0 18px 0 9px;
+    }
+
+    .amazon-cat-wrap select {
+        max-width: 68px;
+        font-size: 11.5px;
+    }
+
+    .amazon-caret {
+        right: 6px;
+        width: 8px;
+    }
+
+    .amazon-input-wrap input {
+        font-size: 13px;
+        padding: 0 28px 0 10px;
+    }
+
+    .amazon-search-btn {
+        padding: 0 14px;
+    }
+
+    .filter-toggle-btn {
+        height: 42px;
+        padding: 0 12px;
+        font-size: 12.5px;
+        gap: 6px;
+    }
+
+    .filter-drawer-panel {
         padding: 14px;
+        border-radius: 10px;
+    }
+
+    .drawer-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .price-input-wrapper input,
+    .drawer-field select {
+        height: 36px;
+        font-size: 12px;
     }
 
     .products-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .filter-search input {
-        font-size: 13px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
     }
 
     .pagination {
         gap: 10px;
+        margin-top: 24px;
+    }
+
+    .pagination button {
+        min-width: 76px;
+        height: 36px;
+        font-size: 12px;
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 420px) {
+    .filter-toggle-btn span:not(.filter-count-badge) {
+        display: none;
+    }
+
+    .filter-toggle-btn {
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 380px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
     }
 }

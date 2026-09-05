@@ -88,76 +88,113 @@ const AdminProducts = () => {
         );
     }
 
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const filteredProducts = products.filter((p) =>
+        p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.brand?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.category?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className="admin-page admin-products">
 
             <header className="admin-page__header">
-                <h1 className="admin-page__title">Manage Products</h1>
+                <div>
+                    <h1 className="admin-page__title">Manage Products</h1>
+                    <p className="admin-page__subtitle">
+                        Catalog of {products.length} products
+                    </p>
+                </div>
 
-                <Link
-                    className="admin-button admin-button--primary"
-                    to="/admin/products/create"
-                >
-                    Add New Product
-                </Link>
+                <div className="admin-products-header-actions">
+                    <div className="admin-search-box">
+                        <input
+                            type="text"
+                            placeholder="Filter products by name, brand..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        {searchTerm && (
+                            <button
+                                type="button"
+                                className="search-clear-btn"
+                                onClick={() => setSearchTerm("")}
+                            >
+                                ✕
+                            </button>
+                        )}
+                    </div>
+
+                    <Link
+                        className="admin-button admin-button--primary"
+                        to="/admin/products/create"
+                    >
+                        + Add New Product
+                    </Link>
+                </div>
             </header>
 
-            {products.length === 0 ? (
+            {filteredProducts.length === 0 ? (
 
                 <div className="admin-empty-state">
-                    <p>No products found.</p>
+                    <p>{searchTerm ? "No products match your filter." : "No products found."}</p>
+                    {searchTerm && (
+                        <button
+                            type="button"
+                            className="admin-button admin-button--secondary"
+                            onClick={() => setSearchTerm("")}
+                        >
+                            Clear Filter
+                        </button>
+                    )}
                 </div>
 
             ) : (
 
                 <div className="admin-list admin-product-list">
 
-                    {products.map((product) => (
+                    {filteredProducts.map((product) => (
 
                         <article
                             className="admin-card admin-product-card"
                             key={product._id}
                         >
 
-                            {product.images?.length > 0 && (
-                                <div className="admin-product-card__media">
+                            <div className="admin-product-card__media">
+                                {product.images?.length > 0 ? (
                                     <img
                                         className="admin-product-card__image"
                                         src={product.images[0]}
                                         alt={product.name}
-                                        width="150"
+                                        loading="lazy"
                                     />
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="admin-no-image">No image</div>
+                                )}
+                                <span className={`admin-stock-tag ${product.stock <= 0 ? "out" : product.stock <= 5 ? "low" : "ok"}`}>
+                                    {product.stock <= 0 ? "Out of Stock" : product.stock <= 5 ? `Low: ${product.stock}` : `${product.stock} in stock`}
+                                </span>
+                            </div>
 
                             <div className="admin-product-card__content">
-                                <h2 className="admin-card__title">
+                                <div className="admin-product-card__category">
+                                    {product.category?.name || "Uncategorized"}
+                                </div>
+
+                                <h2 className="admin-card__title" title={product.name}>
                                     {product.name}
                                 </h2>
 
                                 <div className="admin-product-card__meta">
-                                    <p>
-                                        Brand: {product.brand}
-                                    </p>
-
-                                    <p>
-                                        Category: {product.category?.name || "Uncategorized"}
-                                    </p>
-
-                                    <p>
-                                        Price: ₹{product.price}
-                                    </p>
-
-                                    <p>
-                                        Stock: {product.stock}
-                                    </p>
-
-                                    <p>
-                                        Status:{" "}
-                                        {product.isActive
-                                            ? "Active"
-                                            : "Inactive"}
-                                    </p>
+                                    <span className="admin-product-card__price">
+                                        ₹{product.price}
+                                    </span>
+                                    {product.brand && (
+                                        <span className="admin-product-card__brand">
+                                            {product.brand}
+                                        </span>
+                                    )}
                                 </div>
 
                                 <div className="admin-card__actions">

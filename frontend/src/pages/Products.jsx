@@ -132,6 +132,11 @@ const Products = () => {
 
     };
 
+    const [showFilters, setShowFilters] = useState(false);
+
+    const activeFiltersCount = (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (sort ? 1 : 0);
+    const selectedCategoryName = categories.find((c) => c._id === category)?.name || "";
+
     return (
         <div className="products-page">
 
@@ -139,119 +144,230 @@ const Products = () => {
                 <h1>Products</h1>
             </div>
 
-            <div className="products-filters">
+            <div className="products-controls">
 
-                {/* Search */}
-                <form
-                    className="filter-search"
-                    onSubmit={handleSearch}
-                >
+                {/* Amazon-style Sleek Search & Filter Bar */}
+                <div className="amazon-search-row">
 
-                    <input
-                        type="text"
-                        placeholder="Search products..."
-                        value={search}
-                        onChange={(e) =>
-                            setSearch(e.target.value)
-                        }
-                    />
-
-                    <button type="submit">
-                        Search
-                    </button>
-
-                </form>
-
-                <div className="filter-row">
-
-                    {/* Category */}
-                    <select
-                        value={category}
-                        onChange={(e) => {
-                            setCategory(e.target.value);
-                            setPage(1);
-                        }}
+                    <form
+                        className="amazon-search-bar"
+                        onSubmit={handleSearch}
                     >
-
-                        <option value="">
-                            All Categories
-                        </option>
-
-                        {categories.map((cat) => (
-
-                            <option
-                                key={cat._id}
-                                value={cat._id}
+                        {/* Category Dropdown (Amazon Left Pill) */}
+                        <div className="amazon-cat-wrap">
+                            <select
+                                aria-label="Select Category"
+                                value={category}
+                                onChange={(e) => {
+                                    setCategory(e.target.value);
+                                    setPage(1);
+                                }}
                             >
-                                {cat.name}
-                            </option>
+                                <option value="">All</option>
+                                {categories.map((cat) => (
+                                    <option key={cat._id} value={cat._id}>
+                                        {cat.name}
+                                    </option>
+                                ))}
+                            </select>
+                            <svg className="amazon-caret" viewBox="0 0 10 6" fill="none" stroke="currentColor">
+                                <path d="M1 1l4 4 4-4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                        </div>
 
-                        ))}
+                        {/* Search Input */}
+                        <div className="amazon-input-wrap">
+                            <input
+                                type="text"
+                                placeholder="Search products, brands, titles..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                            {search && (
+                                <button
+                                    type="button"
+                                    className="search-clear-x"
+                                    onClick={() => {
+                                        setSearch("");
+                                        setPage(1);
+                                        fetchProducts("");
+                                    }}
+                                    aria-label="Clear search"
+                                >
+                                    ✕
+                                </button>
+                            )}
+                        </div>
 
-                    </select>
+                        {/* Amazon Search Button */}
+                        <button type="submit" className="amazon-search-btn" aria-label="Search">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="11" cy="11" r="7"/>
+                                <line x1="21" y1="21" x2="16" y2="16"/>
+                            </svg>
+                        </button>
+                    </form>
 
-                    {/* Price */}
-                    <input
-                        className="price-input"
-                        type="number"
-                        placeholder="Min Price"
-                        value={minPrice}
-                        onChange={(e) => {
-                            setMinPrice(e.target.value);
-                            setPage(1);
-                        }}
-                    />
-
-                    <input
-                        className="price-input"
-                        type="number"
-                        placeholder="Max Price"
-                        value={maxPrice}
-                        onChange={(e) => {
-                            setMaxPrice(e.target.value);
-                            setPage(1);
-                        }}
-                    />
-
-                    {/* Sorting */}
-                    <select
-                        value={sort}
-                        onChange={(e) => {
-                            setSort(e.target.value);
-                            setPage(1);
-                        }}
-                    >
-
-                        <option value="">
-                            Newest
-                        </option>
-
-                        <option value="price_asc">
-                            Price: Low to High
-                        </option>
-
-                        <option value="price_desc">
-                            Price: High to Low
-                        </option>
-
-                        <option value="name_asc">
-                            Name: A-Z
-                        </option>
-
-                        <option value="name_desc">
-                            Name: Z-A
-                        </option>
-
-                    </select>
-
+                    {/* Filter Toggle Button */}
                     <button
-                        className="clear-btn"
-                        onClick={clearFilters}
+                        type="button"
+                        className={`filter-toggle-btn ${showFilters ? "is-active" : ""}`}
+                        onClick={() => setShowFilters((open) => !open)}
+                        aria-expanded={showFilters}
+                        title="Toggle filters"
                     >
-                        Clear Filters
+                        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="4" y1="21" x2="4" y2="14"/>
+                            <line x1="4" y1="10" x2="4" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12" y2="3"/>
+                            <line x1="20" y1="21" x2="20" y2="16"/>
+                            <line x1="20" y1="12" x2="20" y2="3"/>
+                            <line x1="1" y1="14" x2="7" y2="14"/>
+                            <line x1="9" y1="8" x2="15" y2="8"/>
+                            <line x1="17" y1="16" x2="23" y2="16"/>
+                        </svg>
+                        <span>Filters</span>
+                        {activeFiltersCount > 0 && (
+                            <span className="filter-count-badge">{activeFiltersCount}</span>
+                        )}
                     </button>
 
                 </div>
+
+                {/* Collapsible Filter Panel (Appears only on toggle) */}
+                {showFilters && (
+                    <div className="filter-drawer-panel">
+                        <div className="drawer-header">
+                            <span className="drawer-title">Filter & Sort</span>
+                            {activeFiltersCount > 0 && (
+                                <button type="button" className="drawer-clear-btn" onClick={clearFilters}>
+                                    Reset all
+                                </button>
+                            )}
+                        </div>
+
+                        <div className="drawer-grid">
+                            {/* Price Range */}
+                            <div className="drawer-field">
+                                <label>Price Range</label>
+                                <div className="price-inputs-group">
+                                    <div className="price-input-wrapper">
+                                        <span className="currency-prefix">$</span>
+                                        <input
+                                            type="number"
+                                            placeholder="Min"
+                                            value={minPrice}
+                                            onChange={(e) => {
+                                                setMinPrice(e.target.value);
+                                                setPage(1);
+                                            }}
+                                        />
+                                    </div>
+                                    <span className="price-to">to</span>
+                                    <div className="price-input-wrapper">
+                                        <span className="currency-prefix">$</span>
+                                        <input
+                                            type="number"
+                                            placeholder="Max"
+                                            value={maxPrice}
+                                            onChange={(e) => {
+                                                setMaxPrice(e.target.value);
+                                                setPage(1);
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Sort */}
+                            <div className="drawer-field">
+                                <label>Sort By</label>
+                                <select
+                                    value={sort}
+                                    onChange={(e) => {
+                                        setSort(e.target.value);
+                                        setPage(1);
+                                    }}
+                                >
+                                    <option value="">Featured / Newest</option>
+                                    <option value="price_asc">Price: Low to High</option>
+                                    <option value="price_desc">Price: High to Low</option>
+                                    <option value="name_asc">Name: A to Z</option>
+                                    <option value="name_desc">Name: Z to A</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Active Filter Chips */}
+                {(search || category || minPrice || maxPrice || sort) && (
+                    <div className="active-chips-bar">
+                        <span className="chips-label">Active:</span>
+                        {search && (
+                            <span className="filter-chip">
+                                "{search}"
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setSearch("");
+                                        setPage(1);
+                                        fetchProducts("");
+                                    }}
+                                >
+                                    ✕
+                                </button>
+                            </span>
+                        )}
+                        {category && (
+                            <span className="filter-chip">
+                                {selectedCategoryName || "Category"}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setCategory("");
+                                        setPage(1);
+                                    }}
+                                >
+                                    ✕
+                                </button>
+                            </span>
+                        )}
+                        {(minPrice || maxPrice) && (
+                            <span className="filter-chip">
+                                ${minPrice || "0"} - {maxPrice ? `$${maxPrice}` : "Any"}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setMinPrice("");
+                                        setMaxPrice("");
+                                        setPage(1);
+                                    }}
+                                >
+                                    ✕
+                                </button>
+                            </span>
+                        )}
+                        {sort && (
+                            <span className="filter-chip">
+                                Sort: {sort === "price_asc" ? "Price Low-High" : sort === "price_desc" ? "Price High-Low" : sort === "name_asc" ? "A-Z" : "Z-A"}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setSort("");
+                                        setPage(1);
+                                    }}
+                                >
+                                    ✕
+                                </button>
+                            </span>
+                        )}
+                        <button type="button" className="chip-clear-all" onClick={clearFilters}>
+                            Clear all
+                        </button>
+                    </div>
+                )}
 
             </div>
 

@@ -141,14 +141,17 @@
 }
 
 .hero-eyebrow {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     margin-bottom: 18px;
-
-    color: var(--color-text-muted);
-
+    padding: 6px 14px;
+    background: #eaf1ed;
+    color: #274538;
+    border: 1px solid #d5e2da;
+    border-radius: 999px;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
 }
 
 .hero-content h1 {
@@ -460,16 +463,11 @@
 
 @media (max-width: 700px) {
 
-    .home-header {
-        justify-content: space-between;
-    }
-
     .home-hero {
         grid-template-columns: 1fr;
         text-align: center;
-
-        gap: 24px;
-        padding-top: 10px;
+        gap: 32px;
+        padding: 16px var(--page-pad-x) 32px;
     }
 
     .hero-content {
@@ -486,24 +484,30 @@
         justify-content: center;
     }
 
+    .hero-visual {
+        max-width: 380px;
+        margin: 0 auto;
+        overflow: visible;
+    }
+
     .visual-circle {
         width: min(65%, 220px);
         height: min(65%, 220px);
     }
 
     .tag-one {
-        top: 8%;
-        left: 4%;
+        top: 6%;
+        left: 2%;
     }
 
     .tag-two {
         top: 38%;
-        right: 4%;
+        right: 2%;
     }
 
     .tag-three {
         bottom: 4%;
-        left: 12%;
+        left: 8%;
     }
 }
 
@@ -514,32 +518,29 @@
 
 @media (max-width: 480px) {
 
-    .home-nav a:not(.home-register-btn) {
-        display: none;
+    .home-hero {
+        padding-inline: 16px;
     }
 
-    .home-nav.nav-open a:not(.home-register-btn) {
-        display: inline-block;
-    }
-
-    .home-nav.nav-open {
-        width: 100%;
+    .hero-actions {
         flex-direction: column;
-        align-items: flex-start;
-
-        padding-top: 6px;
+        width: 100%;
+        gap: 12px;
     }
 
-    .nav-toggle {
-        display: inline-flex;
+    .hero-shop-btn,
+    .hero-create-btn {
+        width: 100%;
+        min-height: 48px;
     }
 
     .floating-tag {
-        padding: 6px 9px;
+        padding: 6px 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .floating-tag p {
-        font-size: 9px;
+        font-size: 10px;
     }
 }
 
