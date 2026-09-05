@@ -173,294 +173,297 @@ const AdminCategories = () => {
         }
     };
 
+    // Loading state (matches AdminProducts / AdminOrders pattern)
     if (loading) {
-        return <p>Loading categories...</p>;
-    }
-
-   return (
-    <div className="admin-page categories-page">
-
-        <div className="admin-page__header">
-            <div>
-                <span className="admin-page__eyebrow">
-                    CATALOG
-                </span>
-
-                <h1 className="admin-page__title">
-                    Manage Categories
-                </h1>
-
-                <p className="admin-page__description">
-                    Create, update and organize your product categories.
+        return (
+            <div className="admin-page admin-state">
+                <p className="admin-state__message">
+                    Loading categories...
                 </p>
             </div>
-        </div>
+        );
+    }
 
-        {error && (
-            <div className="admin-alert admin-alert--error">
-                {error}
-            </div>
-        )}
+    return (
+        <div className="admin-page admin-categories">
 
-        <div className="categories-layout">
+            <header className="admin-page__header">
+                <div>
+                    <h1 className="admin-page__title">
+                        Manage Categories
+                    </h1>
 
-            {/* FORM */}
-
-            <section className="category-form-card">
-
-                <div className="category-form-card__header">
-
-                    <div>
-                        <span className="category-form-card__label">
-                            {editingId ? "EDIT CATEGORY" : "NEW CATEGORY"}
-                        </span>
-
-                        <h2>
-                            {editingId
-                                ? "Update Category"
-                                : "Add Category"}
-                        </h2>
-                    </div>
-
-                    {editingId && (
-                        <button
-                            type="button"
-                            className="category-cancel-icon"
-                            onClick={resetForm}
-                            title="Cancel editing"
-                        >
-                            ×
-                        </button>
-                    )}
-
+                    <p className="admin-page__subtitle">
+                        {categories.length} categor{categories.length === 1 ? "y" : "ies"} in your catalog
+                    </p>
                 </div>
+            </header>
 
-                <form
-                    className="category-form"
-                    onSubmit={handleSubmit}
-                >
+            {error && (
+                <div className="admin-alert admin-alert--error">
+                    {error}
+                </div>
+            )}
 
-                    <div className="category-form__field">
+            <div className="categories-layout">
 
-                        <label htmlFor="category-name">
-                            Category Name
-                        </label>
+                {/* FORM */}
 
-                        <input
-                            id="category-name"
-                            type="text"
-                            name="name"
-                            placeholder="e.g. Electronics"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                        />
+                <section className="category-form-card">
 
-                    </div>
+                    <div className="category-form-card__header">
 
-                    <div className="category-form__field">
+                        <div>
+                            <span className="category-form-card__label">
+                                {editingId ? "EDIT CATEGORY" : "NEW CATEGORY"}
+                            </span>
 
-                        <label htmlFor="category-description">
-                            Description
-                        </label>
-
-                        <textarea
-                            id="category-description"
-                            name="description"
-                            placeholder="Describe this category..."
-                            value={formData.description}
-                            onChange={handleChange}
-                            rows="5"
-                        />
-
-                    </div>
-
-                    <div className="category-form__field">
-
-                        <label htmlFor="category-image">
-                            Image URL
-                        </label>
-
-                        <input
-                            id="category-image"
-                            type="url"
-                            name="image"
-                            placeholder="https://example.com/image.jpg"
-                            value={formData.image}
-                            onChange={handleChange}
-                        />
-
-                    </div>
-
-                    {formData.image && (
-                        <div className="category-image-preview">
-
-                            <img
-                                src={formData.image}
-                                alt="Category preview"
-                                onError={(e) => {
-                                    e.currentTarget.style.display = "none";
-                                }}
-                            />
-
-                        </div>
-                    )}
-
-                    <div className="category-form__actions">
-
-                        <button
-                            className="button button-primary"
-                            type="submit"
-                            disabled={saving}
-                        >
-                            {saving
-                                ? "Saving..."
-                                : editingId
+                            <h2>
+                                {editingId
                                     ? "Update Category"
                                     : "Add Category"}
-                        </button>
+                            </h2>
+                        </div>
 
                         {editingId && (
                             <button
-                                className="button button-secondary"
                                 type="button"
+                                className="category-cancel-icon"
                                 onClick={resetForm}
-                                disabled={saving}
+                                title="Cancel editing"
                             >
-                                Cancel
+                                ×
                             </button>
                         )}
 
                     </div>
 
-                </form>
+                    <form
+                        className="category-form"
+                        onSubmit={handleSubmit}
+                    >
 
-            </section>
+                        <div className="category-form__field">
 
+                            <label htmlFor="category-name">
+                                Category Name
+                            </label>
 
-            {/* CATEGORY LIST */}
+                            <input
+                                id="category-name"
+                                type="text"
+                                name="name"
+                                placeholder="e.g. Electronics"
+                                value={formData.name}
+                                onChange={handleChange}
+                                required
+                            />
 
-            <section className="categories-list-section">
-
-                <div className="categories-list-header">
-
-                    <div>
-                        <span className="category-form-card__label">
-                            CATEGORIES
-                        </span>
-
-                        <h2>
-                            Your Categories
-                        </h2>
-                    </div>
-
-                    <span className="category-count">
-                        {categories.length}
-                    </span>
-
-                </div>
-
-                {categories.length === 0 ? (
-
-                    <div className="categories-empty">
-
-                        <div className="categories-empty__icon">
-                            +
                         </div>
 
-                        <h3>
-                            No categories yet
-                        </h3>
+                        <div className="category-form__field">
 
-                        <p>
-                            Create your first category using the form.
-                        </p>
+                            <label htmlFor="category-description">
+                                Description
+                            </label>
+
+                            <textarea
+                                id="category-description"
+                                name="description"
+                                placeholder="Describe this category..."
+                                value={formData.description}
+                                onChange={handleChange}
+                                rows="5"
+                            />
+
+                        </div>
+
+                        <div className="category-form__field">
+
+                            <label htmlFor="category-image">
+                                Image URL
+                            </label>
+
+                            <input
+                                id="category-image"
+                                type="url"
+                                name="image"
+                                placeholder="https://example.com/image.jpg"
+                                value={formData.image}
+                                onChange={handleChange}
+                            />
+
+                        </div>
+
+                        {formData.image && (
+                            <div className="category-image-preview">
+
+                                <img
+                                    src={formData.image}
+                                    alt="Category preview"
+                                    onError={(e) => {
+                                        e.currentTarget.style.display = "none";
+                                    }}
+                                />
+
+                            </div>
+                        )}
+
+                        <div className="category-form__actions">
+
+                            <button
+                                className="admin-button admin-button--primary"
+                                type="submit"
+                                disabled={saving}
+                            >
+                                {saving
+                                    ? "Saving..."
+                                    : editingId
+                                        ? "Update Category"
+                                        : "Add Category"}
+                            </button>
+
+                            {editingId && (
+                                <button
+                                    className="admin-button admin-button--secondary"
+                                    type="button"
+                                    onClick={resetForm}
+                                    disabled={saving}
+                                >
+                                    Cancel
+                                </button>
+                            )}
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                {/* CATEGORY LIST */}
+
+                <section className="categories-list-section">
+
+                    <div className="categories-list-header">
+
+                        <div>
+                            <span className="category-form-card__label">
+                                CATEGORIES
+                            </span>
+
+                            <h2>
+                                Your Categories
+                            </h2>
+                        </div>
+
+                        <span className="category-count">
+                            {categories.length}
+                        </span>
 
                     </div>
 
-                ) : (
+                    {categories.length === 0 ? (
 
-                    <div className="categories-grid">
+                        <div className="categories-empty">
 
-                        {categories.map((category) => (
+                            <div className="categories-empty__icon">
+                                +
+                            </div>
 
-                            <article
-                                className="category-card"
-                                key={category._id}
-                            >
+                            <h3>
+                                No categories yet
+                            </h3>
 
-                                <div className="category-card__image">
+                            <p>
+                                Create your first category using the form.
+                            </p>
 
-                                    {category.image ? (
+                        </div>
 
-                                        <img
-                                            src={category.image}
-                                            alt={category.name}
-                                        />
+                    ) : (
 
-                                    ) : (
+                        <div className="categories-grid">
 
-                                        <span>
-                                            {category.name
-                                                ?.charAt(0)
-                                                ?.toUpperCase()}
-                                        </span>
+                            {categories.map((category) => (
 
-                                    )}
+                                <article
+                                    className="admin-card category-card"
+                                    key={category._id}
+                                >
 
-                                </div>
+                                    <div className="category-card__image">
 
-                                <div className="category-card__content">
+                                        {category.image ? (
 
-                                    <h3>
-                                        {category.name}
-                                    </h3>
+                                            <img
+                                                src={category.image}
+                                                alt={category.name}
+                                            />
 
-                                    <p>
-                                        {category.description ||
-                                            "No description provided."}
-                                    </p>
+                                        ) : (
 
-                                    <div className="category-card__actions">
+                                            <span>
+                                                {category.name
+                                                    ?.charAt(0)
+                                                    ?.toUpperCase()}
+                                            </span>
 
-                                        <button
-                                            className="category-action category-action--edit"
-                                            onClick={() =>
-                                                editCategory(category)
-                                            }
-                                        >
-                                            Edit
-                                        </button>
-
-                                        <button
-                                            className="category-action category-action--delete"
-                                            onClick={() =>
-                                                deleteCategory(
-                                                    category._id
-                                                )
-                                            }
-                                        >
-                                            Delete
-                                        </button>
+                                        )}
 
                                     </div>
 
-                                </div>
+                                    <div className="category-card__content">
 
-                            </article>
+                                        <h3>
+                                            {category.name}
+                                        </h3>
 
-                        ))}
+                                        <p>
+                                            {category.description ||
+                                                "No description provided."}
+                                        </p>
 
-                    </div>
+                                        <div className="admin-card__actions">
 
-                )}
+                                            <button
+                                                className="admin-button admin-button--secondary"
+                                                onClick={() =>
+                                                    editCategory(category)
+                                                }
+                                            >
+                                                Edit
+                                            </button>
 
-            </section>
+                                            <button
+                                                className="admin-button admin-button--danger"
+                                                onClick={() =>
+                                                    deleteCategory(
+                                                        category._id
+                                                    )
+                                                }
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+
+                                </article>
+
+                            ))}
+
+                        </div>
+
+                    )}
+
+                </section>
+
+            </div>
 
         </div>
-
-    </div>
-);
+    );
 };
 
 export default AdminCategories;

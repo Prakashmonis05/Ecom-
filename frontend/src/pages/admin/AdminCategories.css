@@ -1,47 +1,52 @@
 /* ========================================
    VEYRO ADMIN - CATEGORIES
+   (aligned with AdminProducts / AdminOrders
+   shared design tokens)
 ======================================== */
 
-.categories-page {
-    width: min(1200px, calc(100% - 40px));
+.admin-page.admin-categories {
+    width: 80%;
     margin: 0 auto;
     padding: 40px 0 80px;
+    box-sizing: border-box;
+}
+
+.admin-categories *,
+.admin-categories *::before,
+.admin-categories *::after {
+    box-sizing: border-box;
 }
 
 
 /* ========================================
-   PAGE HEADER
+   PAGE HEADER (shared pattern)
 ======================================== */
 
-.admin-page__header {
-    margin-bottom: 32px;
+.admin-categories .admin-page__header {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 28px;
 }
 
-.admin-page__eyebrow {
-    display: block;
-    margin-bottom: 8px;
-
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-
-    color: #7b817d;
+.admin-categories .admin-page__header > div {
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.admin-page__title {
+.admin-categories .admin-page__title {
     margin: 0;
 
-    font-size: clamp(28px, 4vw, 38px);
-    line-height: 1.1;
+    font-size: clamp(22px, 3vw, 28px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
 
-    color: #202925;
+    color: var(--primary, #202925);
 }
 
-.admin-page__description {
-    margin: 10px 0 0;
-
-    font-size: 14px;
-    color: #737a76;
+.admin-categories .admin-page__subtitle {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #6b7280;
 }
 
 
@@ -63,6 +68,33 @@
     background: #fff1f1;
     border: 1px solid #fecaca;
     color: #b42318;
+}
+
+
+/* ========================================
+   LOADING / ERROR STATE (shared pattern)
+======================================== */
+
+.admin-state {
+    min-height: 300px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+    text-align: center;
+}
+
+.admin-state__message {
+    margin: 0;
+
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.admin-state__message--error {
+    color: #dc2626;
 }
 
 
@@ -101,6 +133,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    gap: 10px;
 
     margin-bottom: 24px;
 }
@@ -127,6 +160,7 @@
 .category-cancel-icon {
     width: 32px;
     height: 32px;
+    flex-shrink: 0;
 
     border: none;
     border-radius: 50%;
@@ -173,8 +207,6 @@
 .category-form__field textarea {
     width: 100%;
 
-    box-sizing: border-box;
-
     padding: 12px 13px;
 
     border: 1px solid #dfe3e0;
@@ -184,6 +216,7 @@
 
     color: #202925;
 
+    font-family: inherit;
     font-size: 14px;
 
     outline: none;
@@ -250,8 +283,88 @@
     margin-top: 4px;
 }
 
-.category-form__actions .button {
+.category-form__actions .admin-button {
     flex: 1;
+}
+
+
+/* ========================================
+   SHARED ADMIN BUTTONS
+   (same tokens as AdminProducts / AdminOrders)
+======================================== */
+
+.admin-button {
+    min-height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 16px;
+
+    border-radius: 8px;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.admin-button:hover {
+    transform: translateY(-1px);
+}
+
+.admin-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.admin-button--primary {
+    background: #202925;
+    color: #ffffff;
+    border: 1px solid #202925;
+}
+
+.admin-button--primary:hover:not(:disabled) {
+    background: #111815;
+    border-color: #111815;
+    box-shadow: 0 5px 14px rgba(32, 41, 37, 0.18);
+}
+
+.admin-button--secondary {
+    background: #ffffff;
+    color: #202925;
+    border: 1px solid #d1d5db;
+}
+
+.admin-button--secondary:hover:not(:disabled) {
+    background: #f5f6f5;
+    border-color: #202925;
+}
+
+.admin-button--danger {
+    background: #ffffff;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.admin-button--danger:hover:not(:disabled) {
+    background: #fef2f2;
+    border-color: #ef4444;
 }
 
 
@@ -267,6 +380,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 10px;
 
     margin-bottom: 20px;
 }
@@ -274,6 +388,7 @@
 .category-count {
     min-width: 34px;
     height: 34px;
+    flex-shrink: 0;
 
     display: flex;
     align-items: center;
@@ -295,18 +410,23 @@
 
 .categories-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 18px;
 }
 
 
 /* ========================================
    CATEGORY CARD
+   (uses shared .admin-card + local
+   category-card modifier, matching the
+   .admin-card / .admin-product-card
+   pattern used elsewhere)
 ======================================== */
 
-.category-card {
+.admin-card.category-card {
     display: flex;
     flex-direction: column;
+    min-width: 0;
 
     overflow: hidden;
 
@@ -321,7 +441,7 @@
         border-color 0.2s ease;
 }
 
-.category-card:hover {
+.admin-card.category-card:hover {
     transform: translateY(-2px);
 
     border-color: #d6dad7;
@@ -337,6 +457,7 @@
 .category-card__image {
     width: 100%;
     height: 145px;
+    flex-shrink: 0;
 
     display: flex;
     align-items: center;
@@ -381,6 +502,7 @@
 .category-card__content {
     display: flex;
     flex-direction: column;
+    flex: 1;
 
     padding: 18px;
 }
@@ -390,6 +512,8 @@
 
     font-size: 17px;
     color: #202925;
+
+    overflow-wrap: anywhere;
 }
 
 .category-card__content p {
@@ -405,51 +529,20 @@
 
 
 /* ========================================
-   CARD ACTIONS
+   CARD ACTIONS (shared pattern)
 ======================================== */
 
-.category-card__actions {
+.category-card .admin-card__actions {
     display: flex;
     gap: 8px;
 
     margin-top: 18px;
+    padding-top: 0;
+    border-top: none;
 }
 
-.category-action {
+.category-card .admin-card__actions .admin-button {
     flex: 1;
-
-    padding: 9px 12px;
-
-    border-radius: 7px;
-
-    font-size: 12px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition: 0.2s ease;
-}
-
-.category-action--edit {
-    border: 1px solid #d8ddd9;
-
-    background: #ffffff;
-    color: #202925;
-}
-
-.category-action--edit:hover {
-    background: #f3f5f3;
-}
-
-.category-action--delete {
-    border: 1px solid #fecaca;
-
-    background: #fff7f7;
-    color: #b42318;
-}
-
-.category-action--delete:hover {
-    background: #fee2e2;
 }
 
 
@@ -519,8 +612,8 @@
 
 @media (max-width: 600px) {
 
-    .categories-page {
-        width: min(100% - 28px, 1180px);
+    .admin-page.admin-categories {
+        width: 90%;
         padding: 28px 0 60px;
     }
 
@@ -529,7 +622,7 @@
     }
 
     .categories-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .category-card__image {
@@ -538,18 +631,26 @@
 
 }
 
-@media (max-width: 420px) {
+@media (max-width: 480px) {
 
-    .categories-page {
-        width: calc(100% - 20px);
+    .admin-page.admin-categories {
+        width: 94%;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
     }
 
     .category-form__actions {
         flex-direction: column;
     }
 
-    .category-card__actions {
+    .category-card .admin-card__actions {
         flex-direction: column;
+    }
+
+    .categories-list-header {
+        flex-wrap: wrap;
     }
 
 }
