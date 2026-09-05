@@ -1,4 +1,30 @@
 const Product = require("../models/Product");
+const cloudinary = require("../config/cloudinary");
+
+const uploadToCloudinary = (file) => {
+
+    return new Promise((resolve, reject) => {
+
+        const stream = cloudinary.uploader.upload_stream(
+            {
+                folder: "veyro/products"
+            },
+            (error, result) => {
+
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+
+            }
+        );
+
+        stream.end(file.buffer);
+
+    });
+
+};
 
 const addProduct = async (req, res) => {
 
@@ -10,9 +36,23 @@ const addProduct = async (req, res) => {
             price,
             category,
             brand,
-            stock,
-            images
+            stock
         } = req.body;
+
+        let imageUrls = [];
+
+        if (req.files && req.files.length > 0) {
+
+            const uploadResults = await Promise.all(
+                req.files.map((file) =>
+                    uploadToCloudinary(file)
+                )
+            );
+
+            imageUrls = uploadResults.map(
+                (result) => result.secure_url
+            );
+        }
 
         const product = await Product.create({
             name,
@@ -21,7 +61,7 @@ const addProduct = async (req, res) => {
             category,
             brand,
             stock,
-            images,
+            images: imageUrls,
             createdBy: req.user._id
         });
 
@@ -33,14 +73,17 @@ const addProduct = async (req, res) => {
 
     } catch (error) {
 
+        console.error(error);
+
         res.status(500).json({
             success: false,
             message: error.message
         });
 
     }
-
 };
+
+
 const getProducts = async (req, res) => {
 
     try {
@@ -198,18 +241,7 @@ const updateProduct = async (req, res) => {
 
     try {
 
-        const product = await Product.findByIdAndUpdate(
-
-            req.params.id,
-
-            req.body,
-
-            {
-                new: true,
-                runValidators: true
-            }
-
-        );
+        const product = await Product.findById(req.params.id);
 
         if (!product) {
 
@@ -220,12 +252,56 @@ const updateProduct = async (req, res) => {
 
         }
 
+        const {
+            name,
+            description,
+            price,
+            category,
+            brand,
+            stock
+        } = req.body;
+
+        const updateData = {
+            name,
+            description,
+            price,
+            category,
+            brand,
+            stock
+        };
+
+        if (req.files && req.files.length > 0) {
+
+            const uploadResults = await Promise.all(
+                req.files.map((file) =>
+                    uploadToCloudinary(file)
+                )
+            );
+
+            updateData.images = uploadResults.map(
+                (result) => result.secure_url
+            );
+        }
+
+        const updatedProduct =
+            await Product.findByIdAndUpdate(
+                req.params.id,
+                updateData,
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
+
         res.status(200).json({
             success: true,
-            product
+            message: "Product updated successfully",
+            product: updatedProduct
         });
 
     } catch (error) {
+
+        console.error(error);
 
         res.status(500).json({
             success: false,
@@ -233,8 +309,8 @@ const updateProduct = async (req, res) => {
         });
 
     }
-
 };
+
 
 const deleteProduct = async (req, res) => {
 
@@ -274,5 +350,6 @@ module.exports = {
     getProducts,
     getProductById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    uploadToCloudinary
 };

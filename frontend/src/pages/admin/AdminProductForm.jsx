@@ -17,7 +17,7 @@ const AdminProductForm = () => {
         brand: "",
         category: "",
         stock: "",
-        images: ""
+        images: []
     });
 
     const [categories, setCategories] = useState([]);
@@ -141,94 +141,86 @@ const AdminProductForm = () => {
     // Submit
     // =========================
 
-    const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
 
-        e.preventDefault();
+    e.preventDefault();
 
-        setLoading(true);
-        setError("");
+    setLoading(true);
+    setError("");
 
-        // Make sure category is selected
-        if (!formData.category) {
+    try {
 
-            setError(
-                "Please select a category"
+        const productData = new FormData();
+
+        productData.append(
+            "name",
+            formData.name
+        );
+
+        productData.append(
+            "description",
+            formData.description
+        );
+
+        productData.append(
+            "price",
+            formData.price
+        );
+
+        productData.append(
+            "category",
+            formData.category
+        );
+
+        productData.append(
+            "brand",
+            formData.brand
+        );
+
+        productData.append(
+            "stock",
+            formData.stock
+        );
+
+        formData.images.forEach((image) => {
+
+            productData.append(
+                "images",
+                image
             );
 
-            setLoading(false);
+        });
 
-            return;
-        }
+        if (isEditMode) {
 
-        const productData = {
-
-            name: formData.name,
-
-            description:
-                formData.description,
-
-            price:
-                Number(formData.price),
-
-            brand:
-                formData.brand,
-
-            category:
-                formData.category,
-
-            stock:
-                Number(formData.stock),
-
-            images:
-                formData.images
-                    .split(",")
-                    .map((image) => image.trim())
-                    .filter(Boolean)
-        };
-
-        try {
-
-            if (isEditMode) {
-
-                const response = await api.put(
-                    `/products/${id}`,
-                    productData
-                );
-
-                alert(
-                    response.data.message ||
-                    "Product updated successfully"
-                );
-
-            } else {
-
-                const response = await api.post(
-                    "/products",
-                    productData
-                );
-
-                alert(
-                    response.data.message ||
-                    "Product created successfully"
-                );
-
-            }
-
-            navigate("/admin/products");
-
-        } catch (error) {
-
-            setError(
-                error.response?.data?.message ||
-                "Failed to save product"
+            await api.put(
+                `/products/${id}`,
+                productData
             );
 
-        } finally {
+        } else {
 
-            setLoading(false);
+            await api.post(
+                "/products",
+                productData
+            );
 
         }
-    };
+
+        navigate("/admin/products");
+
+    } catch (error) {
+
+        setError(
+            error.response?.data?.message ||
+            "Failed to save product"
+        );
+
+    } finally {
+
+        setLoading(false);
+    }
+};
 
     // =========================
     // Loading
@@ -281,7 +273,7 @@ const AdminProductForm = () => {
                         onChange={handleChange}
                         required
                     />
-                </div>
+                     </div>
 
                 {/* Description */}
 
@@ -380,15 +372,20 @@ const AdminProductForm = () => {
                 {/* Images */}
 
                 <div className="admin-form__field">
-                    <input
-                        className="admin-form__control"
-                        type="text"
+                   <input
+                        type="file"
                         name="images"
-                        placeholder="Image URLs separated by commas"
-                        value={formData.images}
-                        onChange={handleChange}
+                        accept="image/*"
+                        multiple
+                        onChange={(e) => {
+                            setFormData((previous) => ({
+                                ...previous,
+                                images: Array.from(e.target.files)
+                            }));
+                        }}
                     />
                 </div>
+               
 
                 {/* Submit */}
 

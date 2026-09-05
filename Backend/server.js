@@ -12,6 +12,7 @@ const reviewRoutes = require("./routes/reviewRoutes");
 const userRoutes = require("./routes/userRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const uploadRoutes = require("./routes/uploadRoutes");
 const app = express();
 connectDB();
 app.use(cors());
@@ -25,6 +26,7 @@ app.use(reviewRoutes);
 app.use(userRoutes);
 app.use(wishlistRoutes);
 app.use(adminRoutes);
+app.use("/api/upload", uploadRoutes);
 app.listen(5000, () => {
     console.log("Server running on port 5000");
 });
