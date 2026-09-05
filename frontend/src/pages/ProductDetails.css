@@ -380,12 +380,109 @@
     border: 1.5px solid var(--brand-border);
     border-radius: var(--radius-md);
     transition: all var(--transition-normal);
+    cursor: pointer;
 }
 
 .details-wishlist-btn:hover {
-    background: #f7faf8;
-    border-color: #cbd4cf;
+    background: #fff5f5;
+    border-color: #fca5a5;
+    color: #dc2626;
     transform: translateY(-2px);
+}
+
+.details-wishlist-btn.wishlisted {
+    background: #fff1f2;
+    border-color: #fca5a5;
+    color: #dc2626;
+}
+
+.details-wishlist-btn.wishlisted:hover {
+    background: #ffe4e6;
+    border-color: #f87171;
+}
+
+.wishlist-heart-icon {
+    transition: transform var(--transition-fast), fill var(--transition-fast);
+    flex-shrink: 0;
+}
+
+@keyframes heartPop {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.45); }
+    60%  { transform: scale(0.88); }
+    80%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.wishlist-heart-icon.wishlist-pop {
+    animation: heartPop 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* =========================================================
+   TOAST NOTIFICATION
+   ========================================================= */
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(120%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.pd-toast {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.14);
+    animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+    max-width: 320px;
+    line-height: 1.4;
+}
+
+.pd-toast--success {
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    color: #15803d;
+}
+
+.pd-toast--error {
+    background: #fef2f2;
+    border: 1.5px solid #fca5a5;
+    color: #b91c1c;
+}
+
+.pd-toast-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.pd-toast--success .pd-toast-icon {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.pd-toast--error .pd-toast-icon {
+    background: #fee2e2;
+    color: #b91c1c;
 }
 
 /* Benefits Grid */

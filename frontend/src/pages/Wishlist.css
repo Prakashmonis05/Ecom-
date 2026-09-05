@@ -224,20 +224,27 @@
 }
 
 .wishlist-btn-remove {
+    width: 38px;
     height: 38px;
-    padding: 0 12px;
-    background: #ffffff;
-    border: 1px solid var(--brand-border);
+    padding: 0;
+    background: #fff5f5;
+    border: 1.5px solid #fecaca;
     color: var(--color-danger);
-    font-size: 12px;
-    font-weight: 700;
-    border-radius: var(--radius-sm);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     transition: all var(--transition-fast);
+    cursor: pointer;
 }
 
 .wishlist-btn-remove:hover {
-    background: var(--color-danger-bg);
-    border-color: var(--color-danger-border);
+    background: var(--color-danger);
+    border-color: var(--color-danger);
+    color: #ffffff;
+    transform: scale(1.12) rotate(5deg);
+    box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
 }
 
 @media (max-width: 580px) {

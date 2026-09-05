@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
@@ -15,6 +15,16 @@ const ProductDetails = () => {
 
     const [selectedImage, setSelectedImage] = useState(0);
     const [quantity, setQuantity] = useState(1);
+    const [wishlisted, setWishlisted] = useState(false);
+    const [wishlistAnim, setWishlistAnim] = useState(false);
+    const [toast, setToast] = useState(null);
+    const toastTimer = useRef(null);
+
+    const showToast = (message, type = "success") => {
+        if (toastTimer.current) clearTimeout(toastTimer.current);
+        setToast({ message, type });
+        toastTimer.current = setTimeout(() => setToast(null), 3000);
+    };
 
     const fetchProduct = async () => {
 
@@ -53,12 +63,12 @@ const ProductDetails = () => {
     const handleAddToCart = async () => {
 
         if (!user) {
-            alert("Please login to add products to cart");
+            showToast("Please login to add products to cart", "error");
             return;
         }
 
         if (product.stock <= 0) {
-            alert("Product is out of stock");
+            showToast("Product is out of stock", "error");
             return;
         }
 
@@ -72,13 +82,14 @@ const ProductDetails = () => {
                 }
             );
 
-            alert(response.data.message);
+            showToast(response.data.message);
 
         } catch (error) {
 
-            alert(
+            showToast(
                 error.response?.data?.message ||
-                "Failed to add product to cart"
+                "Failed to add product to cart",
+                "error"
             );
 
         }
@@ -93,7 +104,7 @@ const ProductDetails = () => {
     const handleWishlist = async () => {
 
         if (!user) {
-            alert("Please login to use wishlist");
+            showToast("Please login to use wishlist", "error");
             return;
         }
 
@@ -103,13 +114,21 @@ const ProductDetails = () => {
                 `/wishlist/${product._id}`
             );
 
-            alert(response.data.message);
+            const added = response.data.message?.toLowerCase().includes("added");
+            setWishlisted(added);
+
+            /* heart pop animation */
+            setWishlistAnim(true);
+            setTimeout(() => setWishlistAnim(false), 500);
+
+            showToast(response.data.message);
 
         } catch (error) {
 
-            alert(
+            showToast(
                 error.response?.data?.message ||
-                "Failed to update wishlist"
+                "Failed to update wishlist",
+                "error"
             );
 
         }
@@ -209,6 +228,7 @@ const ProductDetails = () => {
 
 
     return (
+        <>
         <main className="product-details-page">
 
             <div className="product-details-container">
@@ -257,11 +277,10 @@ const ProductDetails = () => {
 
                                 <button
                                     key={index}
-                                    className={`thumbnail ${
-                                        selectedImage === index
-                                            ? "thumbnail-active"
-                                            : ""
-                                    }`}
+                                    className={`thumbnail ${selectedImage === index
+                                        ? "thumbnail-active"
+                                        : ""
+                                        }`}
                                     onClick={() =>
                                         setSelectedImage(index)
                                     }
@@ -464,12 +483,27 @@ const ProductDetails = () => {
 
 
                             <button
-                                className="details-wishlist-btn"
+                                className={`details-wishlist-btn${wishlisted ? " wishlisted" : ""}`}
                                 onClick={handleWishlist}
+                                aria-label={wishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
                             >
-                                ♡
+                                <svg
+                                    key={wishlistAnim ? "anim" : "idle"}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill={wishlisted ? "currentColor" : "none"}
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    className={`wishlist-heart-icon${wishlistAnim ? " wishlist-pop" : ""}`}
+                                >
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                </svg>
                                 <span>
-                                    Wishlist
+                                    {wishlisted ? "Wishlisted" : "Wishlist"}
                                 </span>
                             </button>
 
@@ -545,6 +579,17 @@ const ProductDetails = () => {
             </div>
 
         </main>
+
+        {/* Toast Notification */}
+        {toast && (
+            <div className={`pd-toast pd-toast--${toast.type}`}>
+                <span className="pd-toast-icon">
+                    {toast.type === "success" ? "✓" : "✕"}
+                </span>
+                {toast.message}
+            </div>
+        )}
+        </>
     );
 };
 
