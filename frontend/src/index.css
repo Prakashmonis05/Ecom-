@@ -1,65 +1,250 @@
+/* =========================================================
+   VEYRO DESIGN SYSTEM & GLOBAL STYLES
+   ========================================================= */
+
 :root {
-    font-family: 'Plus Jakarta Sans', Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    color: #1e2925;
-    background: #f8faf9;
-    font-synthesis: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    /* Brand Colors */
+    --brand-primary: #1d2b24;
+    --brand-primary-hover: #26382f;
+    --brand-dark: #121c17;
+    --brand-light: #f5f7f6;
+    --brand-surface: #ffffff;
+    --brand-accent: #2e4a3c;
+    --brand-accent-subtle: #eef3f0;
+    --brand-border: #e3e8e5;
+    --brand-border-focus: #1d2b24;
+
+    /* Neutrals */
+    --text-main: #18221e;
+    --text-muted: #5e6b65;
+    --text-light: #8e9a94;
+    --bg-page: #f8faf9;
+    --bg-card: #ffffff;
+    --bg-subtle: #f2f5f3;
+
+    /* Status Colors */
+    --color-success: #0f766e;
+    --color-success-bg: #ecfdf5;
+    --color-success-border: #a7f3d0;
+    --color-warning: #b45309;
+    --color-warning-bg: #fffbeb;
+    --color-warning-border: #fde68a;
+    --color-danger: #b91c1c;
+    --color-danger-bg: #fef2f2;
+    --color-danger-border: #fecaca;
+
+    /* Elevation Shadows */
+    --shadow-xs: 0 1px 2px rgba(18, 28, 23, 0.04);
+    --shadow-sm: 0 2px 6px rgba(18, 28, 23, 0.05);
+    --shadow-md: 0 6px 18px rgba(18, 28, 23, 0.07);
+    --shadow-lg: 0 14px 34px rgba(18, 28, 23, 0.09);
+    --shadow-xl: 0 22px 48px rgba(18, 28, 23, 0.12);
+
+    /* Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --radius-pill: 9999px;
+
+    /* Transitions */
+    --transition-fast: 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-normal: 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Max Widths */
+    --container-max: 1240px;
 }
 
-*,
-*::before,
-*::after {
+/* =========================================================
+   RESET & CORE BOX MODEL
+   ========================================================= */
+
+*, *::before, *::after {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 html {
-    min-width: 320px;
-    scroll-behavior: smooth;
-    overflow-x: hidden;
+    font-size: 16px;
     -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    color-scheme: light;
 }
 
 body {
-    min-width: 320px;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-page);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     min-height: 100vh;
-    margin: 0;
+    display: flex;
+    flex-direction: column;
     overflow-x: hidden;
-    background: #f8faf9;
 }
 
-button,
-input,
-textarea,
-select {
-    font: inherit;
+#root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
-button,
-select {
-    cursor: pointer;
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-main);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
 }
 
-button:disabled {
-    cursor: not-allowed;
-}
-
-img {
-    display: block;
-    max-width: 100%;
+p {
+    color: var(--text-muted);
 }
 
 a {
     color: inherit;
     text-decoration: none;
+    transition: color var(--transition-fast);
 }
 
-#root {
-    min-height: 100vh;
+img, svg, picture {
+    display: block;
+    max-width: 100%;
 }
 
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    line-height: inherit;
+}
+
+button {
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+/* =========================================================
+   SCROLLBAR STYLING
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f4f2;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c5cec9;
+    border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a2aba6;
+}
+
+/* Selection */
 ::selection {
-    color: #fffaf2;
-    background: #c96045;
+    background: rgba(29, 43, 36, 0.15);
+    color: var(--brand-dark);
+}
+
+/* =========================================================
+   GLOBAL SHARED UTILITIES
+   ========================================================= */
+
+.page-shell {
+    width: min(var(--container-max), 92%);
+    margin: 36px auto 64px;
+}
+
+.page-header {
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 260px;
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.status-badge-error {
+    background: var(--color-danger-bg);
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger-border);
+}
+
+/* =========================================================
+   SHARED BUTTONS
+   ========================================================= */
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 650;
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.button-primary {
+    background: var(--brand-primary);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(29, 43, 36, 0.15);
+}
+
+.button-primary:hover {
+    background: var(--brand-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(29, 43, 36, 0.22);
+}
+
+.button-secondary {
+    background: #ffffff;
+    color: var(--text-main);
+    border-color: var(--brand-border);
+}
+
+.button-secondary:hover {
+    background: var(--bg-subtle);
+    border-color: #cbd5cf;
 }

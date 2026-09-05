@@ -1,605 +1,257 @@
-/* ========================================
-   VEYRO ADMIN - CATEGORIES
-   (aligned with AdminProducts / AdminOrders
-   shared design tokens)
-======================================== */
+/* =========================================================
+   ADMIN CATEGORIES MANAGEMENT
+   ========================================================= */
 
-.admin-page.admin-categories {
-    width: 80%;
-    margin: 0 auto;
-    padding: 40px 0 80px;
-    box-sizing: border-box;
-}
-
-.admin-categories *,
-.admin-categories *::before,
-.admin-categories *::after {
-    box-sizing: border-box;
-}
-
-
-/* ========================================
-   PAGE HEADER (shared pattern)
-======================================== */
-
-.admin-categories .admin-page__header {
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 28px;
-}
-
-.admin-categories .admin-page__header > div {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.admin-categories .admin-page__title {
-    margin: 0;
-
-    font-size: clamp(22px, 3vw, 28px);
-    font-weight: 800;
-    letter-spacing: -0.5px;
-
-    color: var(--primary, #202925);
-}
-
-.admin-categories .admin-page__subtitle {
-    margin: 4px 0 0;
-    font-size: 13px;
-    color: #6b7280;
-}
-
-
-/* ========================================
-   ALERT
-======================================== */
-
-.admin-alert {
-    margin-bottom: 24px;
-    padding: 13px 16px;
-
-    border-radius: 8px;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.admin-alert--error {
-    background: #fff1f1;
-    border: 1px solid #fecaca;
-    color: #b42318;
-}
-
-
-/* ========================================
-   LOADING / ERROR STATE (shared pattern)
-======================================== */
-
-.admin-state {
-    min-height: 300px;
-
+.admin-categories {
+    width: min(1280px, 94%);
+    margin: 32px auto 80px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 24px;
-    text-align: center;
+    flex-direction: column;
+    gap: 28px;
 }
-
-.admin-state__message {
-    margin: 0;
-
-    color: #6b7280;
-    font-size: 15px;
-}
-
-.admin-state__message--error {
-    color: #dc2626;
-}
-
-
-/* ========================================
-   MAIN LAYOUT
-======================================== */
 
 .categories-layout {
     display: grid;
-    grid-template-columns: 360px minmax(0, 1fr);
-    gap: 28px;
-
+    grid-template-columns: 380px 1fr;
+    gap: 32px;
     align-items: start;
 }
 
-
-/* ========================================
-   FORM CARD
-======================================== */
-
+/* Category Form Card (Left) */
 .category-form-card {
     background: #ffffff;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-
-    padding: 26px;
-
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
-
+    border: 1px solid var(--brand-border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
     position: sticky;
-    top: 90px;
+    top: 96px;
 }
 
 .category-form-card__header {
     display: flex;
-    align-items: flex-start;
     justify-content: space-between;
-    gap: 10px;
-
-    margin-bottom: 24px;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--brand-border);
+    margin-bottom: 20px;
 }
 
 .category-form-card__label {
-    display: block;
-    margin-bottom: 6px;
-
     font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-
-    color: #7b817d;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    color: var(--brand-accent);
+    text-transform: uppercase;
 }
 
-.category-form-card h2,
-.categories-list-header h2 {
-    margin: 0;
-
-    font-size: 20px;
-    color: #202925;
+.category-form-card__header h2 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--brand-dark);
+    margin-top: 4px;
 }
 
 .category-cancel-icon {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    background: #f3f4f3;
-    color: #555;
-
     font-size: 22px;
-    line-height: 1;
-
+    color: var(--text-light);
     cursor: pointer;
-
-    transition: 0.2s ease;
+    line-height: 1;
 }
 
 .category-cancel-icon:hover {
-    background: #e5e7e5;
+    color: var(--brand-dark);
 }
-
-
-/* ========================================
-   FORM
-======================================== */
 
 .category-form {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
 }
 
 .category-form__field {
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 6px;
 }
 
 .category-form__field label {
-    font-size: 13px;
-    font-weight: 600;
-    color: #343b37;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--text-main);
 }
 
 .category-form__field input,
 .category-form__field textarea {
     width: 100%;
-
-    padding: 12px 13px;
-
-    border: 1px solid #dfe3e0;
-    border-radius: 8px;
-
-    background: #fafbfa;
-
-    color: #202925;
-
-    font-family: inherit;
-    font-size: 14px;
-
+    padding: 10px 14px;
+    border: 1.5px solid var(--brand-border);
+    border-radius: var(--radius-sm);
+    background: #ffffff;
+    font-size: 13.5px;
+    color: var(--text-main);
     outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
-}
-
-.category-form__field textarea {
-    resize: vertical;
-    min-height: 110px;
+    transition: all var(--transition-fast);
 }
 
 .category-form__field input:focus,
 .category-form__field textarea:focus {
-    border-color: #202925;
-    background: #ffffff;
-
-    box-shadow: 0 0 0 3px rgba(32, 41, 37, 0.08);
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(29, 43, 36, 0.08);
 }
-
-.category-form__field input::placeholder,
-.category-form__field textarea::placeholder {
-    color: #9ca3af;
-}
-
-
-/* ========================================
-   IMAGE PREVIEW
-======================================== */
 
 .category-image-preview {
     width: 100%;
-    height: 150px;
-
+    height: 140px;
+    border-radius: var(--radius-md);
     overflow: hidden;
-
-    border-radius: 10px;
-
-    background: #f3f4f3;
-    border: 1px solid #e5e7eb;
+    background: #f8faf8;
+    border: 1px solid var(--brand-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .category-image-preview img {
-    width: 100%;
-    height: 100%;
-
-    display: block;
-
+    max-width: 100%;
+    max-height: 100%;
     object-fit: cover;
 }
-
-
-/* ========================================
-   FORM ACTIONS
-======================================== */
 
 .category-form__actions {
     display: flex;
     gap: 10px;
-
-    margin-top: 4px;
+    margin-top: 6px;
 }
 
 .category-form__actions .admin-button {
     flex: 1;
 }
 
-
-/* ========================================
-   SHARED ADMIN BUTTONS
-   (same tokens as AdminProducts / AdminOrders)
-======================================== */
-
-.admin-button {
-    min-height: 42px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0 16px;
-
-    border-radius: 8px;
-
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-
-    text-decoration: none;
-    white-space: nowrap;
-
-    box-sizing: border-box;
-
-    cursor: pointer;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.15s ease,
-        box-shadow 0.2s ease,
-        opacity 0.2s ease;
-}
-
-.admin-button:hover {
-    transform: translateY(-1px);
-}
-
-.admin-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none !important;
-}
-
-.admin-button--primary {
-    background: #202925;
-    color: #ffffff;
-    border: 1px solid #202925;
-}
-
-.admin-button--primary:hover:not(:disabled) {
-    background: #111815;
-    border-color: #111815;
-    box-shadow: 0 5px 14px rgba(32, 41, 37, 0.18);
-}
-
-.admin-button--secondary {
-    background: #ffffff;
-    color: #202925;
-    border: 1px solid #d1d5db;
-}
-
-.admin-button--secondary:hover:not(:disabled) {
-    background: #f5f6f5;
-    border-color: #202925;
-}
-
-.admin-button--danger {
-    background: #ffffff;
-    color: #dc2626;
-    border: 1px solid #fecaca;
-}
-
-.admin-button--danger:hover:not(:disabled) {
-    background: #fef2f2;
-    border-color: #ef4444;
-}
-
-
-/* ========================================
-   CATEGORY LIST
-======================================== */
-
+/* Category List (Right) */
 .categories-list-section {
-    min-width: 0;
+    background: #ffffff;
+    border: 1px solid var(--brand-border);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
 }
 
 .categories-list-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    align-items: center;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--brand-border);
+    margin-bottom: 22px;
+}
 
-    margin-bottom: 20px;
+.categories-list-header h2 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--brand-dark);
 }
 
 .category-count {
-    min-width: 34px;
-    height: 34px;
-    flex-shrink: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #202925;
-    color: #ffffff;
-
-    font-size: 13px;
-    font-weight: 700;
+    background: var(--brand-accent-subtle);
+    color: var(--brand-accent);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 12px;
+    font-weight: 800;
 }
-
-
-/* ========================================
-   CATEGORY GRID
-======================================== */
 
 .categories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 18px;
 }
 
-
-/* ========================================
-   CATEGORY CARD
-   (uses shared .admin-card + local
-   category-card modifier, matching the
-   .admin-card / .admin-product-card
-   pattern used elsewhere)
-======================================== */
-
-.admin-card.category-card {
+.category-card {
+    background: #ffffff;
+    border: 1px solid var(--brand-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    min-width: 0;
-
-    overflow: hidden;
-
-    background: #ffffff;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease;
+    transition: all var(--transition-fast);
 }
 
-.admin-card.category-card:hover {
-    transform: translateY(-2px);
-
-    border-color: #d6dad7;
-
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
+.category-card:hover {
+    border-color: #cad3ce;
+    box-shadow: var(--shadow-md);
 }
-
-
-/* ========================================
-   CATEGORY IMAGE
-======================================== */
 
 .category-card__image {
     width: 100%;
-    height: 145px;
-    flex-shrink: 0;
-
+    height: 130px;
+    background: #f4f7f5;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    overflow: hidden;
-
-    background: #f2f3f1;
+    border-bottom: 1px solid var(--brand-border);
 }
 
 .category-card__image img {
     width: 100%;
     height: 100%;
-
-    display: block;
-
     object-fit: cover;
 }
 
 .category-card__image span {
-    width: 60px;
-    height: 60px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #202925;
-    color: #ffffff;
-
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 850;
+    color: var(--brand-accent);
 }
 
-
-/* ========================================
-   CARD CONTENT
-======================================== */
-
 .category-card__content {
+    padding: 16px;
     display: flex;
     flex-direction: column;
     flex: 1;
-
-    padding: 18px;
 }
 
 .category-card__content h3 {
-    margin: 0 0 7px;
-
-    font-size: 17px;
-    color: #202925;
-
-    overflow-wrap: anywhere;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--brand-dark);
+    margin-bottom: 4px;
 }
 
 .category-card__content p {
-    margin: 0;
-
-    min-height: 42px;
-
-    color: #737a76;
-
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
-
-
-/* ========================================
-   CARD ACTIONS (shared pattern)
-======================================== */
-
-.category-card .admin-card__actions {
-    display: flex;
-    gap: 8px;
-
-    margin-top: 18px;
-    padding-top: 0;
-    border-top: none;
-}
-
-.category-card .admin-card__actions .admin-button {
-    flex: 1;
-}
-
-
-/* ========================================
-   EMPTY STATE
-======================================== */
 
 .categories-empty {
     padding: 60px 20px;
-
     text-align: center;
-
-    background: #ffffff;
-
-    border: 1px dashed #d8ddd9;
-    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .categories-empty__icon {
-    width: 50px;
-    height: 50px;
-
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--brand-accent-subtle);
+    color: var(--brand-accent);
+    font-size: 24px;
+    font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    margin: 0 auto 16px;
-
-    border-radius: 50%;
-
-    background: #f0f2ef;
-    color: #202925;
-
-    font-size: 28px;
 }
-
-.categories-empty h3 {
-    margin: 0 0 6px;
-
-    font-size: 17px;
-    color: #202925;
-}
-
-.categories-empty p {
-    margin: 0;
-
-    font-size: 13px;
-    color: #737a76;
-}
-
-
-/* ========================================
-   RESPONSIVE
-======================================== */
 
 @media (max-width: 900px) {
-
     .categories-layout {
         grid-template-columns: 1fr;
     }
@@ -607,50 +259,10 @@
     .category-form-card {
         position: static;
     }
-
 }
 
-@media (max-width: 600px) {
-
-    .admin-page.admin-categories {
-        width: 90%;
-        padding: 28px 0 60px;
-    }
-
-    .category-form-card {
-        padding: 20px;
-    }
-
-    .categories-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .category-card__image {
-        height: 170px;
-    }
-
-}
-
-@media (max-width: 480px) {
-
-    .admin-page.admin-categories {
-        width: 94%;
-    }
-
+@media (max-width: 540px) {
     .categories-grid {
         grid-template-columns: 1fr;
     }
-
-    .category-form__actions {
-        flex-direction: column;
-    }
-
-    .category-card .admin-card__actions {
-        flex-direction: column;
-    }
-
-    .categories-list-header {
-        flex-wrap: wrap;
-    }
-
 }

@@ -8,6 +8,7 @@
     background: #f8faf9;
     color: #1e2925;
     box-sizing: border-box;
+    width: 100%;
 }
 
 .admin-container {

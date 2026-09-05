@@ -1,71 +1,109 @@
+/* =========================================================
+   LUXURY NAVBAR STYLESHEET
+   ========================================================= */
+
 .navbar {
     width: 100%;
-    height: 72px;
-    background: rgba(255, 255, 255, 0.96);
-    border-bottom: 1px solid #e5e7eb;
+    height: 74px;
+    background: rgba(255, 255, 255, 0.88);
+    border-bottom: 1px solid rgba(227, 232, 229, 0.8);
     position: sticky;
     top: 0;
     z-index: 1000;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 20px rgba(18, 28, 23, 0.03);
+    transition: all var(--transition-normal);
 }
 
 .navbar-container {
-    width: min(1180px, 92%);
+    width: min(1280px, 92%);
     height: 100%;
     margin: 0 auto;
     position: relative;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 /* =========================
-   LOGO
-========================= */
+   LOGO & BRAND MARK
+   ========================= */
 
-.navbar-logo {
+.navbar-brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     text-decoration: none;
-    color: #202925;
-
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: 2px;
-
-    transition: opacity 0.2s ease;
+    cursor: pointer;
+    user-select: none;
+    transition: opacity var(--transition-fast);
 }
 
-.navbar-logo:hover {
-    opacity: 0.75;
+.navbar-brand-wrap:hover {
+    opacity: 0.92;
+}
+
+.navbar-logo-symbol {
+    flex-shrink: 0;
+    transition: transform var(--transition-normal), filter var(--transition-normal);
+}
+
+.navbar-brand-wrap:hover .navbar-logo-symbol {
+    transform: translateY(-1px) scale(1.03);
+    filter: drop-shadow(0 4px 10px rgba(29, 43, 36, 0.22));
+}
+
+.navbar-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.navbar-brand-name {
+    font-size: 21px;
+    font-weight: 850;
+    letter-spacing: 2.4px;
+    color: var(--brand-dark);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.navbar-brand-tagline {
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: 2.2px;
+    color: #4a725d;
+    margin-top: 3px;
+    text-transform: uppercase;
 }
 
 /* =========================
-   HAMBURGER TOGGLE
-========================= */
+   HAMBURGER TOGGLE (MOBILE)
+   ========================= */
 
 .navbar-toggle {
     display: none;
     align-items: center;
     justify-content: center;
-
-    width: 40px;
-    height: 40px;
-
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    width: 42px;
+    height: 42px;
+    border: 1.5px solid var(--brand-border);
+    border-radius: var(--radius-md);
     background: #ffffff;
-
     cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.navbar-toggle:hover {
+    background: #f4f7f5;
+    border-color: #cbd5cf;
 }
 
 .navbar-toggle-bar {
     position: relative;
-
     width: 18px;
     height: 2px;
-
-    background: #202925;
-
+    background: var(--brand-dark);
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
@@ -74,13 +112,10 @@
     content: "";
     position: absolute;
     left: 0;
-
     width: 18px;
     height: 2px;
-
-    background: #202925;
-
-    transition: transform 0.2s ease, top 0.2s ease, opacity 0.2s ease;
+    background: var(--brand-dark);
+    transition: transform 0.2s ease, top 0.2s ease;
 }
 
 .navbar-toggle-bar::before {
@@ -91,7 +126,6 @@
     top: 6px;
 }
 
-/* animate into an X when open */
 .navbar-toggle.is-open .navbar-toggle-bar {
     background: transparent;
 }
@@ -107,242 +141,273 @@
 }
 
 /* =========================
-   RIGHT SIDE
-========================= */
+   NAVBAR ACTIONS (RIGHT SIDE)
+   ========================= */
 
 .navbar-actions {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
-/* =========================
-   NORMAL LINKS
-========================= */
-
+/* Normal Navigation Links */
 .navbar-link {
     position: relative;
-
     text-decoration: none;
-    color: #4b5563;
+    color: var(--text-muted);
+    font-size: 13.5px;
+    font-weight: 650;
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: all var(--transition-fast);
+}
 
-    font-size: 14px;
-    font-weight: 600;
-
-    padding: 9px 12px;
-    border-radius: 7px;
-
-    transition:
-        color 0.2s ease,
-        background 0.2s ease;
+.nav-icon {
+    color: var(--text-light);
+    transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
 .navbar-link:hover {
-    color: #202925;
-    background: #f3f5f4;
+    color: var(--brand-dark);
+    background: #f2f5f3;
+}
+
+.navbar-link:hover .nav-icon {
+    color: var(--brand-accent);
+    transform: translateY(-1px);
+}
+
+.navbar-link.is-active {
+    color: var(--brand-dark);
+    background: #eef3f0;
+    font-weight: 750;
+}
+
+.navbar-link.is-active .nav-icon {
+    color: var(--brand-accent);
+}
+
+/* User Profile Badge Link */
+.navbar-profile-link {
+    background: #ffffff;
+    border: 1px solid var(--brand-border);
+    padding: 6px 12px 6px 8px;
+    box-shadow: var(--shadow-xs);
+}
+
+.nav-user-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1c2b24 0%, #355343 100%);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Low stock alert dot */
+.low-stock-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #f59e0b;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
 }
 
 /* =========================
-   LOGIN
-========================= */
+   LOGIN BUTTON
+   ========================= */
 
 .navbar-login {
     text-decoration: none;
-    color: #202925;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    padding: 9px 13px;
-    border-radius: 7px;
-
-    transition:
-        background 0.2s ease,
-        color 0.2s ease;
+    color: var(--brand-dark);
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 9px 18px;
+    border-radius: var(--radius-md);
+    background: #ffffff;
+    border: 1.5px solid var(--brand-border);
+    transition: all var(--transition-fast);
 }
 
 .navbar-login:hover {
-    background: #f3f5f4;
-}
-
-/* =========================
-   REGISTER
-========================= */
-
-.navbar-register {
-    text-decoration: none;
-
-    background: #202925;
-    color: #ffffff;
-
-    font-size: 14px;
-    font-weight: 600;
-
-    padding: 10px 17px;
-    border-radius: 8px;
-
-    margin-left: 3px;
-
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease;
-}
-
-.navbar-register:hover {
-    background: #2d3833;
+    background: #f4f7f5;
+    border-color: #cbd5cf;
     transform: translateY(-1px);
 }
 
 /* =========================
-   ADMIN
-========================= */
+   REGISTER BUTTON
+   ========================= */
 
-.navbar-admin {
+.navbar-register {
     text-decoration: none;
-
-    color: #202925;
-    background: #f5f7f6;
-
-    border: 1px solid #dce1df;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    padding: 8px 12px;
-    border-radius: 7px;
-
-    margin-left: 3px;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
+    background: linear-gradient(135deg, #1b2820 0%, #294033 100%);
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    box-shadow: 0 4px 14px rgba(27, 40, 32, 0.2);
+    transition: all var(--transition-normal);
 }
 
-.navbar-admin:hover {
-    background: #eef1ef;
-    border-color: #cdd4d0;
+.navbar-register svg {
+    transition: transform var(--transition-fast);
+}
+
+.navbar-register:hover {
+    background: linear-gradient(135deg, #223429 0%, #334f3f 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(27, 40, 32, 0.28);
+}
+
+.navbar-register:hover svg {
+    transform: translateX(3px);
 }
 
 /* =========================
-   LOGOUT
-========================= */
+   ADMIN PORTAL BADGE
+   ========================= */
+
+.navbar-admin-badge {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #065f46;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    padding: 4px 9px;
+    border-radius: var(--radius-pill);
+    margin-right: 4px;
+}
+
+/* =========================
+   LOGOUT BUTTON
+   ========================= */
 
 .navbar-logout {
-    border: 1px solid #d9dddb;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1.5px solid var(--brand-border);
     background: #ffffff;
-
-    color: #374151;
-
-    font-family: inherit;
+    color: var(--text-muted);
     font-size: 13px;
-    font-weight: 600;
-
-    padding: 8px 13px;
-    border-radius: 7px;
-
+    font-weight: 650;
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
     cursor: pointer;
-
-    margin-left: 3px;
-
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
+    transition: all var(--transition-fast);
 }
 
 .navbar-logout:hover {
-    background: #f5f6f5;
-    border-color: #c9cfcc;
-    color: #202925;
+    background: #fee2e2;
+    border-color: #fecaca;
+    color: var(--color-danger);
 }
 
 /* =========================
-   MOBILE
-   Collapses navbar-actions into a
-   dropdown panel triggered by the
-   hamburger toggle.
-========================= */
+   RESPONSIVE (MOBILE & TABLET)
+   ========================= */
 
-@media (max-width: 800px) {
-
+@media (max-width: 960px) {
     .navbar-toggle {
         display: inline-flex;
     }
 
     .navbar-actions {
         position: absolute;
-        top: calc(100% + 1px);
+        top: 74px;
         left: 0;
         right: 0;
-
         flex-direction: column;
         align-items: stretch;
-        gap: 6px;
-
+        gap: 8px;
         max-height: 0;
         overflow: hidden;
-
-        padding: 0 18px;
-
+        padding: 0 20px;
         background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(16px);
-        border-bottom: 1px solid #e5e7eb;
-        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.09);
-
-        transition: max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1), padding 0.28s ease;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--brand-border);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        transition: max-height 0.32s cubic-bezier(0.16, 1, 0.3, 1), padding 0.32s ease;
     }
 
     .navbar-actions.is-open {
-        max-height: 560px;
-        padding: 14px 18px 20px;
+        max-height: 600px;
+        padding: 16px 20px 24px;
     }
 
     .navbar-link,
     .navbar-login,
     .navbar-register,
-    .navbar-admin,
     .navbar-logout {
         width: 100%;
-        min-height: 44px;
-
+        min-height: 46px;
         display: flex;
         align-items: center;
         text-align: left;
         justify-content: flex-start;
-
-        padding: 10px 16px;
-        font-size: 14px;
-        border-radius: 9px;
-
-        margin-left: 0;
-    }
-
-    .navbar-link:hover,
-    .navbar-login:hover {
-        background: #f0f3f1;
-        color: #1a221f;
+        padding: 11px 16px;
+        font-size: 14.5px;
+        border-radius: var(--radius-md);
     }
 
     .navbar-register {
-        text-align: center;
         justify-content: center;
-        margin-top: 4px;
+        margin-top: 6px;
+    }
+
+    .navbar-admin-badge {
+        width: fit-content;
+        margin: 4px 0 2px 14px;
     }
 }
 
 @media (max-width: 520px) {
-
     .navbar {
-        height: 64px;
+        height: 68px;
     }
 
-    .navbar-logo {
-        font-size: 19px;
-        letter-spacing: 1.5px;
+    .navbar-brand-name {
+        font-size: 18px;
+        letter-spacing: 2px;
+    }
+
+    .navbar-brand-tagline {
+        font-size: 7.5px;
+        letter-spacing: 1.8px;
+    }
+
+    .navbar-logo-symbol {
+        width: 32px;
+        height: 32px;
     }
 
     .navbar-toggle {
         width: 38px;
         height: 38px;
+    }
+
+    .navbar-actions {
+        top: 68px;
     }
 }
