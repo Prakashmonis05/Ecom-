@@ -26,6 +26,8 @@ const AdminProductForm = () => {
     const [fetching, setFetching] = useState(isEditMode);
     const [error, setError] = useState("");
 
+    const [existingImages, setExistingImages] = useState([]);
+
     // =========================
     // Fetch categories
     // =========================
@@ -82,27 +84,15 @@ const AdminProductForm = () => {
 
                 setFormData({
                     name: product.name || "",
-
-                    description:
-                        product.description || "",
-
-                    price:
-                        product.price ?? "",
-
-                    brand:
-                        product.brand || "",
-
-                    category:
-                        product.category?._id ||
-                        product.category ||
-                        "",
-
-                    stock:
-                        product.stock ?? "",
-
-                    images:
-                        product.images?.join(", ") || ""
+                    description: product.description || "",
+                    price: product.price ?? "",
+                    brand: product.brand || "",
+                    category: product.category?._id || product.category || "",
+                    stock: product.stock ?? "",
+                    images: []
                 });
+
+                setExistingImages(product.images || []);
 
             } catch (error) {
 
@@ -141,86 +131,90 @@ const AdminProductForm = () => {
     // Submit
     // =========================
 
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
 
-    e.preventDefault();
+        e.preventDefault();
 
-    setLoading(true);
-    setError("");
+        setLoading(true);
+        setError("");
 
-    try {
+        try {
 
-        const productData = new FormData();
-
-        productData.append(
-            "name",
-            formData.name
-        );
-
-        productData.append(
-            "description",
-            formData.description
-        );
-
-        productData.append(
-            "price",
-            formData.price
-        );
-
-        productData.append(
-            "category",
-            formData.category
-        );
-
-        productData.append(
-            "brand",
-            formData.brand
-        );
-
-        productData.append(
-            "stock",
-            formData.stock
-        );
-
-        formData.images.forEach((image) => {
+            const productData = new FormData();
 
             productData.append(
-                "images",
-                image
+                "name",
+                formData.name
             );
 
-        });
-
-        if (isEditMode) {
-
-            await api.put(
-                `/products/${id}`,
-                productData
+            productData.append(
+                "description",
+                formData.description
             );
 
-        } else {
-
-            await api.post(
-                "/products",
-                productData
+            productData.append(
+                "price",
+                formData.price
             );
 
+            productData.append(
+                "category",
+                formData.category
+            );
+
+            productData.append(
+                "brand",
+                formData.brand
+            );
+
+            productData.append(
+                "stock",
+                formData.stock
+            );
+
+            if (Array.isArray(formData.images)) {
+                formData.images.forEach((image) => {
+                    if (image instanceof File) {
+                        productData.append(
+                            "images",
+                            image
+                        );
+                    }
+                });
+            }
+
+            if (isEditMode) {
+
+                await api.put(
+                    `/products/${id}`,
+                    productData
+                );
+
+            } else {
+
+                await api.post(
+                    "/products",
+                    productData
+                );
+
+            }
+
+            navigate("/admin/products");
+
+        } catch (error) {
+
+            console.error("Save product error:", error);
+
+            setError(
+                error.response?.data?.message ||
+                "Failed to save product"
+            );
+
+        } finally {
+
+            setLoading(false);
         }
-
-        navigate("/admin/products");
-
-    } catch (error) {
-
-        setError(
-            error.response?.data?.message ||
-            "Failed to save product"
-        );
-
-    } finally {
-
-        setLoading(false);
-    }
-};
+    };
 
     // =========================
     // Loading
@@ -372,7 +366,20 @@ const AdminProductForm = () => {
                 {/* Images */}
 
                 <div className="admin-form__field">
-                   <input
+                    <label className="admin-form__label">Product Images</label>
+                    {isEditMode && existingImages.length > 0 && (
+                        <div style={{ display: 'flex', gap: '8px', marginBottom: '10px', flexWrap: 'wrap' }}>
+                            {existingImages.map((imgUrl, idx) => (
+                                <img
+                                    key={idx}
+                                    src={imgUrl}
+                                    alt={`Product preview ${idx + 1}`}
+                                    style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #ccc' }}
+                                />
+                            ))}
+                        </div>
+                    )}
+                    <input
                         type="file"
                         name="images"
                         accept="image/*"
@@ -385,6 +392,7 @@ const AdminProductForm = () => {
                         }}
                     />
                 </div>
+
                
 
                 {/* Submit */}

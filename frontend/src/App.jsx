@@ -29,7 +29,6 @@ import AdminOrderDetails from "./pages/admin/AdminOrderDetails";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminLowStock from "./pages/admin/AdminLowStock";
 import AdminCategories from "./pages/admin/AdminCategories";
-
 const HomeRedirect = () => {
 
     const { user, loading } = useAuth();
@@ -39,6 +38,11 @@ const HomeRedirect = () => {
     }
 
     if (user) {
+
+        if (user.role === "admin") {
+            return <Navigate to="/admin/dashboard" replace />;
+        }
+
         return <Navigate to="/products" replace />;
     }
 

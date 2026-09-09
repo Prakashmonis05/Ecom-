@@ -72,6 +72,47 @@
     letter-spacing: 0.5px;
 }
 
+.profile-actions-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+}
+
+.profile-edit-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-edit-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profile-edit-form label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.profile-edit-form input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--brand-border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    color: var(--brand-dark);
+    outline: none;
+    transition: border-color var(--transition-fast);
+}
+
+.profile-edit-form input:focus {
+    border-color: var(--brand-primary);
+}
+
 @media (max-width: 500px) {
     .profile-card {
         padding: 24px 18px;
@@ -82,4 +123,9 @@
         align-items: flex-start;
         gap: 4px;
     }
+
+    .profile-actions-row {
+        flex-direction: column;
+    }
 }
+

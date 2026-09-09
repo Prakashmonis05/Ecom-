@@ -20,6 +20,18 @@ const ProductDetails = () => {
     const [toast, setToast] = useState(null);
     const toastTimer = useRef(null);
 
+    // Reviews State
+    const [reviews, setReviews] = useState([]);
+    const [averageRating, setAverageRating] = useState(0);
+    const [reviewCount, setReviewCount] = useState(0);
+    const [reviewsLoading, setReviewsLoading] = useState(true);
+
+    // Add Review Form State
+    const [newRating, setNewRating] = useState(5);
+    const [newComment, setNewComment] = useState("");
+    const [submittingReview, setSubmittingReview] = useState(false);
+    const [reviewFormError, setReviewFormError] = useState("");
+
     const showToast = (message, type = "success") => {
         if (toastTimer.current) clearTimeout(toastTimer.current);
         setToast({ message, type });
@@ -27,34 +39,89 @@ const ProductDetails = () => {
     };
 
     const fetchProduct = async () => {
-
         try {
-
-            const response = await api.get(
-                `/products/${id}`
-            );
-
+            const response = await api.get(`/products/${id}`);
             setProduct(response.data.product);
-
         } catch (error) {
-
             setError(
-                error.response?.data?.message ||
-                "Failed to load product"
+                error.response?.data?.message || "Failed to load product"
             );
-
         } finally {
-
             setLoading(false);
-
         }
+    };
 
+    const fetchReviews = async () => {
+        try {
+            setReviewsLoading(true);
+            const response = await api.get(`/products/${id}/reviews`);
+            if (response.data.success) {
+                setReviews(response.data.reviews || []);
+                setAverageRating(response.data.averageRating || 0);
+                setReviewCount(response.data.count || 0);
+            }
+        } catch (error) {
+            console.error("Failed to load reviews:", error);
+        } finally {
+            setReviewsLoading(false);
+        }
     };
 
     useEffect(() => {
         fetchProduct();
+        fetchReviews();
     }, [id]);
 
+    const handleReviewSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!user) {
+            showToast("Please login to write a review", "error");
+            return;
+        }
+
+        if (!newComment.trim()) {
+            setReviewFormError("Please enter a review comment");
+            return;
+        }
+
+        setSubmittingReview(true);
+        setReviewFormError("");
+
+        try {
+            const response = await api.post("/reviews", {
+                productId: id,
+                rating: Number(newRating),
+                comment: newComment.trim()
+            });
+
+            if (response.data.success) {
+                showToast("Review submitted successfully!");
+                setNewComment("");
+                setNewRating(5);
+                fetchReviews();
+            }
+        } catch (error) {
+            const msg = error.response?.data?.message || "Failed to submit review";
+            setReviewFormError(msg);
+            showToast(msg, "error");
+        } finally {
+            setSubmittingReview(false);
+        }
+    };
+
+    const renderStars = (rating) => {
+        const stars = [];
+        const rounded = Math.round(rating);
+        for (let i = 1; i <= 5; i++) {
+            stars.push(
+                <span key={i} className={i <= rounded ? "star-filled" : "star-empty"}>
+                    ★
+                </span>
+            );
+        }
+        return stars;
+    };
 
     /* =========================
        Add To Cart
@@ -357,11 +424,11 @@ const ProductDetails = () => {
                         <div className="product-rating">
 
                             <span className="stars">
-                                ★★★★★
+                                {renderStars(averageRating)}
                             </span>
 
                             <span>
-                                4.8
+                                {averageRating > 0 ? averageRating : "No ratings"}
                             </span>
 
                             <span className="rating-divider">
@@ -369,7 +436,7 @@ const ProductDetails = () => {
                             </span>
 
                             <span>
-                                Customer reviews
+                                {reviewCount} {reviewCount === 1 ? "review" : "reviews"}
                             </span>
 
                         </div>
@@ -575,6 +642,126 @@ const ProductDetails = () => {
                     </div>
 
                 </div>
+
+                {/* =========================
+                    REVIEWS SECTION
+                ========================= */}
+
+                <section className="product-reviews-section">
+                    <h2 className="reviews-section-title">
+                        Customer Reviews ({reviewCount})
+                    </h2>
+
+                    <div className="reviews-layout">
+                        {/* Rating summary */}
+                        <div className="reviews-summary-card">
+                            <div className="avg-rating-number">
+                                {averageRating > 0 ? averageRating : "N/A"}
+                            </div>
+                            <div className="avg-stars">
+                                {renderStars(averageRating)}
+                            </div>
+                            <p className="summary-total-text">
+                                Based on {reviewCount} {reviewCount === 1 ? "review" : "reviews"}
+                            </p>
+                        </div>
+
+                        {/* Add Review Form */}
+                        <div className="add-review-card">
+                            <h3>Write a Review</h3>
+                            {user ? (
+                                <form onSubmit={handleReviewSubmit} className="review-form">
+                                    {reviewFormError && (
+                                        <div className="review-error-msg">
+                                            {reviewFormError}
+                                        </div>
+                                    )}
+
+                                    <div className="rating-select-group">
+                                        <label>Your Rating:</label>
+                                        <div className="star-rating-picker">
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <button
+                                                    key={star}
+                                                    type="button"
+                                                    className={`star-pick-btn ${star <= newRating ? "active" : ""}`}
+                                                    onClick={() => setNewRating(star)}
+                                                >
+                                                    ★
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="comment-group">
+                                        <label htmlFor="comment">Your Comment:</label>
+                                        <textarea
+                                            id="comment"
+                                            rows="3"
+                                            placeholder="Share details about your experience with this product..."
+                                            value={newComment}
+                                            onChange={(e) => setNewComment(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="submit-review-btn"
+                                        disabled={submittingReview}
+                                    >
+                                        {submittingReview ? "Submitting..." : "Submit Review"}
+                                    </button>
+                                </form>
+                            ) : (
+                                <p className="login-to-review-text">
+                                    Please log in and purchase this item to post a review.
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Reviews List */}
+                    <div className="reviews-list-container">
+                        {reviewsLoading ? (
+                            <p className="loading-reviews-text">Loading reviews...</p>
+                        ) : reviews.length > 0 ? (
+                            <div className="reviews-list">
+                                {reviews.map((rev) => (
+                                    <div key={rev._id} className="review-card">
+                                        <div className="review-header">
+                                            <div className="reviewer-info">
+                                                <div className="reviewer-avatar">
+                                                    {(rev.user?.name || "U").charAt(0).toUpperCase()}
+                                                </div>
+                                                <div>
+                                                    <span className="reviewer-name">
+                                                        {rev.user?.name || "Anonymous"}
+                                                    </span>
+                                                    <span className="review-date">
+                                                        {new Date(rev.createdAt).toLocaleDateString("en-US", {
+                                                            year: "numeric",
+                                                            month: "short",
+                                                            day: "numeric"
+                                                        })}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className="review-rating-stars">
+                                                {renderStars(rev.rating)}
+                                            </div>
+                                        </div>
+                                        <p className="review-comment">{rev.comment}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="no-reviews-box">
+                                <p>No reviews yet. Be the first to share your experience!</p>
+                            </div>
+                        )}
+                    </div>
+                </section>
 
             </div>
 
