@@ -42,8 +42,13 @@ const Login = () => {
                 return;
             }
 
-            login(response.data.token);
-            navigate("/products");
+            const user = await login(response.data.token);
+
+            if (user.role === "admin") {
+                navigate("/admin/dashboard");
+            } else {
+                navigate("/products");
+            }
 
         } catch (error) {
             setError(

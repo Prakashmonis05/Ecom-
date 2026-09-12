@@ -5,6 +5,12 @@ const AdminRoute = () => {
 
     const { user, loading } = useAuth();
 
+    console.log("ADMIN ROUTE:", {
+        user,
+        role: user?.role,
+        loading
+    });
+
     if (loading) {
         return <p>Loading...</p>;
     }

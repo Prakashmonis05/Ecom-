@@ -11,10 +11,28 @@ export const AuthProvider = ({ children }) => {
     );
     const [loading, setLoading] = useState(true);
 
-    const login = (newToken) => {
-        localStorage.setItem("token", newToken);
-        setToken(newToken);
-    };
+ const login = async (newToken) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
+
+    try {
+        const response = await api.get("/users/profile", {
+            headers: {
+                Authorization: `Bearer ${newToken}`
+            }
+        });
+
+        setUser(response.data.user);
+
+        return response.data.user;
+
+    } catch (error) {
+        localStorage.removeItem("token");
+        setToken(null);
+        setUser(null);
+        throw error;
+    }
+};
 
     const logout = () => {
         localStorage.removeItem("token");

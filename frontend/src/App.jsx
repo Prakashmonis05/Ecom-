@@ -33,20 +33,25 @@ const HomeRedirect = () => {
 
     const { user, loading } = useAuth();
 
+    console.log("HOME REDIRECT:", {
+        user,
+        role: user?.role,
+        loading
+    });
+
     if (loading) {
         return <p>Loading...</p>;
     }
 
-    if (user) {
-
-        if (user.role === "admin") {
-            return <Navigate to="/admin/dashboard" replace />;
-        }
-
-        return <Navigate to="/products" replace />;
+    if (!user) {
+        return <Home />;
     }
 
-    return <Home />;
+    if (user.role === "admin") {
+        return <Navigate to="/admin/dashboard" replace />;
+    }
+
+    return <Navigate to="/products" replace />;
 };
 
 function App() {
