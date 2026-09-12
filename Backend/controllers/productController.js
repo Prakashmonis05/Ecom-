@@ -95,7 +95,7 @@ const getProducts = async (req, res) => {
             maxPrice,
             sort,
             page = 1,
-            limit = 10
+            limit = 12
         } = req.query;
 
         const filter = {};
@@ -210,7 +210,7 @@ const getProductById = async (req, res) => {
     try {
 
         const product = await Product.findById(req.params.id)
-    .populate("category", "name");
+            .populate("category", "name");
 
         if (!product) {
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { LoadingSpinner } from "../components/LoadingAnimation";
 import "./Wishlist.css";
 
 const Wishlist = () => {
@@ -93,7 +94,12 @@ const Wishlist = () => {
     };
 
     if (loading) {
-        return <p className="wishlist-status">Loading wishlist...</p>;
+        return (
+            <div className="page-loading-wrapper">
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">Loading wishlist...</p>
+            </div>
+        );
     }
 
     if (error) {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { LoadingSpinner } from "../components/LoadingAnimation";
 import "./Cart.css";
 
 const Cart = () => {
@@ -81,7 +82,12 @@ const Cart = () => {
     };
 
     if (loading) {
-        return <p className="cart-status">Loading cart...</p>;
+        return (
+            <div className="page-loading-wrapper">
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">Loading cart...</p>
+            </div>
+        );
     }
 
     if (error) {

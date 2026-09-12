@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import { LoadingSpinner } from "../components/LoadingAnimation";
 import "./Checkout.css";
 
 const Checkout = () => {
@@ -156,8 +157,8 @@ const Checkout = () => {
         return (
             <main className="checkout-page">
                 <div className="checkout-container checkout-loading">
-                    <div className="checkout-spinner"></div>
-                    <p>Loading your checkout details...</p>
+                    <LoadingSpinner size="lg" />
+                    <p className="page-loading-text">Loading your checkout details...</p>
                 </div>
             </main>
         );

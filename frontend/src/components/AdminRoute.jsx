@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { LoadingSpinner } from "./LoadingAnimation";
 
 const AdminRoute = () => {
 
@@ -12,7 +13,12 @@ const AdminRoute = () => {
     });
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <div className="page-loading-wrapper">
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">Checking admin privileges...</p>
+            </div>
+        );
     }
 
     if (!user) {

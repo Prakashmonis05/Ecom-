@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import api from "../services/api";
+import { LoadingSpinner } from "../components/LoadingAnimation";
 import "./Products.css";
 
 const Products = () => {
@@ -374,7 +375,10 @@ const Products = () => {
             <div className="products-content">
 
                 {loading && (
-                    <p className="status-text">Loading products...</p>
+                    <div className="page-loading-wrapper">
+                        <LoadingSpinner size="lg" />
+                        <p className="page-loading-text">Loading products...</p>
+                    </div>
                 )}
 
                 {error && (

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
+import { LoadingSpinner } from "../../components/LoadingAnimation";
 import "./AdminProductForm.css";
 
 const AdminProductForm = () => {
@@ -224,7 +225,8 @@ const AdminProductForm = () => {
 
         return (
             <div className="admin-page admin-state">
-                <p className="admin-state__message">
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">
                     Loading product...
                 </p>
             </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
+import { LoadingSpinner } from "../components/LoadingAnimation";
 import "./OrderDetails.css";
 
 const OrderDetails = () => {
@@ -83,23 +84,14 @@ const OrderDetails = () => {
 
 
     if (loading) {
-
         return (
             <main className="order-details-page">
-
                 <div className="order-details-loading">
-
-                    <div className="order-spinner"></div>
-
-                    <p>
-                        Loading order...
-                    </p>
-
+                    <LoadingSpinner size="lg" />
+                    <p className="page-loading-text">Loading order...</p>
                 </div>
-
             </main>
         );
-
     }
 
 

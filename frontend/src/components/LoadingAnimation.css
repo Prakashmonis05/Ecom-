@@ -1,0 +1,87 @@
+/* =========================================================
+   VEYRO ANIMATED LOADING SPINNER & PAGE STATE STYLES
+   ========================================================= */
+
+/* Standalone Animated Spinner Component */
+.veyro-spinner {
+    display: inline-block;
+    border-radius: 50%;
+    border-style: solid;
+    animation: veyro-spin 0.8s linear infinite;
+}
+
+.veyro-spinner-sm {
+    width: 16px;
+    height: 16px;
+    border-width: 2px;
+}
+
+.veyro-spinner-md {
+    width: 24px;
+    height: 24px;
+    border-width: 3px;
+}
+
+.veyro-spinner-lg {
+    width: 36px;
+    height: 36px;
+    border-width: 4px;
+}
+
+.veyro-spinner-primary {
+    border-color: rgba(29, 43, 36, 0.15);
+    border-top-color: #1d2b24;
+}
+
+.veyro-spinner-white {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-top-color: #ffffff;
+}
+
+@keyframes veyro-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Page Loading Wrappers */
+.page-loading-wrapper,
+.admin-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 280px;
+    padding: 40px 20px;
+    gap: 16px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.page-loading-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-muted, #5e6b65);
+    animation: veyro-fade-pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes veyro-fade-pulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}

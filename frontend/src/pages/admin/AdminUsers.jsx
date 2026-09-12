@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
+import { LoadingSpinner } from "../../components/LoadingAnimation";
 import "./AdminUsers.css";
 
 const AdminUsers = () => {
@@ -37,8 +38,9 @@ const AdminUsers = () => {
 
     if (loading) {
         return (
-            <div className="admin-page admin-users-state">
-                <p>Loading users...</p>
+            <div className="admin-page admin-state admin-users-state">
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">Loading users...</p>
             </div>
         );
     }

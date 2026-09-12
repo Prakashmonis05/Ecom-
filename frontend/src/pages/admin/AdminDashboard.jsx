@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
+import { LoadingSpinner } from "../../components/LoadingAnimation";
 import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
@@ -100,8 +101,8 @@ const AdminDashboard = () => {
     if (loading) {
         return (
             <div className="admin-page admin-state">
-                <div className="admin-loader"></div>
-                <p>Loading executive dashboard...</p>
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">Loading executive dashboard...</p>
             </div>
         );
     }

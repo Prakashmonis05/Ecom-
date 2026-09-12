@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { LoadingSpinner } from "../components/LoadingAnimation";
 import "./Profile.css";
 
 const Profile = () => {
@@ -106,8 +107,9 @@ const Profile = () => {
 
     if (loading) {
         return (
-            <div className="page-shell loading-state">
-                <p>Loading profile...</p>
+            <div className="page-loading-wrapper">
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">Loading profile...</p>
             </div>
         );
     }

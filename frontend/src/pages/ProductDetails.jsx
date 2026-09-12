@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import { LoadingSpinner } from "../components/LoadingAnimation";
 import "./ProductDetails.css";
 
 const ProductDetails = () => {
@@ -229,19 +230,12 @@ const ProductDetails = () => {
     ========================= */
 
     if (loading) {
-
         return (
             <div className="product-details-state">
-
-                <div className="product-loading-spinner"></div>
-
-                <p>
-                    Loading product...
-                </p>
-
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">Loading product...</p>
             </div>
         );
-
     }
 
 

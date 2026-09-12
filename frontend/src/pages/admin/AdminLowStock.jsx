@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../../services/api";
+import { LoadingSpinner } from "../../components/LoadingAnimation";
 import "./AdminLowStock.css";
 
 const AdminLowStock = () => {
@@ -130,17 +131,12 @@ const AdminLowStock = () => {
         {/* STATES */}
 
         {loading && (
-
             <div className="admin-state low-stock-state">
-
-                <div className="loading-spinner"></div>
-
-                <p>
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">
                     Loading inventory...
                 </p>
-
             </div>
-
         )}
 
 

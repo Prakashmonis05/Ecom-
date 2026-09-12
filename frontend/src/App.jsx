@@ -29,6 +29,8 @@ import AdminOrderDetails from "./pages/admin/AdminOrderDetails";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminLowStock from "./pages/admin/AdminLowStock";
 import AdminCategories from "./pages/admin/AdminCategories";
+import { LoadingSpinner } from "./components/LoadingAnimation";
+
 const HomeRedirect = () => {
 
     const { user, loading } = useAuth();
@@ -40,7 +42,12 @@ const HomeRedirect = () => {
     });
 
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <div className="page-loading-wrapper">
+                <LoadingSpinner size="lg" />
+                <p className="page-loading-text">Loading application...</p>
+            </div>
+        );
     }
 
     if (!user) {
@@ -59,7 +66,6 @@ function App() {
     return (
 
         <BrowserRouter>
-
             <Navbar />
 
             <Routes>
